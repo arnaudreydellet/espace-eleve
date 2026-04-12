@@ -19,8 +19,6 @@ body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text
 @keyframes fadeUp { from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);} }
 @keyframes pulse { 0%,100%{opacity:1;}50%{opacity:.3;} }
 @keyframes spin { to{transform:rotate(360deg);} }
-
-/* ── AUTH ── */
 .auth-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
 .auth-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 2.5rem; width: 100%; max-width: 440px; box-shadow: 0 4px 24px rgba(0,0,0,.06); animation: fadeUp .4s ease; }
 .auth-logo { width: 44px; height: 44px; border-radius: 12px; background: var(--navy); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 1.5rem; }
@@ -43,8 +41,6 @@ body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text
 .btn-auth:disabled { background: #8a9fc5; cursor: not-allowed; transform: none; }
 .form-panel { display: none; }
 .form-panel.active { display: block; }
-
-/* ── DASHBOARD ── */
 .dashboard { display: none; min-height: 100vh; }
 .dash-header { background: var(--navy); padding: 1.25rem 2rem; display: flex; align-items: center; justify-content: space-between; }
 .dash-header-left { display: flex; align-items: center; gap: 14px; }
@@ -54,7 +50,6 @@ body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text
 .dash-user { font-size: 12px; color: rgba(255,255,255,.5); cursor: pointer; transition: color .15s; }
 .dash-user:hover { color: rgba(255,255,255,.85); }
 .dash-main { padding: 2rem; max-width: 900px; margin: 0 auto; }
-
 .eleve-hero { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 1.75rem 2rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
 .eleve-name { font-size: 22px; font-weight: 600; letter-spacing: -.3px; margin-bottom: 3px; }
 .eleve-meta { font-size: 13px; color: var(--text2); }
@@ -62,7 +57,6 @@ body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text
 .estat { text-align: center; }
 .estat-val { font-size: 28px; font-weight: 600; font-family: 'JetBrains Mono', monospace; color: var(--navy); line-height: 1; }
 .estat-lbl { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--text3); margin-top: 4px; }
-
 .progress-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 1.5rem 2rem; margin-bottom: 2rem; }
 .progress-panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
 .progress-panel-title { font-size: 14px; font-weight: 600; }
@@ -70,7 +64,6 @@ body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text
 .progress-track { height: 8px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
 .progress-fill { height: 100%; background: var(--green); border-radius: 4px; transition: width 1s cubic-bezier(.4,0,.2,1); width: 0%; }
 .progress-sub { font-size: 12px; color: var(--text3); margin-top: .5rem; }
-
 .theme-section { margin-bottom: 2.5rem; }
 .theme-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 1rem; }
 .theme-header-left { display: flex; align-items: center; gap: 12px; }
@@ -81,17 +74,13 @@ body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text
 .ic-litteral  { background: #F0FDF4; } .ic-fonctions { background: #EFF6FF; }
 .ic-geometrie { background: #FDF4FF; } .ic-nombres { background: #FFFBEB; }
 .ic-stats     { background: #FFF1F2; }
-
-.btn-eval { padding: 7px 16px; border-radius: 999px; border: 1.5px solid var(--navy); background: transparent; font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 600; color: var(--navy); cursor: pointer; transition: all .15s; white-space: nowrap; flex-shrink: 0; }
-.btn-eval:hover { background: var(--navy); color: #fff; }
-
 .fiches-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
 .fiche-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 1.25rem; display: flex; flex-direction: column; gap: 10px; transition: all .2s; position: relative; overflow: hidden; }
 .fiche-card.active { cursor: pointer; }
 .fiche-card.active:hover { border-color: var(--navy); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,.08); }
 .fiche-card.done { border-color: var(--green-m); }
-.fiche-card.done::before { content:''; position:absolute;top:0;left:0;right:0;height:3px;background:var(--green); }
-.fiche-card.encours::before { content:''; position:absolute;top:0;left:0;right:0;height:3px;background:var(--amber); }
+.fiche-card.done::before { content:""; position:absolute;top:0;left:0;right:0;height:3px;background:var(--green); }
+.fiche-card.encours::before { content:""; position:absolute;top:0;left:0;right:0;height:3px;background:var(--amber); }
 .fiche-card.bientot { opacity: .6; }
 .fiche-theme { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.35; }
 .fiche-statut { display: flex; align-items: center; gap: 6px; }
@@ -108,11 +97,19 @@ body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text
 .fiche-btn.done-btn { background: var(--green-l); color: var(--green); }
 .fiche-btn.done-btn:hover { background: var(--green-m); }
 .fiche-btn.bientot-btn { background: var(--surface2); color: var(--text3); cursor: default; pointer-events: none; }
-
 .loading-overlay { display: none; position: fixed; inset: 0; background: rgba(247,246,242,.85); z-index: 999; align-items: center; justify-content: center; flex-direction: column; gap: 1rem; }
 .loading-overlay.visible { display: flex; }
 .spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--navy); border-radius: 50%; animation: spin .7s linear infinite; }
 .loading-txt { font-size: 13px; color: var(--text3); }
+/* EVAL BANNER */
+.eval-banner { background: var(--surface); border: 1.5px solid var(--navy); border-radius: var(--rl); padding: 1.75rem 2rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+.eval-banner-left { display: flex; align-items: center; gap: 14px; }
+.eval-icon { width: 44px; height: 44px; border-radius: 10px; background: #EEF2FF; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.eval-titre { font-size: 15px; font-weight: 600; margin-bottom: 3px; }
+.eval-sub { font-size: 12px; color: var(--text2); line-height: 1.5; }
+.btn-passer-eval { padding: 10px 22px; border-radius: 999px; background: var(--navy); color: #fff; border: none; font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s; white-space: nowrap; text-decoration: none; display: inline-block; }
+.btn-passer-eval:hover { background: #142248; transform: translateY(-1px); }
+.eval-done-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; background: var(--green-l); color: var(--green); font-size: 11px; font-weight: 600; }
 </style>
 </head>
 <body>
@@ -122,111 +119,75 @@ body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text
   <div class="loading-txt" id="loading-txt">Chargement...</div>
 </div>
 
-<!-- AUTH -->
 <div class="auth-wrap" id="auth-wrap">
   <div class="auth-card">
     <div class="auth-logo">R</div>
     <div class="auth-title">Mon espace remédiation</div>
     <div class="auth-sub">Connecte-toi ou crée ton compte pour accéder à tes fiches personnalisées.</div>
-
     <div class="auth-tabs">
       <button class="auth-tab active" onclick="switchTab('connexion')">Se connecter</button>
       <button class="auth-tab" onclick="switchTab('inscription')">Créer un compte</button>
     </div>
-
-    <!-- CONNEXION -->
     <div class="form-panel active" id="panel-connexion">
-      <div class="form-group">
-        <label class="form-label">Adresse email</label>
-        <input class="form-input" type="email" id="co-email" placeholder="ton.email@exemple.fr" autocomplete="email" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Mot de passe</label>
-        <input class="form-input" type="password" id="co-mdp" placeholder="••••••••" />
-      </div>
+      <div class="form-group"><label class="form-label">Adresse email</label><input class="form-input" type="email" id="co-email" placeholder="ton.email@exemple.fr" autocomplete="email" /></div>
+      <div class="form-group"><label class="form-label">Mot de passe</label><input class="form-input" type="password" id="co-mdp" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" /></div>
       <div class="form-err" id="co-err"></div>
-      <button class="btn-auth" id="co-btn" onclick="seConnecter()">Se connecter →</button>
+      <button class="btn-auth" id="co-btn" onclick="seConnecter()">Se connecter &rarr;</button>
     </div>
-
-    <!-- INSCRIPTION -->
     <div class="form-panel" id="panel-inscription">
       <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Prénom *</label>
-          <input class="form-input" type="text" id="in-prenom" placeholder="Prénom" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Nom *</label>
-          <input class="form-input" type="text" id="in-nom" placeholder="Nom" />
-        </div>
+        <div class="form-group"><label class="form-label">Prénom *</label><input class="form-input" type="text" id="in-prenom" placeholder="Prénom" /></div>
+        <div class="form-group"><label class="form-label">Nom *</label><input class="form-input" type="text" id="in-nom" placeholder="Nom" /></div>
       </div>
-      <div class="form-group">
-        <label class="form-label">Adresse email *</label>
-        <input class="form-input" type="email" id="in-email" placeholder="ton.email@exemple.fr" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Mot de passe *</label>
-        <input class="form-input" type="password" id="in-mdp" placeholder="Choisis un mot de passe" />
-      </div>
+      <div class="form-group"><label class="form-label">Adresse email *</label><input class="form-input" type="email" id="in-email" placeholder="ton.email@exemple.fr" /></div>
+      <div class="form-group"><label class="form-label">Mot de passe *</label><input class="form-input" type="password" id="in-mdp" placeholder="Choisis un mot de passe" /></div>
       <div class="form-group">
         <label class="form-label">Niveau *</label>
         <select class="form-select" id="in-niveau" onchange="mettreAJourClasses()">
-          <option value="">— Choisir son niveau —</option>
+          <option value="">&mdash; Choisir son niveau &mdash;</option>
           <option value="Seconde CAP">Seconde CAP</option>
           <option value="Seconde Bac Pro">Seconde Bac Pro</option>
         </select>
       </div>
       <div class="form-group">
         <label class="form-label">Classe *</label>
-        <select class="form-select" id="in-classe" disabled>
-          <option value="">— Choisir d'abord son niveau —</option>
-        </select>
+        <select class="form-select" id="in-classe" disabled><option value="">&mdash; Choisir d'abord son niveau &mdash;</option></select>
       </div>
       <div class="form-group">
         <label class="form-label">Professeur de maths *</label>
         <select class="form-select" id="in-prof">
-          <option value="">— Choisir son professeur —</option>
+          <option value="">&mdash; Choisir son professeur &mdash;</option>
           <option value="Reydellet">M. Reydellet</option>
           <option value="Autre">Autre</option>
         </select>
       </div>
       <div class="form-err" id="in-err"></div>
-      <button class="btn-auth" id="in-btn" onclick="sInscrire()">Créer mon compte →</button>
+      <button class="btn-auth" id="in-btn" onclick="sInscrire()">Créer mon compte &rarr;</button>
     </div>
   </div>
 </div>
 
-<!-- DASHBOARD -->
 <div class="dashboard" id="dashboard">
   <div class="dash-header">
     <div class="dash-header-left">
       <div class="dash-logo">R</div>
-      <div>
-        <div class="dash-title">Mon espace remédiation</div>
-        <div class="dash-sub">Lycée Benoît Fourneyron</div>
-      </div>
+      <div><div class="dash-title">Mon espace remédiation</div><div class="dash-sub">Lycée Benoît Fourneyron</div></div>
     </div>
-    <div class="dash-user" onclick="seDeconnecter()">← Se déconnecter</div>
+    <div class="dash-user" onclick="seDeconnecter()">&larr; Se déconnecter</div>
   </div>
   <div class="dash-main">
     <div class="eleve-hero">
-      <div>
-        <div class="eleve-name" id="eleve-name">—</div>
-        <div class="eleve-meta" id="eleve-meta">—</div>
-      </div>
+      <div><div class="eleve-name" id="eleve-name">&mdash;</div><div class="eleve-meta" id="eleve-meta">&mdash;</div></div>
       <div class="eleve-stats">
-        <div class="estat"><div class="estat-val" id="stat-total">—</div><div class="estat-lbl">Fiches</div></div>
-        <div class="estat"><div class="estat-val" style="color:var(--green);" id="stat-validees">—</div><div class="estat-lbl">Validées</div></div>
-        <div class="estat"><div class="estat-val" style="color:var(--red);" id="stat-alertes">—</div><div class="estat-lbl">Bloquées</div></div>
+        <div class="estat"><div class="estat-val" id="stat-total">&mdash;</div><div class="estat-lbl">Fiches</div></div>
+        <div class="estat"><div class="estat-val" style="color:var(--green);" id="stat-validees">&mdash;</div><div class="estat-lbl">Validées</div></div>
+        <div class="estat"><div class="estat-val" style="color:var(--red);" id="stat-alertes">&mdash;</div><div class="estat-lbl">Bloquées</div></div>
       </div>
     </div>
     <div class="progress-panel" id="progress-panel" style="display:none;">
-      <div class="progress-panel-header">
-        <div class="progress-panel-title">Ta progression globale</div>
-        <div class="progress-panel-pct" id="progress-pct">0%</div>
-      </div>
+      <div class="progress-panel-header"><div class="progress-panel-title">Ta progression globale</div><div class="progress-panel-pct" id="progress-pct">0%</div></div>
       <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
-      <div class="progress-sub" id="progress-sub">—</div>
+      <div class="progress-sub" id="progress-sub">&mdash;</div>
     </div>
     <div id="fiches-section"></div>
   </div>
@@ -234,6 +195,7 @@ body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text
 
 <script>
 var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxlBMjVXIg58lsopoeQ5sEZW-jcQIOrOtnWwCGVtHLGjcmpi9exaYZ3oAEre4deZum2/exec";
+var EVAL_URL   = "https://arnaudreydellet.github.io/evaluation-fractions/";
 
 var CLASSES = {
   "Seconde CAP": ["2nde BMA Armurerie", "2nde CAP Cuisine", "2nde CAP Coiffure", "2nde CAP Autre"],
@@ -241,255 +203,223 @@ var CLASSES = {
 };
 
 var THEMES = [
-  { id: "fractions", titre: "Fractions", icon: "🔢", iconClass: "ic-fractions",
+  { id: "fractions", titre: "Fractions", icon: "\uD83D\uDD22", iconClass: "ic-fractions",
     fiches: [
-      { id: "fractions_comprendre",        titre: "Comprendre les fractions",                        url: "https://arnaudreydellet.github.io/fiche-rem-diation-1/" },
-      { id: "fractions_reconnaitre_egales", titre: "Reconnaître deux fractions égales",               url: "https://arnaudreydellet.github.io/fiche-2/" },
-      { id: "fractions_irreductible",       titre: "Rendre une fraction irréductible",                url: "https://arnaudreydellet.github.io/fiche-3/" },
-      { id: "fractions_add_meme_denom",     titre: "Additionner deux fractions de même dénominateur", url: "https://arnaudreydellet.github.io/fiche-4/" },
-      { id: "fractions_denom_commun_1",     titre: "Trouver un dénominateur commun (1)",              url: "https://arnaudreydellet.github.io/fiche-5/" },
-      { id: "fractions_denom_commun_2",     titre: "Trouver un dénominateur commun (2)",              url: "https://arnaudreydellet.github.io/fiche-6/" },
-      { id: "fractions_mult_entier",        titre: "Multiplier une fraction par un entier",           url: "https://arnaudreydellet.github.io/fiche-7/" },
-      { id: "fractions_mult_fractions",     titre: "Multiplier deux fractions entre elles",           url: "https://arnaudreydellet.github.io/fiche-8/" },
-      { id: "fractions_inverse",            titre: "Comprendre l\u2019inverse d\u2019une fraction",   url: "https://arnaudreydellet.github.io/fiche-9/" },
-      { id: "fractions_division",           titre: "Diviser par une fraction",                        url: "https://arnaudreydellet.github.io/fiche10/" },
+      { id: "fractions_comprendre",         titre: "Comprendre les fractions",                         url: "https://arnaudreydellet.github.io/fiche-rem-diation-1/" },
+      { id: "fractions_reconnaitre_egales", titre: "Reconna\u00eetre deux fractions \u00e9gales",    url: "https://arnaudreydellet.github.io/fiche-2/" },
+      { id: "fractions_irreductible",       titre: "Rendre une fraction irr\u00e9ductible",           url: "https://arnaudreydellet.github.io/fiche-3/" },
+      { id: "fractions_add_meme_denom",     titre: "Additionner fractions de m\u00eame d\u00e9nominateur", url: "https://arnaudreydellet.github.io/fiche-4/" },
+      { id: "fractions_denom_commun_1",     titre: "Trouver un d\u00e9nominateur commun (1)",         url: "https://arnaudreydellet.github.io/fiche-5/" },
+      { id: "fractions_denom_commun_2",     titre: "Trouver un d\u00e9nominateur commun (2)",         url: "https://arnaudreydellet.github.io/fiche-6/" },
+      { id: "fractions_mult_entier",        titre: "Multiplier une fraction par un entier",            url: "https://arnaudreydellet.github.io/fiche-7/" },
+      { id: "fractions_mult_fractions",     titre: "Multiplier deux fractions entre elles",            url: "https://arnaudreydellet.github.io/fiche-8/" },
+      { id: "fractions_inverse",            titre: "Comprendre l\u2019inverse d\u2019une fraction",  url: "https://arnaudreydellet.github.io/fiche-9/" },
+      { id: "fractions_division",           titre: "Diviser par une fraction",                         url: "https://arnaudreydellet.github.io/fiche10/" }
     ]
   },
-  { id: "proportionnalite", titre: "Proportionnalité et pourcentages", icon: "📊", iconClass: "ic-propor",    fiches: [] },
-  { id: "calcul_litteral",  titre: "Calcul littéral et équations",     icon: "✏️", iconClass: "ic-litteral",  fiches: [] },
-  { id: "fonctions",        titre: "Fonctions",                        icon: "📈", iconClass: "ic-fonctions", fiches: [] },
-  { id: "geometrie",        titre: "Géométrie",                        icon: "📐", iconClass: "ic-geometrie", fiches: [] },
-  { id: "nombres",          titre: "Nombres et calculs numériques",    icon: "🔣", iconClass: "ic-nombres",   fiches: [] },
-  { id: "stats",            titre: "Statistiques et probabilités",     icon: "🎲", iconClass: "ic-stats",     fiches: [] }
+  { id: "proportionnalite", titre: "Proportionnalit\u00e9 et pourcentages", icon: "\uD83D\uDCCA", iconClass: "ic-propor",    fiches: [] },
+  { id: "calcul_litteral",  titre: "Calcul litt\u00e9ral et \u00e9quations",  icon: "\u270F\uFE0F", iconClass: "ic-litteral",  fiches: [] },
+  { id: "fonctions",        titre: "Fonctions",                                 icon: "\uD83D\uDCC8", iconClass: "ic-fonctions", fiches: [] },
+  { id: "geometrie",        titre: "G\u00e9om\u00e9trie",                    icon: "\uD83D\uDCD0", iconClass: "ic-geometrie", fiches: [] },
+  { id: "nombres",          titre: "Nombres et calculs num\u00e9riques",       icon: "\uD83D\uDD23", iconClass: "ic-nombres",   fiches: [] },
+  { id: "stats",            titre: "Statistiques et probabilit\u00e9s",        icon: "\uD83C\uDFB2", iconClass: "ic-stats",     fiches: [] }
 ];
 
 var currentUser = null;
 
-// ── Tabs ──
 function switchTab(tab) {
-  document.querySelectorAll('.auth-tab').forEach(function(t, i) {
-    t.classList.toggle('active', (i === 0 && tab === 'connexion') || (i === 1 && tab === 'inscription'));
+  document.querySelectorAll(".auth-tab").forEach(function(t, i) {
+    t.classList.toggle("active", (i===0 && tab==="connexion") || (i===1 && tab==="inscription"));
   });
-  document.getElementById('panel-connexion').classList.toggle('active', tab === 'connexion');
-  document.getElementById('panel-inscription').classList.toggle('active', tab === 'inscription');
+  document.getElementById("panel-connexion").classList.toggle("active", tab==="connexion");
+  document.getElementById("panel-inscription").classList.toggle("active", tab==="inscription");
 }
 
-// ── Connexion Enter ──
-document.getElementById('co-email').addEventListener('keydown', function(e) { if (e.key === 'Enter') seConnecter(); });
-document.getElementById('co-mdp').addEventListener('keydown', function(e) { if (e.key === 'Enter') seConnecter(); });
+document.getElementById("co-email").addEventListener("keydown", function(e){ if(e.key==="Enter") seConnecter(); });
+document.getElementById("co-mdp").addEventListener("keydown",   function(e){ if(e.key==="Enter") seConnecter(); });
 
-// ── Classes dynamiques ──
 function mettreAJourClasses() {
-  var niveau = document.getElementById('in-niveau').value;
-  var sel = document.getElementById('in-classe');
-  sel.innerHTML = '<option value="">— Choisir sa classe —</option>';
+  var niveau = document.getElementById("in-niveau").value;
+  var sel = document.getElementById("in-classe");
+  sel.innerHTML = "<option value=\"\">\u2014 Choisir sa classe \u2014</option>";
   if (niveau && CLASSES[niveau]) {
-    CLASSES[niveau].forEach(function(c) {
-      sel.innerHTML += '<option value="' + c + '">' + c + '</option>';
-    });
+    CLASSES[niveau].forEach(function(c){ sel.innerHTML += "<option value=\"" + c + "\">" + c + "</option>"; });
     sel.disabled = false;
-  } else {
-    sel.disabled = true;
-  }
+  } else { sel.disabled = true; }
 }
 
-// ── Loading ──
-function setLoading(visible, txt) {
-  document.getElementById('loading-overlay').classList.toggle('visible', visible);
-  if (txt) document.getElementById('loading-txt').textContent = txt;
+function setLoading(v, txt) {
+  document.getElementById("loading-overlay").classList.toggle("visible", v);
+  if (txt) document.getElementById("loading-txt").textContent = txt;
 }
 
-// ── Connexion ──
 function seConnecter() {
-  var email = document.getElementById('co-email').value.trim();
-  var mdp   = document.getElementById('co-mdp').value;
-  var err   = document.getElementById('co-err');
-  err.classList.remove('visible');
-
-  if (!email || !mdp) { err.textContent = 'Remplis tous les champs.'; err.classList.add('visible'); return; }
-
-  setLoading(true, 'Connexion en cours...');
-  document.getElementById('co-btn').disabled = true;
-
-  fetch(SCRIPT_URL, {
-    method: 'POST',
-    body: JSON.stringify({ type: 'connexion_compte', email: email, mot_de_passe: mdp })
-  })
-  .then(function(r) { return r.json(); })
-  .then(function(json) {
-    setLoading(false);
-    document.getElementById('co-btn').disabled = false;
-    if (json.status === 'ok') {
-      currentUser = json;
-      afficherDashboard(json);
-    } else {
-      err.textContent = json.message || 'Email ou mot de passe incorrect.';
-      err.classList.add('visible');
-    }
-  })
-  .catch(function() {
-    setLoading(false);
-    document.getElementById('co-btn').disabled = false;
-    err.textContent = 'Erreur de connexion. Réessaie.';
-    err.classList.add('visible');
-  });
-}
-
-// ── Inscription ──
-function sInscrire() {
-  var prenom = document.getElementById('in-prenom').value.trim();
-  var nom    = document.getElementById('in-nom').value.trim();
-  var email  = document.getElementById('in-email').value.trim();
-  var mdp    = document.getElementById('in-mdp').value;
-  var niveau = document.getElementById('in-niveau').value;
-  var classe = document.getElementById('in-classe').value;
-  var prof   = document.getElementById('in-prof').value;
-  var err    = document.getElementById('in-err');
-  err.classList.remove('visible');
-
-  if (!prenom || !nom || !email || !mdp || !niveau || !classe || !prof) {
-    err.textContent = 'Remplis tous les champs obligatoires.';
-    err.classList.add('visible'); return;
-  }
-  if (mdp.length < 4) {
-    err.textContent = 'Le mot de passe doit faire au moins 4 caractères.';
-    err.classList.add('visible'); return;
-  }
-
-  setLoading(true, 'Création du compte...');
-  document.getElementById('in-btn').disabled = true;
-
-  fetch(SCRIPT_URL, {
-    method: 'POST',
-    body: JSON.stringify({
-      type: 'creer_compte', email: email, mot_de_passe: mdp,
-      prenom: prenom, nom: nom, niveau: niveau, classe: classe, prof: prof
+  var email = document.getElementById("co-email").value.trim();
+  var mdp   = document.getElementById("co-mdp").value;
+  var err   = document.getElementById("co-err");
+  err.classList.remove("visible");
+  if (!email || !mdp) { err.textContent = "Remplis tous les champs."; err.classList.add("visible"); return; }
+  setLoading(true, "Connexion en cours...");
+  document.getElementById("co-btn").disabled = true;
+  fetch(SCRIPT_URL, { method:"POST", body: JSON.stringify({ type:"connexion_compte", email:email, mot_de_passe:mdp }) })
+    .then(function(r){ return r.json(); })
+    .then(function(json){
+      setLoading(false);
+      document.getElementById("co-btn").disabled = false;
+      if (json.status === "ok") { currentUser = json; afficherDashboard(json); }
+      else { err.textContent = json.message || "Email ou mot de passe incorrect."; err.classList.add("visible"); }
     })
-  })
-  .then(function(r) { return r.json(); })
-  .then(function(json) {
-    setLoading(false);
-    document.getElementById('in-btn').disabled = false;
-    if (json.status === 'ok') {
-      currentUser = { email: email, prenom: prenom, nom: nom, niveau: niveau, classe: classe, prof: prof, fiches: [] };
-      afficherDashboard(currentUser);
-    } else {
-      err.textContent = json.message || 'Erreur lors de la création du compte.';
-      err.classList.add('visible');
-    }
-  })
-  .catch(function() {
-    setLoading(false);
-    document.getElementById('in-btn').disabled = false;
-    err.textContent = 'Erreur de connexion. Réessaie.';
-    err.classList.add('visible');
-  });
+    .catch(function(){
+      setLoading(false);
+      document.getElementById("co-btn").disabled = false;
+      err.textContent = "Erreur de connexion. R\u00e9essaie.";
+      err.classList.add("visible");
+    });
 }
 
-// ── Dashboard ──
+function sInscrire() {
+  var prenom = document.getElementById("in-prenom").value.trim();
+  var nom    = document.getElementById("in-nom").value.trim();
+  var email  = document.getElementById("in-email").value.trim();
+  var mdp    = document.getElementById("in-mdp").value;
+  var niveau = document.getElementById("in-niveau").value;
+  var classe = document.getElementById("in-classe").value;
+  var prof   = document.getElementById("in-prof").value;
+  var err    = document.getElementById("in-err");
+  err.classList.remove("visible");
+  if (!prenom||!nom||!email||!mdp||!niveau||!classe||!prof) { err.textContent="Remplis tous les champs obligatoires."; err.classList.add("visible"); return; }
+  if (mdp.length < 4) { err.textContent="Le mot de passe doit faire au moins 4 caract\u00e8res."; err.classList.add("visible"); return; }
+  setLoading(true, "Cr\u00e9ation du compte...");
+  document.getElementById("in-btn").disabled = true;
+  fetch(SCRIPT_URL, { method:"POST", body: JSON.stringify({ type:"creer_compte", email:email, mot_de_passe:mdp, prenom:prenom, nom:nom, niveau:niveau, classe:classe, prof:prof }) })
+    .then(function(r){ return r.json(); })
+    .then(function(json){
+      setLoading(false);
+      document.getElementById("in-btn").disabled = false;
+      if (json.status === "ok") {
+        currentUser = { email:email, prenom:prenom, nom:nom, niveau:niveau, classe:classe, prof:prof, fiches:[], fiches_assignees:[], eval_faite:false };
+        afficherDashboard(currentUser);
+      } else { err.textContent = json.message || "Erreur lors de la cr\u00e9ation du compte."; err.classList.add("visible"); }
+    })
+    .catch(function(){
+      setLoading(false);
+      document.getElementById("in-btn").disabled = false;
+      err.textContent = "Erreur de connexion. R\u00e9essaie.";
+      err.classList.add("visible");
+    });
+}
+
 function afficherDashboard(user) {
-  document.getElementById('auth-wrap').style.display   = 'none';
-  document.getElementById('dashboard').style.display   = 'block';
+  document.getElementById("auth-wrap").style.display  = "none";
+  document.getElementById("dashboard").style.display  = "block";
 
-  var fiches = user.fiches || [];
-  document.getElementById('eleve-name').textContent = user.prenom + ' ' + user.nom;
-  document.getElementById('eleve-meta').textContent = 'Lycée Benoît Fourneyron · ' + (user.classe || '');
+  var fiches          = user.fiches          || [];
+  var fichesAssignees = user.fiches_assignees || [];
+  var evalFaite       = user.eval_faite      || false;
 
-  var tousIds = [];
-  THEMES.forEach(function(t) { t.fiches.forEach(function(f) { tousIds.push(f.id); }); });
-  var total    = tousIds.length;
-  var validees = fiches.filter(function(f) { return f.statut === 'quiz_final_valide'; }).length;
-  var alertes  = fiches.filter(function(f) { return f.statut === 'echec_3_tentatives'; }).length;
+  document.getElementById("eleve-name").textContent = user.prenom + " " + user.nom;
+  document.getElementById("eleve-meta").textContent = "Lyc\u00e9e Beno\u00eet Fourneyron \u00b7 " + (user.classe || "");
 
-  document.getElementById('stat-total').textContent    = total;
-  document.getElementById('stat-validees').textContent = validees;
-  document.getElementById('stat-alertes').textContent  = alertes;
+  var total    = fichesAssignees.length;
+  var validees = fiches.filter(function(f){ return f.statut==="quiz_final_valide" && fichesAssignees.indexOf(f.fiche_id)!==-1; }).length;
+  var alertes  = fiches.filter(function(f){ return f.statut==="echec_3_tentatives"; }).length;
 
-  var pct = total > 0 ? Math.round(validees / total * 100) : 0;
-  document.getElementById('progress-panel').style.display = 'block';
-  document.getElementById('progress-pct').textContent     = pct + '%';
-  setTimeout(function() { document.getElementById('progress-fill').style.width = pct + '%'; }, 100);
-  document.getElementById('progress-sub').textContent = validees + ' fiche' + (validees > 1 ? 's validées' : ' validée') + ' sur ' + total;
+  document.getElementById("stat-total").textContent    = evalFaite ? total    : "\u2014";
+  document.getElementById("stat-validees").textContent = evalFaite ? validees : "\u2014";
+  document.getElementById("stat-alertes").textContent  = evalFaite ? alertes  : "\u2014";
+
+  if (evalFaite && total > 0) {
+    var pct = Math.round(validees / total * 100);
+    document.getElementById("progress-panel").style.display = "block";
+    document.getElementById("progress-pct").textContent = pct + "%";
+    setTimeout(function(){ document.getElementById("progress-fill").style.width = pct + "%"; }, 100);
+    document.getElementById("progress-sub").textContent = validees + " fiche" + (validees>1?"s valid\u00e9es":" valid\u00e9e") + " sur " + total;
+  }
 
   var statutsMap = {};
-  fiches.forEach(function(f) {
-    if (!statutsMap[f.fiche_id] || (f.tentative_num || 0) > (statutsMap[f.fiche_id].tentative_num || 0)) {
-      statutsMap[f.fiche_id] = f;
-    }
+  fiches.forEach(function(f){
+    if (!statutsMap[f.fiche_id] || (f.tentative_num||0) > (statutsMap[f.fiche_id].tentative_num||0)) statutsMap[f.fiche_id] = f;
   });
 
-  var html = '';
+  var evalLien = EVAL_URL
+    + "?nom="        + encodeURIComponent(user.prenom + " " + user.nom)
+    + "&classe="     + encodeURIComponent(user.classe || "")
+    + "&lycee="      + encodeURIComponent("Lyc\u00e9e Beno\u00eet Fourneyron")
+    + "&email="      + encodeURIComponent(user.email || "")
+    + "&prof="       + encodeURIComponent(user.prof || "")
+    + "&prof_email=" + encodeURIComponent("ar.reydellet@gmail.com");
+
+  var html = "";
   THEMES.forEach(function(theme) {
-    html += '<div class="theme-section">';
-    html += '<div class="theme-header">';
-    html += '<div class="theme-header-left">';
-    html += '<div class="theme-icon ' + theme.iconClass + '">' + theme.icon + '</div>';
-    html += '<div><div class="theme-title">' + theme.titre + '</div>';
-    if (theme.fiches.length > 0) html += '<div class="theme-count">' + theme.fiches.length + ' fiche' + (theme.fiches.length > 1 ? 's' : '') + '</div>';
-    html += '</div></div>';
-    html += '<button class="btn-eval">\uD83D\uDCDD Passer l\u2019\u00e9valuation</button>';
-    html += '</div>';
+    html += "<div class=\"theme-section\">";
+    html += "<div class=\"theme-header\">";
+    html += "<div class=\"theme-header-left\">";
+    html += "<div class=\"theme-icon " + theme.iconClass + "\">" + theme.icon + "</div>";
+    html += "<div><div class=\"theme-title\">" + theme.titre + "</div></div>";
+    html += "</div></div>";
 
     if (theme.fiches.length === 0) {
-      html += '<div style="background:var(--surface);border:1px dashed var(--border);border-radius:var(--rl);padding:1.25rem 1.5rem;display:flex;align-items:center;gap:12px;">';
-      html += '<span style="font-size:18px;">\uD83D\uDEE0\uFE0F</span>';
-      html += '<span style="font-size:13px;color:var(--text3);font-style:italic;">Les fiches sont en cours de cr\u00e9ation\u2026</span>';
-      html += '</div>';
+      html += "<div style=\"background:var(--surface);border:1px dashed var(--border);border-radius:var(--rl);padding:1.25rem 1.5rem;display:flex;align-items:center;gap:12px;\">";
+      html += "<span style=\"font-size:18px;\">\uD83D\uDEE0\uFE0F</span>";
+      html += "<span style=\"font-size:13px;color:var(--text3);font-style:italic;\">Les fiches sont en cours de cr\u00e9ation\u2026</span>";
+      html += "</div>";
+    } else if (!evalFaite) {
+      html += "<div class=\"eval-banner\">";
+      html += "<div class=\"eval-banner-left\"><div class=\"eval-icon\">\uD83D\uDCCB</div>";
+      html += "<div><div class=\"eval-titre\">\u00c9valuation diagnostique</div>";
+      html += "<div class=\"eval-sub\">Passe l'\u00e9valuation pour d\u00e9couvrir tes fiches personnalis\u00e9es.</div></div></div>";
+      html += "<a href=\"" + evalLien + "\" target=\"_blank\" class=\"btn-passer-eval\">Passer l'\u00e9valuation \u2192</a>";
+      html += "</div>";
     } else {
-      html += '<div class="fiches-grid">';
-      theme.fiches.forEach(function(fiche) {
-        var ficheData = statutsMap[fiche.id] || null;
-        var statut    = ficheData ? ficheData.statut : 'todo';
-        var score     = ficheData && ficheData.score_quiz ? ficheData.score_quiz + '%' : null;
-        var aUrl      = fiche.url && fiche.url !== '';
-
-        var lien = '#';
-        if (aUrl) {
-          lien = fiche.url
-            + '?nom='        + encodeURIComponent(user.prenom + ' ' + user.nom)
-            + '&classe='     + encodeURIComponent(user.classe || '')
-            + '&lycee='      + encodeURIComponent('Lyc\u00e9e Beno\u00eet Fourneyron')
-            + '&email='      + encodeURIComponent(user.email || '')
-            + '&prof='       + encodeURIComponent(user.prof || '')
-            + '&prof_email=' + encodeURIComponent('ar.reydellet@gmail.com');
-        }
-
-        var statutClass = 's-todo', statutTxt = '\u00c0 faire', cardClass = aUrl ? 'active' : 'bientot';
-        if (!aUrl)                               { statutClass = 's-bientot'; statutTxt = 'Bient\u00f4t disponible'; }
-        else if (statut === 'quiz_final_valide') { statutClass = 's-valide';  statutTxt = 'Valid\u00e9e \u2713'; cardClass = 'done active'; }
-        else if (statut === 'quiz_initial')      { statutClass = 's-encours'; statutTxt = 'En cours\u2026'; cardClass = 'encours active'; }
-        else if (statut === 'echec_3_tentatives'){ statutClass = 's-echec';   statutTxt = 'Intervention requise'; cardClass = 'active'; }
-
-        var btnClass = '', btnTxt = 'Commencer \u2192';
-        if (!aUrl)                               { btnClass = 'bientot-btn'; btnTxt = 'Bient\u00f4t\u2026'; }
-        else if (statut === 'quiz_final_valide') { btnClass = 'done-btn';    btnTxt = '\u2713 Revoir la fiche'; }
-        else if (statut === 'quiz_initial')      { btnTxt = 'Continuer \u2192'; }
-
-        html += '<div class="fiche-card ' + cardClass + '">';
-        html += '<div class="fiche-theme">' + fiche.titre + '</div>';
-        html += '<div class="fiche-statut ' + statutClass + '"><div class="statut-dot"></div><div class="statut-txt">' + statutTxt + '</div></div>';
-        if (score && aUrl) html += '<div class="fiche-score">Dernier score : ' + score + '</div>';
-        if (aUrl) html += '<a href="' + lien + '" target="_blank" class="fiche-btn ' + btnClass + '">' + btnTxt + '</a>';
-        else      html += '<div class="fiche-btn bientot-btn">' + btnTxt + '</div>';
-        html += '</div>';
-      });
-      html += '</div>';
+      var fa = theme.fiches.filter(function(f){ return fichesAssignees.indexOf(f.id) !== -1; });
+      if (fa.length === 0) {
+        html += "<div style=\"background:var(--surface);border:1px solid var(--green-m);border-radius:var(--rl);padding:1.25rem 1.5rem;display:flex;align-items:center;gap:12px;\">";
+        html += "<span style=\"font-size:18px;\">\u2705</span>";
+        html += "<span style=\"font-size:13px;color:var(--green);font-weight:600;\">Tu ma\u00eetrises toutes les notions de ce th\u00e8me !</span>";
+        html += "</div>";
+      } else {
+        html += "<div style=\"display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;\">";
+        html += "<span style=\"font-size:12px;color:var(--text3);\">" + fa.length + " fiche" + (fa.length>1?"s":"") + " \u00e0 travailler</span>";
+        html += "<span class=\"eval-done-badge\">\u2713 \u00c9valuation pass\u00e9e</span>";
+        html += "</div>";
+        html += "<div class=\"fiches-grid\">";
+        fa.forEach(function(fiche) {
+          var fd  = statutsMap[fiche.id] || null;
+          var st  = fd ? fd.statut : "todo";
+          var sc  = fd && fd.score_quiz ? fd.score_quiz + "%" : null;
+          var aUrl = fiche.url && fiche.url !== "";
+          var lien = "#";
+          if (aUrl) lien = fiche.url + "?nom=" + encodeURIComponent(user.prenom+" "+user.nom) + "&classe=" + encodeURIComponent(user.classe||"") + "&lycee=" + encodeURIComponent("Lyc\u00e9e Beno\u00eet Fourneyron") + "&email=" + encodeURIComponent(user.email||"") + "&prof=" + encodeURIComponent(user.prof||"") + "&prof_email=ar.reydellet%40gmail.com";
+          var scls = "s-todo", stxt = "\u00c0 faire", ccls = aUrl ? "active" : "bientot";
+          if (st==="quiz_final_valide")   { scls="s-valide"; stxt="Valid\u00e9e \u2713"; ccls="done active"; }
+          else if (st==="echec_3_tentatives") { scls="s-echec"; stxt="Intervention requise"; }
+          var bcls="", btxt="Commencer \u2192";
+          if (st==="quiz_final_valide") { bcls="done-btn"; btxt="\u2713 Revoir la fiche"; }
+          html += "<div class=\"fiche-card " + ccls + "\">";
+          html += "<div class=\"fiche-theme\">" + fiche.titre + "</div>";
+          html += "<div class=\"fiche-statut " + scls + "\"><div class=\"statut-dot\"></div><div class=\"statut-txt\">" + stxt + "</div></div>";
+          if (sc) html += "<div class=\"fiche-score\">Dernier score : " + sc + "</div>";
+          if (aUrl) html += "<a href=\"" + lien + "\" target=\"_blank\" class=\"fiche-btn " + bcls + "\">" + btxt + "</a>";
+          html += "</div>";
+        });
+        html += "</div>";
+      }
     }
-    html += '</div>';
+    html += "</div>";
   });
 
-  document.getElementById('fiches-section').innerHTML = html;
+  document.getElementById("fiches-section").innerHTML = html;
 }
 
 function seDeconnecter() {
   currentUser = null;
-  document.getElementById('dashboard').style.display = 'none';
-  document.getElementById('auth-wrap').style.display  = 'flex';
-  document.getElementById('co-email').value = '';
-  document.getElementById('co-mdp').value   = '';
-  document.getElementById('fiches-section').innerHTML = '';
-  document.getElementById('progress-panel').style.display = 'none';
-  switchTab('connexion');
+  document.getElementById("dashboard").style.display = "none";
+  document.getElementById("auth-wrap").style.display  = "flex";
+  document.getElementById("co-email").value = "";
+  document.getElementById("co-mdp").value   = "";
+  document.getElementById("fiches-section").innerHTML = "";
+  document.getElementById("progress-panel").style.display = "none";
+  switchTab("connexion");
 }
 </script>
 </body>
