@@ -11,29 +11,40 @@
   --bg: #F7F6F2; --surface: #FFFFFF; --surface2: #F0EFE9;
   --border: #E2E0D8; --text: #1A1917; --text2: #6B6960; --text3: #A8A69E;
   --green: #1A7A5E; --green-l: #E3F4EE; --green-m: #A8DCC8;
-  --amber: #B8610A; --amber-l: #FEF3E2;
-  --red: #B52A2A; --red-l: #FDEAEA;
-  --blue: #1A4FA0; --blue-l: #EBF0FA;
+  --amber: #B8610A; --red: #B52A2A;
   --navy: #1A2C5B; --r: 10px; --rl: 16px;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-
-.login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
-.login-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 2.5rem; width: 100%; max-width: 420px; box-shadow: 0 4px 24px rgba(0,0,0,.06); animation: fadeUp .4s ease; }
 @keyframes fadeUp { from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);} }
-.login-logo { width: 44px; height: 44px; border-radius: 12px; background: var(--navy); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 1.5rem; }
-.login-title { font-size: 22px; font-weight: 600; margin-bottom: .4rem; }
-.login-sub { font-size: 13px; color: var(--text2); margin-bottom: 2rem; line-height: 1.55; }
-.login-label { font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: .4rem; display: block; }
-.login-input { width: 100%; height: 44px; padding: 0 14px; border: 1.5px solid var(--border); border-radius: var(--r); font-family: 'Sora', sans-serif; font-size: 14px; color: var(--text); background: var(--surface2); outline: none; transition: border-color .2s, background .2s; margin-bottom: 1rem; }
-.login-input:focus { border-color: var(--navy); background: var(--surface); }
-.login-err { font-size: 12px; color: var(--red); margin-bottom: .75rem; display: none; }
-.btn-login { width: 100%; height: 44px; background: var(--navy); color: #fff; border: none; border-radius: var(--r); font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: all .15s; }
-.btn-login:hover { background: #142248; transform: translateY(-1px); }
-.btn-login:active { transform: scale(.98); }
-.btn-login:disabled { background: #8a9fc5; cursor: not-allowed; transform: none; }
+@keyframes pulse { 0%,100%{opacity:1;}50%{opacity:.3;} }
+@keyframes spin { to{transform:rotate(360deg);} }
 
+/* ── AUTH ── */
+.auth-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+.auth-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 2.5rem; width: 100%; max-width: 440px; box-shadow: 0 4px 24px rgba(0,0,0,.06); animation: fadeUp .4s ease; }
+.auth-logo { width: 44px; height: 44px; border-radius: 12px; background: var(--navy); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 1.5rem; }
+.auth-title { font-size: 22px; font-weight: 600; margin-bottom: .3rem; }
+.auth-sub { font-size: 13px; color: var(--text2); margin-bottom: 1.75rem; line-height: 1.5; }
+.auth-tabs { display: flex; gap: 0; border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; margin-bottom: 1.75rem; }
+.auth-tab { flex: 1; padding: 10px; text-align: center; font-size: 13px; font-weight: 500; color: var(--text2); cursor: pointer; background: var(--surface2); transition: all .15s; border: none; font-family: 'Sora', sans-serif; }
+.auth-tab.active { background: var(--navy); color: #fff; font-weight: 600; }
+.form-group { margin-bottom: 1rem; }
+.form-label { font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: .4rem; display: block; }
+.form-input { width: 100%; height: 44px; padding: 0 14px; border: 1.5px solid var(--border); border-radius: var(--r); font-family: 'Sora', sans-serif; font-size: 14px; color: var(--text); background: var(--surface2); outline: none; transition: border-color .2s, background .2s; }
+.form-input:focus { border-color: var(--navy); background: var(--surface); }
+.form-select { width: 100%; height: 44px; padding: 0 14px; border: 1.5px solid var(--border); border-radius: var(--r); font-family: 'Sora', sans-serif; font-size: 14px; color: var(--text); background: var(--surface2); outline: none; cursor: pointer; transition: border-color .2s; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236B6960' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
+.form-select:focus { border-color: var(--navy); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-err { font-size: 12px; color: var(--red); margin-bottom: .75rem; display: none; padding: 8px 12px; background: #fdeaea; border-radius: var(--r); }
+.form-err.visible { display: block; }
+.btn-auth { width: 100%; height: 44px; background: var(--navy); color: #fff; border: none; border-radius: var(--r); font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: all .15s; margin-top: .5rem; }
+.btn-auth:hover { background: #142248; transform: translateY(-1px); }
+.btn-auth:disabled { background: #8a9fc5; cursor: not-allowed; transform: none; }
+.form-panel { display: none; }
+.form-panel.active { display: block; }
+
+/* ── DASHBOARD ── */
 .dashboard { display: none; min-height: 100vh; }
 .dash-header { background: var(--navy); padding: 1.25rem 2rem; display: flex; align-items: center; justify-content: space-between; }
 .dash-header-left { display: flex; align-items: center; gap: 14px; }
@@ -66,21 +77,15 @@ body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text
 .theme-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
 .theme-title { font-size: 13px; font-weight: 600; color: var(--text2); letter-spacing: .06em; text-transform: uppercase; }
 .theme-count { font-size: 11px; color: var(--text3); font-family: 'JetBrains Mono', monospace; }
-
-.ic-fractions { background: #EEF2FF; }
-.ic-propor    { background: #FFF7ED; }
-.ic-litteral  { background: #F0FDF4; }
-.ic-fonctions { background: #EFF6FF; }
-.ic-geometrie { background: #FDF4FF; }
-.ic-nombres   { background: #FFFBEB; }
+.ic-fractions { background: #EEF2FF; } .ic-propor { background: #FFF7ED; }
+.ic-litteral  { background: #F0FDF4; } .ic-fonctions { background: #EFF6FF; }
+.ic-geometrie { background: #FDF4FF; } .ic-nombres { background: #FFFBEB; }
 .ic-stats     { background: #FFF1F2; }
 
-/* Bouton évaluation */
 .btn-eval { padding: 7px 16px; border-radius: 999px; border: 1.5px solid var(--navy); background: transparent; font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 600; color: var(--navy); cursor: pointer; transition: all .15s; white-space: nowrap; flex-shrink: 0; }
 .btn-eval:hover { background: var(--navy); color: #fff; }
 
 .fiches-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
-
 .fiche-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 1.25rem; display: flex; flex-direction: column; gap: 10px; transition: all .2s; position: relative; overflow: hidden; }
 .fiche-card.active { cursor: pointer; }
 .fiche-card.active:hover { border-color: var(--navy); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,.08); }
@@ -88,23 +93,15 @@ body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text
 .fiche-card.done::before { content:''; position:absolute;top:0;left:0;right:0;height:3px;background:var(--green); }
 .fiche-card.encours::before { content:''; position:absolute;top:0;left:0;right:0;height:3px;background:var(--amber); }
 .fiche-card.bientot { opacity: .6; }
-
 .fiche-theme { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.35; }
 .fiche-statut { display: flex; align-items: center; gap: 6px; }
 .statut-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 .statut-txt { font-size: 11px; font-weight: 500; }
-.s-todo .statut-dot { background: var(--text3); }
-.s-todo .statut-txt { color: var(--text3); }
-.s-encours .statut-dot { background: var(--amber); animation: pulse .8s infinite; }
-.s-encours .statut-txt { color: var(--amber); }
-.s-valide .statut-dot { background: var(--green); }
-.s-valide .statut-txt { color: var(--green); }
-.s-echec .statut-dot { background: var(--red); }
-.s-echec .statut-txt { color: var(--red); }
-.s-bientot .statut-dot { background: var(--text3); }
-.s-bientot .statut-txt { color: var(--text3); font-style: italic; }
-@keyframes pulse { 0%,100%{opacity:1;}50%{opacity:.3;} }
-
+.s-todo .statut-dot { background: var(--text3); } .s-todo .statut-txt { color: var(--text3); }
+.s-encours .statut-dot { background: var(--amber); animation: pulse .8s infinite; } .s-encours .statut-txt { color: var(--amber); }
+.s-valide .statut-dot { background: var(--green); } .s-valide .statut-txt { color: var(--green); }
+.s-echec .statut-dot { background: var(--red); } .s-echec .statut-txt { color: var(--red); }
+.s-bientot .statut-dot { background: var(--text3); } .s-bientot .statut-txt { color: var(--text3); font-style: italic; }
 .fiche-score { font-size: 11px; color: var(--text3); font-family: 'JetBrains Mono', monospace; }
 .fiche-btn { display: flex; align-items: center; justify-content: center; gap: 6px; background: var(--navy); color: #fff; padding: 9px; border-radius: var(--r); font-size: 12px; font-weight: 500; text-decoration: none; transition: background .15s; margin-top: 4px; }
 .fiche-btn:hover { background: #142248; }
@@ -112,41 +109,104 @@ body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text
 .fiche-btn.done-btn:hover { background: var(--green-m); }
 .fiche-btn.bientot-btn { background: var(--surface2); color: var(--text3); cursor: default; pointer-events: none; }
 
-.loading { display: none; min-height: 100vh; align-items: center; justify-content: center; flex-direction: column; gap: 1rem; }
+.loading-overlay { display: none; position: fixed; inset: 0; background: rgba(247,246,242,.85); z-index: 999; align-items: center; justify-content: center; flex-direction: column; gap: 1rem; }
+.loading-overlay.visible { display: flex; }
 .spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--navy); border-radius: 50%; animation: spin .7s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
 .loading-txt { font-size: 13px; color: var(--text3); }
 </style>
 </head>
 <body>
 
-<div class="loading" id="loading">
+<div class="loading-overlay" id="loading-overlay">
   <div class="spinner"></div>
-  <div class="loading-txt">Chargement de tes fiches...</div>
+  <div class="loading-txt" id="loading-txt">Chargement...</div>
 </div>
 
-<div class="login-wrap" id="login-wrap">
-  <div class="login-card">
-    <div class="login-logo">R</div>
-    <div class="login-title">Mon espace remédiation</div>
-    <div class="login-sub">Entre ton adresse email pour accéder à tes fiches de travail personnalisées.</div>
-    <label class="login-label">Adresse email *</label>
-    <input class="login-input" type="email" id="login-email" placeholder="ton.email@exemple.fr" autocomplete="email">
-    <div class="login-err" id="login-err">Email introuvable. Vérifie l'adresse saisie lors du diagnostic.</div>
-    <button class="btn-login" id="btn-login" onclick="connexion()">Accéder à mes fiches →</button>
+<!-- AUTH -->
+<div class="auth-wrap" id="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-logo">R</div>
+    <div class="auth-title">Mon espace remédiation</div>
+    <div class="auth-sub">Connecte-toi ou crée ton compte pour accéder à tes fiches personnalisées.</div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchTab('connexion')">Se connecter</button>
+      <button class="auth-tab" onclick="switchTab('inscription')">Créer un compte</button>
+    </div>
+
+    <!-- CONNEXION -->
+    <div class="form-panel active" id="panel-connexion">
+      <div class="form-group">
+        <label class="form-label">Adresse email</label>
+        <input class="form-input" type="email" id="co-email" placeholder="ton.email@exemple.fr" autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mot de passe</label>
+        <input class="form-input" type="password" id="co-mdp" placeholder="••••••••" />
+      </div>
+      <div class="form-err" id="co-err"></div>
+      <button class="btn-auth" id="co-btn" onclick="seConnecter()">Se connecter →</button>
+    </div>
+
+    <!-- INSCRIPTION -->
+    <div class="form-panel" id="panel-inscription">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Prénom *</label>
+          <input class="form-input" type="text" id="in-prenom" placeholder="Prénom" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nom *</label>
+          <input class="form-input" type="text" id="in-nom" placeholder="Nom" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Adresse email *</label>
+        <input class="form-input" type="email" id="in-email" placeholder="ton.email@exemple.fr" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mot de passe *</label>
+        <input class="form-input" type="password" id="in-mdp" placeholder="Choisis un mot de passe" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Niveau *</label>
+        <select class="form-select" id="in-niveau" onchange="mettreAJourClasses()">
+          <option value="">— Choisir son niveau —</option>
+          <option value="Seconde CAP">Seconde CAP</option>
+          <option value="Seconde Bac Pro">Seconde Bac Pro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Classe *</label>
+        <select class="form-select" id="in-classe" disabled>
+          <option value="">— Choisir d'abord son niveau —</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Professeur de maths *</label>
+        <select class="form-select" id="in-prof">
+          <option value="">— Choisir son professeur —</option>
+          <option value="Reydellet">M. Reydellet</option>
+          <option value="Autre">Autre</option>
+        </select>
+      </div>
+      <div class="form-err" id="in-err"></div>
+      <button class="btn-auth" id="in-btn" onclick="sInscrire()">Créer mon compte →</button>
+    </div>
   </div>
 </div>
 
+<!-- DASHBOARD -->
 <div class="dashboard" id="dashboard">
   <div class="dash-header">
     <div class="dash-header-left">
       <div class="dash-logo">R</div>
       <div>
         <div class="dash-title">Mon espace remédiation</div>
-        <div class="dash-sub" id="dash-etablissement">—</div>
+        <div class="dash-sub">Lycée Benoît Fourneyron</div>
       </div>
     </div>
-    <div class="dash-user" onclick="deconnexion()">← Changer de compte</div>
+    <div class="dash-user" onclick="seDeconnecter()">← Se déconnecter</div>
   </div>
   <div class="dash-main">
     <div class="eleve-hero">
@@ -155,7 +215,7 @@ body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text
         <div class="eleve-meta" id="eleve-meta">—</div>
       </div>
       <div class="eleve-stats">
-        <div class="estat"><div class="estat-val" id="stat-total">—</div><div class="estat-lbl">Fiches à faire</div></div>
+        <div class="estat"><div class="estat-val" id="stat-total">—</div><div class="estat-lbl">Fiches</div></div>
         <div class="estat"><div class="estat-val" style="color:var(--green);" id="stat-validees">—</div><div class="estat-lbl">Validées</div></div>
         <div class="estat"><div class="estat-val" style="color:var(--red);" id="stat-alertes">—</div><div class="estat-lbl">Bloquées</div></div>
       </div>
@@ -174,13 +234,14 @@ body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text
 
 <script>
 var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxlBMjVXIg58lsopoeQ5sEZW-jcQIOrOtnWwCGVtHLGjcmpi9exaYZ3oAEre4deZum2/exec";
-var ETABLISSEMENT = "Fourneyron";
-var currentEmail = "";
-var currentData  = null;
+
+var CLASSES = {
+  "Seconde CAP": ["2nde BMA Armurerie", "2nde CAP Cuisine", "2nde CAP Coiffure", "2nde CAP Autre"],
+  "Seconde Bac Pro": ["2nde AMA Bac Pro", "2nde TEBE", "2nde Bac Pro Autre"]
+};
 
 var THEMES = [
-  {
-    id: "fractions", titre: "Fractions", icon: "🔢", iconClass: "ic-fractions",
+  { id: "fractions", titre: "Fractions", icon: "🔢", iconClass: "ic-fractions",
     fiches: [
       { id: "fractions_comprendre",        titre: "Comprendre les fractions",                        url: "https://arnaudreydellet.github.io/fiche-rem-diation-1/" },
       { id: "fractions_reconnaitre_egales", titre: "Reconnaître deux fractions égales",               url: "https://arnaudreydellet.github.io/fiche-2/" },
@@ -192,7 +253,7 @@ var THEMES = [
       { id: "fractions_soustraction",       titre: "Soustraire deux fractions",                       url: "" },
       { id: "fractions_mult_entier",        titre: "Multiplier une fraction par un entier",           url: "" },
       { id: "fractions_mult_fractions",     titre: "Multiplier deux fractions entre elles",           url: "" },
-      { id: "fractions_inverse",            titre: "Comprendre l'inverse d'une fraction",             url: "" },
+      { id: "fractions_inverse",            titre: "Comprendre l\u2019inverse d\u2019une fraction",   url: "" },
       { id: "fractions_division",           titre: "Diviser par une fraction",                        url: "" },
     ]
   },
@@ -204,38 +265,137 @@ var THEMES = [
   { id: "stats",            titre: "Statistiques et probabilités",     icon: "🎲", iconClass: "ic-stats",     fiches: [] }
 ];
 
-document.getElementById('login-email').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') connexion();
-});
+var currentUser = null;
 
-function connexion() {
-  var email = document.getElementById('login-email').value.trim();
-  if (!email) return;
-  var btn = document.getElementById('btn-login');
-  btn.disabled = true; btn.textContent = 'Recherche...';
-  document.getElementById('login-err').style.display = 'none';
-  var url = SCRIPT_URL + '?type=eleve&email=' + encodeURIComponent(email) + '&etablissement=' + ETABLISSEMENT + '&t=' + Date.now();
-  fetch(url)
-    .then(function(r) { return r.json(); })
-    .then(function(json) {
-      if (json.status === 'ok') { currentEmail = email; currentData = json; afficherDashboard(json); }
-      else { document.getElementById('login-err').style.display = 'block'; btn.disabled = false; btn.textContent = 'Accéder à mes fiches →'; }
-    })
-    .catch(function() {
-      document.getElementById('login-err').textContent = 'Erreur de connexion. Réessaie dans quelques instants.';
-      document.getElementById('login-err').style.display = 'block';
-      btn.disabled = false; btn.textContent = 'Accéder à mes fiches →';
-    });
+// ── Tabs ──
+function switchTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach(function(t, i) {
+    t.classList.toggle('active', (i === 0 && tab === 'connexion') || (i === 1 && tab === 'inscription'));
+  });
+  document.getElementById('panel-connexion').classList.toggle('active', tab === 'connexion');
+  document.getElementById('panel-inscription').classList.toggle('active', tab === 'inscription');
 }
 
-function afficherDashboard(data) {
-  document.getElementById('login-wrap').style.display = 'none';
-  document.getElementById('dashboard').style.display  = 'block';
+// ── Connexion Enter ──
+document.getElementById('co-email').addEventListener('keydown', function(e) { if (e.key === 'Enter') seConnecter(); });
+document.getElementById('co-mdp').addEventListener('keydown', function(e) { if (e.key === 'Enter') seConnecter(); });
 
-  var fiches = data.fiches || [];
-  document.getElementById('eleve-name').textContent        = (data.prenom || '') + ' ' + (data.nom || '');
-  document.getElementById('eleve-meta').textContent        = 'Lycée Benoît Fourneyron · ' + (data.classe || '');
-  document.getElementById('dash-etablissement').textContent = 'Lycée Benoît Fourneyron';
+// ── Classes dynamiques ──
+function mettreAJourClasses() {
+  var niveau = document.getElementById('in-niveau').value;
+  var sel = document.getElementById('in-classe');
+  sel.innerHTML = '<option value="">— Choisir sa classe —</option>';
+  if (niveau && CLASSES[niveau]) {
+    CLASSES[niveau].forEach(function(c) {
+      sel.innerHTML += '<option value="' + c + '">' + c + '</option>';
+    });
+    sel.disabled = false;
+  } else {
+    sel.disabled = true;
+  }
+}
+
+// ── Loading ──
+function setLoading(visible, txt) {
+  document.getElementById('loading-overlay').classList.toggle('visible', visible);
+  if (txt) document.getElementById('loading-txt').textContent = txt;
+}
+
+// ── Connexion ──
+function seConnecter() {
+  var email = document.getElementById('co-email').value.trim();
+  var mdp   = document.getElementById('co-mdp').value;
+  var err   = document.getElementById('co-err');
+  err.classList.remove('visible');
+
+  if (!email || !mdp) { err.textContent = 'Remplis tous les champs.'; err.classList.add('visible'); return; }
+
+  setLoading(true, 'Connexion en cours...');
+  document.getElementById('co-btn').disabled = true;
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify({ type: 'connexion_compte', email: email, mot_de_passe: mdp })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(json) {
+    setLoading(false);
+    document.getElementById('co-btn').disabled = false;
+    if (json.status === 'ok') {
+      currentUser = json;
+      afficherDashboard(json);
+    } else {
+      err.textContent = json.message || 'Email ou mot de passe incorrect.';
+      err.classList.add('visible');
+    }
+  })
+  .catch(function() {
+    setLoading(false);
+    document.getElementById('co-btn').disabled = false;
+    err.textContent = 'Erreur de connexion. Réessaie.';
+    err.classList.add('visible');
+  });
+}
+
+// ── Inscription ──
+function sInscrire() {
+  var prenom = document.getElementById('in-prenom').value.trim();
+  var nom    = document.getElementById('in-nom').value.trim();
+  var email  = document.getElementById('in-email').value.trim();
+  var mdp    = document.getElementById('in-mdp').value;
+  var niveau = document.getElementById('in-niveau').value;
+  var classe = document.getElementById('in-classe').value;
+  var prof   = document.getElementById('in-prof').value;
+  var err    = document.getElementById('in-err');
+  err.classList.remove('visible');
+
+  if (!prenom || !nom || !email || !mdp || !niveau || !classe || !prof) {
+    err.textContent = 'Remplis tous les champs obligatoires.';
+    err.classList.add('visible'); return;
+  }
+  if (mdp.length < 4) {
+    err.textContent = 'Le mot de passe doit faire au moins 4 caractères.';
+    err.classList.add('visible'); return;
+  }
+
+  setLoading(true, 'Création du compte...');
+  document.getElementById('in-btn').disabled = true;
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify({
+      type: 'creer_compte', email: email, mot_de_passe: mdp,
+      prenom: prenom, nom: nom, niveau: niveau, classe: classe, prof: prof
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(json) {
+    setLoading(false);
+    document.getElementById('in-btn').disabled = false;
+    if (json.status === 'ok') {
+      currentUser = { email: email, prenom: prenom, nom: nom, niveau: niveau, classe: classe, prof: prof, fiches: [] };
+      afficherDashboard(currentUser);
+    } else {
+      err.textContent = json.message || 'Erreur lors de la création du compte.';
+      err.classList.add('visible');
+    }
+  })
+  .catch(function() {
+    setLoading(false);
+    document.getElementById('in-btn').disabled = false;
+    err.textContent = 'Erreur de connexion. Réessaie.';
+    err.classList.add('visible');
+  });
+}
+
+// ── Dashboard ──
+function afficherDashboard(user) {
+  document.getElementById('auth-wrap').style.display   = 'none';
+  document.getElementById('dashboard').style.display   = 'block';
+
+  var fiches = user.fiches || [];
+  document.getElementById('eleve-name').textContent = user.prenom + ' ' + user.nom;
+  document.getElementById('eleve-meta').textContent = 'Lycée Benoît Fourneyron · ' + (user.classe || '');
 
   var tousIds = [];
   THEMES.forEach(function(t) { t.fiches.forEach(function(f) { tousIds.push(f.id); }); });
@@ -263,25 +423,19 @@ function afficherDashboard(data) {
   var html = '';
   THEMES.forEach(function(theme) {
     html += '<div class="theme-section">';
-
-    // En-tête avec titre + bouton évaluation
     html += '<div class="theme-header">';
     html += '<div class="theme-header-left">';
     html += '<div class="theme-icon ' + theme.iconClass + '">' + theme.icon + '</div>';
-    html += '<div>';
-    html += '<div class="theme-title">' + theme.titre + '</div>';
-    if (theme.fiches.length > 0) {
-      html += '<div class="theme-count">' + theme.fiches.length + ' fiche' + (theme.fiches.length > 1 ? 's' : '') + '</div>';
-    }
+    html += '<div><div class="theme-title">' + theme.titre + '</div>';
+    if (theme.fiches.length > 0) html += '<div class="theme-count">' + theme.fiches.length + ' fiche' + (theme.fiches.length > 1 ? 's' : '') + '</div>';
+    html += '</div></div>';
+    html += '<button class="btn-eval">\uD83D\uDCDD Passer l\u2019\u00e9valuation</button>';
     html += '</div>';
-    html += '</div>'; // theme-header-left
-    html += '<button class="btn-eval">📝 Passer l\u2019\u00e9valuation</button>';
-    html += '</div>'; // theme-header
 
     if (theme.fiches.length === 0) {
       html += '<div style="background:var(--surface);border:1px dashed var(--border);border-radius:var(--rl);padding:1.25rem 1.5rem;display:flex;align-items:center;gap:12px;">';
-      html += '<span style="font-size:18px;">🛠️</span>';
-      html += '<span style="font-size:13px;color:var(--text3);font-style:italic;">Les fiches sont en cours de création\u2026</span>';
+      html += '<span style="font-size:18px;">\uD83D\uDEE0\uFE0F</span>';
+      html += '<span style="font-size:13px;color:var(--text3);font-style:italic;">Les fiches sont en cours de cr\u00e9ation\u2026</span>';
       html += '</div>';
     } else {
       html += '<div class="fiches-grid">';
@@ -294,19 +448,19 @@ function afficherDashboard(data) {
         var lien = '#';
         if (aUrl) {
           lien = fiche.url
-            + '?nom='        + encodeURIComponent((data.prenom || '') + ' ' + (data.nom || ''))
-            + '&classe='     + encodeURIComponent(data.classe || '')
+            + '?nom='        + encodeURIComponent(user.prenom + ' ' + user.nom)
+            + '&classe='     + encodeURIComponent(user.classe || '')
             + '&lycee='      + encodeURIComponent('Lyc\u00e9e Beno\u00eet Fourneyron')
-            + '&email='      + encodeURIComponent(currentEmail)
-            + '&prof=Reydellet'
+            + '&email='      + encodeURIComponent(user.email || '')
+            + '&prof='       + encodeURIComponent(user.prof || '')
             + '&prof_email=' + encodeURIComponent('ar.reydellet@gmail.com');
         }
 
         var statutClass = 's-todo', statutTxt = '\u00c0 faire', cardClass = aUrl ? 'active' : 'bientot';
-        if (!aUrl)                              { statutClass = 's-bientot'; statutTxt = 'Bient\u00f4t disponible'; }
-        else if (statut === 'quiz_final_valide'){ statutClass = 's-valide';  statutTxt = 'Valid\u00e9e \u2713'; cardClass = 'done active'; }
-        else if (statut === 'quiz_initial')     { statutClass = 's-encours'; statutTxt = 'En cours\u2026'; cardClass = 'encours active'; }
-        else if (statut === 'echec_3_tentatives'){ statutClass = 's-echec'; statutTxt = 'Intervention requise'; cardClass = 'active'; }
+        if (!aUrl)                               { statutClass = 's-bientot'; statutTxt = 'Bient\u00f4t disponible'; }
+        else if (statut === 'quiz_final_valide') { statutClass = 's-valide';  statutTxt = 'Valid\u00e9e \u2713'; cardClass = 'done active'; }
+        else if (statut === 'quiz_initial')      { statutClass = 's-encours'; statutTxt = 'En cours\u2026'; cardClass = 'encours active'; }
+        else if (statut === 'echec_3_tentatives'){ statutClass = 's-echec';   statutTxt = 'Intervention requise'; cardClass = 'active'; }
 
         var btnClass = '', btnTxt = 'Commencer \u2192';
         if (!aUrl)                               { btnClass = 'bientot-btn'; btnTxt = 'Bient\u00f4t\u2026'; }
@@ -316,7 +470,7 @@ function afficherDashboard(data) {
         html += '<div class="fiche-card ' + cardClass + '">';
         html += '<div class="fiche-theme">' + fiche.titre + '</div>';
         html += '<div class="fiche-statut ' + statutClass + '"><div class="statut-dot"></div><div class="statut-txt">' + statutTxt + '</div></div>';
-        if (score && aUrl) html += '<div class="fiche-score">Dernier score\u00a0: ' + score + '</div>';
+        if (score && aUrl) html += '<div class="fiche-score">Dernier score : ' + score + '</div>';
         if (aUrl) html += '<a href="' + lien + '" target="_blank" class="fiche-btn ' + btnClass + '">' + btnTxt + '</a>';
         else      html += '<div class="fiche-btn bientot-btn">' + btnTxt + '</div>';
         html += '</div>';
@@ -329,15 +483,15 @@ function afficherDashboard(data) {
   document.getElementById('fiches-section').innerHTML = html;
 }
 
-function deconnexion() {
-  currentEmail = ''; currentData = null;
-  document.getElementById('dashboard').style.display  = 'none';
-  document.getElementById('login-wrap').style.display = 'flex';
-  document.getElementById('login-email').value        = '';
-  document.getElementById('btn-login').disabled       = false;
-  document.getElementById('btn-login').textContent    = 'Acc\u00e9der \u00e0 mes fiches \u2192';
+function seDeconnecter() {
+  currentUser = null;
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('auth-wrap').style.display  = 'flex';
+  document.getElementById('co-email').value = '';
+  document.getElementById('co-mdp').value   = '';
   document.getElementById('fiches-section').innerHTML = '';
   document.getElementById('progress-panel').style.display = 'none';
+  switchTab('connexion');
 }
 </script>
 </body>
