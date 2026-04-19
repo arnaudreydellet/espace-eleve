@@ -11,28 +11,20 @@
   --bg: #F7F6F2; --surface: #FFFFFF; --surface2: #F0EFE9;
   --border: #E2E0D8; --text: #1A1917; --text2: #6B6960; --text3: #A8A69E;
   --green: #1A7A5E; --green-l: #E3F4EE; --green-m: #A8DCC8;
-  --amber: #B8610A; --red: #B52A2A;
+  --amber: #B8610A; --amber-l: #FEF3E2; --red: #B52A2A; --red-l: #FDEAEA;
   --navy: #1A2C5B; --r: 10px; --rl: 16px;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-/* ═══ MODE DYS ═══
-   Activé via <body class="dys-mode">
-   - Police OpenDyslexic (comme sur les fiches)
-   - Espacements augmentés (letter-spacing, line-height)
-   - Tailles de police plus grandes
-   - Contrastes renforcés
-*/
+/* ═══ MODE DYS ═══ */
 body.dys-mode, body.dys-mode * { font-family: 'OpenDyslexic', Arial, sans-serif !important; line-height: 1.85; }
-body.dys-mode .auth-title { font-size: 24px; letter-spacing: .01em; }
+body.dys-mode .auth-title { font-size: 24px; }
 body.dys-mode .auth-sub { font-size: 14.5px; }
 body.dys-mode .form-label { font-size: 13px; letter-spacing: .03em; }
-body.dys-mode .form-input, body.dys-mode .form-select { font-size: 15.5px; height: 48px; letter-spacing: .02em; }
-body.dys-mode .btn-auth { font-size: 15px; height: 48px; letter-spacing: .03em; }
-body.dys-mode .dash-title { font-size: 16.5px; }
-body.dys-mode .dash-sub { font-size: 12px; }
-body.dys-mode .eleve-name { font-size: 24px; letter-spacing: 0; line-height: 1.3; }
+body.dys-mode .form-input, body.dys-mode .form-select { font-size: 15.5px; height: 48px; }
+body.dys-mode .btn-auth { font-size: 15px; height: 48px; }
+body.dys-mode .eleve-name { font-size: 24px; line-height: 1.3; }
 body.dys-mode .eleve-meta { font-size: 14.5px; }
 body.dys-mode .estat-val { font-size: 30px; font-family: 'OpenDyslexic', Arial, sans-serif !important; }
 body.dys-mode .estat-lbl { font-size: 11px; letter-spacing: .1em; }
@@ -42,34 +34,35 @@ body.dys-mode .progress-sub { font-size: 13.5px; }
 body.dys-mode .theme-title { font-size: 14px; letter-spacing: .08em; }
 body.dys-mode .fiche-theme { font-size: 14.5px; }
 body.dys-mode .statut-txt { font-size: 12.5px; }
-body.dys-mode .fiche-btn { font-size: 13px; height: 40px; letter-spacing: .03em; }
+body.dys-mode .fiche-btn { font-size: 13px; height: 40px; }
 body.dys-mode .eval-titre { font-size: 16.5px; }
 body.dys-mode .eval-sub { font-size: 13.5px; }
 body.dys-mode .btn-passer-eval { font-size: 14px; padding: 12px 24px; }
 body.dys-mode .fiche-card { padding: 1.4rem 1.35rem; gap: 12px; }
 
 @keyframes fadeUp { from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);} }
-@keyframes pulse { 0%,100%{opacity:1;}50%{opacity:.3;} }
-@keyframes spin { to{transform:rotate(360deg);} }
+@keyframes fadeIn { from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);} }
+@keyframes pulse  { 0%,100%{opacity:1;}50%{opacity:.3;} }
+@keyframes spin   { to{transform:rotate(360deg);} }
+
+/* ═══ LOGIN ═══ */
 .auth-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
 .auth-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 2.5rem; width: 100%; max-width: 440px; box-shadow: 0 4px 24px rgba(0,0,0,.06); animation: fadeUp .4s ease; }
 .auth-logo { width: 44px; height: 44px; border-radius: 12px; background: var(--navy); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 1.5rem; }
 .auth-title { font-size: 22px; font-weight: 600; margin-bottom: .3rem; }
 .auth-sub { font-size: 13px; color: var(--text2); margin-bottom: 1.75rem; line-height: 1.5; }
-.auth-tabs { display: flex; gap: 0; border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; margin-bottom: 1.75rem; }
+.auth-tabs { display: flex; border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; margin-bottom: 1.75rem; }
 .auth-tab { flex: 1; padding: 10px; text-align: center; font-size: 13px; font-weight: 500; color: var(--text2); cursor: pointer; background: var(--surface2); transition: all .15s; border: none; font-family: inherit; }
 .auth-tab.active { background: var(--navy); color: #fff; font-weight: 600; }
 .form-group { margin-bottom: 1rem; }
 .form-label { font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: .4rem; display: block; }
 .form-input { width: 100%; height: 44px; padding: 0 14px; border: 1.5px solid var(--border); border-radius: var(--r); font-family: inherit; font-size: 14px; color: var(--text); background: var(--surface2); outline: none; transition: border-color .2s, background .2s; }
 .form-input:focus { border-color: var(--navy); background: var(--surface); }
-.form-select { width: 100%; height: 44px; padding: 0 14px; border: 1.5px solid var(--border); border-radius: var(--r); font-family: inherit; font-size: 14px; color: var(--text); background: var(--surface2); outline: none; cursor: pointer; transition: border-color .2s; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236B6960' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
+.form-select { width: 100%; height: 44px; padding: 0 14px; border: 1.5px solid var(--border); border-radius: var(--r); font-family: inherit; font-size: 14px; color: var(--text); background: var(--surface2); outline: none; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236B6960' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
 .form-select:focus { border-color: var(--navy); }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.form-err { font-size: 12px; color: var(--red); margin-bottom: .75rem; display: none; padding: 8px 12px; background: #fdeaea; border-radius: var(--r); }
+.form-err { font-size: 12px; color: var(--red); margin-bottom: .75rem; display: none; padding: 8px 12px; background: var(--red-l); border-radius: var(--r); }
 .form-err.visible { display: block; }
-
-/* ═══ CHECKBOX DYS ═══ */
 .form-dys { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; background: var(--surface2); border: 1.5px solid var(--border); border-radius: var(--r); cursor: pointer; transition: all .2s; margin-bottom: 1rem; }
 .form-dys:hover { border-color: var(--navy); background: var(--surface); }
 .form-dys input[type="checkbox"] { appearance: none; width: 20px; height: 20px; border: 2px solid var(--border); border-radius: 5px; background: var(--surface); cursor: pointer; position: relative; flex-shrink: 0; margin-top: 1px; transition: all .15s; }
@@ -78,27 +71,47 @@ body.dys-mode .fiche-card { padding: 1.4rem 1.35rem; gap: 12px; }
 .form-dys-label { flex: 1; cursor: pointer; }
 .form-dys-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
 .form-dys-desc { font-size: 11.5px; color: var(--text3); line-height: 1.45; }
-
 .btn-auth { width: 100%; height: 44px; background: var(--navy); color: #fff; border: none; border-radius: var(--r); font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer; transition: all .15s; margin-top: .5rem; }
 .btn-auth:hover { background: #142248; transform: translateY(-1px); }
 .btn-auth:disabled { background: #8a9fc5; cursor: not-allowed; transform: none; }
 .form-panel { display: none; }
 .form-panel.active { display: block; }
+
+/* ═══ LOADING ═══ */
+.loading-overlay { display: none; position: fixed; inset: 0; background: rgba(247,246,242,.85); z-index: 999; align-items: center; justify-content: center; flex-direction: column; gap: 1rem; }
+.loading-overlay.visible { display: flex; }
+.spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--navy); border-radius: 50%; animation: spin .7s linear infinite; }
+.loading-txt { font-size: 13px; color: var(--text3); }
+
+/* ═══ DASHBOARD ═══ */
 .dashboard { display: none; min-height: 100vh; }
-.dash-header { background: var(--navy); padding: 1.25rem 2rem; display: flex; align-items: center; justify-content: space-between; }
+
+/* ═══ HEADER ═══ */
+.dash-header { background: var(--navy); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; }
 .dash-header-left { display: flex; align-items: center; gap: 14px; }
-.dash-logo { width: 36px; height: 36px; border-radius: 9px; background: rgba(255,255,255,.12); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #fff; }
-.dash-title { font-size: 15px; font-weight: 600; color: #fff; }
-.dash-sub { font-size: 11px; color: rgba(255,255,255,.45); margin-top: 1px; }
+.dash-logo { width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,.12); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; }
+.dash-brand { font-size: 13.5px; font-weight: 600; color: #fff; }
+
+/* ═══ NAVBAR HORIZONTALE — centrée ═══ */
+.dash-nav { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 2px; }
+.nav-tab { padding: 6px 16px; border-radius: 999px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,.55); cursor: pointer; transition: all .15s; background: transparent; border: none; font-family: 'Sora', sans-serif; }
+.nav-tab:hover { color: rgba(255,255,255,.9); background: rgba(255,255,255,.08); }
+.nav-tab.active { color: #fff; background: rgba(255,255,255,.15); font-weight: 600; }
+
+/* Badge DYS + déconnexion */
+.dash-header-right { display: flex; align-items: center; gap: 12px; }
+.dys-badge { display: none; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 999px; background: rgba(255,255,255,.12); color: #fff; font-size: 10.5px; font-weight: 600; letter-spacing: .04em; }
+.dys-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #7ABA9C; }
+body.dys-mode .dys-badge { display: inline-flex; }
 .dash-user { font-size: 12px; color: rgba(255,255,255,.5); cursor: pointer; transition: color .15s; }
 .dash-user:hover { color: rgba(255,255,255,.85); }
 
-/* Badge mode DYS dans le header */
-.dys-badge { display: none; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 999px; background: rgba(255,255,255,.12); color: #fff; font-size: 10.5px; font-weight: 600; letter-spacing: .04em; margin-right: .75rem; }
-.dys-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #7ABA9C; }
-body.dys-mode .dys-badge { display: inline-flex; }
-
+/* ═══ MAIN CONTENT ═══ */
 .dash-main { padding: 2rem; max-width: 900px; margin: 0 auto; }
+.section { display: none; animation: fadeIn .2s ease; }
+.section.active { display: block; }
+
+/* ═══ ACCUEIL (identique à l'original) ═══ */
 .eleve-hero { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 1.75rem 2rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
 .eleve-name { font-size: 22px; font-weight: 600; letter-spacing: -.3px; margin-bottom: 3px; }
 .eleve-meta { font-size: 13px; color: var(--text2); }
@@ -114,15 +127,14 @@ body.dys-mode .dys-badge { display: inline-flex; }
 .progress-fill { height: 100%; background: var(--green); border-radius: 4px; transition: width 1s cubic-bezier(.4,0,.2,1); width: 0%; }
 .progress-sub { font-size: 12px; color: var(--text3); margin-top: .5rem; }
 .theme-section { margin-bottom: 2.5rem; }
+.themes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2rem; }
+.theme-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 1.25rem 1.4rem; }
 .theme-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 1rem; }
 .theme-header-left { display: flex; align-items: center; gap: 12px; }
 .theme-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
 .theme-title { font-size: 13px; font-weight: 600; color: var(--text2); letter-spacing: .06em; text-transform: uppercase; }
-.theme-count { font-size: 11px; color: var(--text3); font-family: 'JetBrains Mono', monospace; }
-.ic-fractions { background: #EEF2FF; } .ic-propor { background: #FFF7ED; }
-.ic-litteral  { background: #F0FDF4; } .ic-fonctions { background: #EFF6FF; }
-.ic-geometrie { background: #FDF4FF; } .ic-nombres { background: #FFFBEB; }
-.ic-stats     { background: #FFF1F2; }
+.ic-fractions{background:#EEF2FF;}.ic-propor{background:#FFF7ED;}.ic-litteral{background:#F0FDF4;}
+.ic-fonctions{background:#EFF6FF;}.ic-geometrie{background:#FDF4FF;}.ic-nombres{background:#FFFBEB;}.ic-stats{background:#FFF1F2;}
 .fiches-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
 .fiche-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 1.25rem; display: flex; flex-direction: column; gap: 10px; transition: all .2s; position: relative; overflow: hidden; }
 .fiche-card.active { cursor: pointer; }
@@ -135,22 +147,17 @@ body.dys-mode .dys-badge { display: inline-flex; }
 .fiche-statut { display: flex; align-items: center; gap: 6px; }
 .statut-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 .statut-txt { font-size: 11px; font-weight: 500; }
-.s-todo .statut-dot { background: var(--text3); } .s-todo .statut-txt { color: var(--text3); }
-.s-encours .statut-dot { background: var(--amber); animation: pulse .8s infinite; } .s-encours .statut-txt { color: var(--amber); }
-.s-valide .statut-dot { background: var(--green); } .s-valide .statut-txt { color: var(--green); }
-.s-echec .statut-dot { background: var(--red); } .s-echec .statut-txt { color: var(--red); }
-.s-bientot .statut-dot { background: var(--text3); } .s-bientot .statut-txt { color: var(--text3); font-style: italic; }
+.s-todo .statut-dot{background:var(--text3);}.s-todo .statut-txt{color:var(--text3);}
+.s-encours .statut-dot{background:var(--amber);animation:pulse .8s infinite;}.s-encours .statut-txt{color:var(--amber);}
+.s-valide .statut-dot{background:var(--green);}.s-valide .statut-txt{color:var(--green);}
+.s-echec .statut-dot{background:var(--red);}.s-echec .statut-txt{color:var(--red);}
+.s-bientot .statut-dot{background:var(--text3);}.s-bientot .statut-txt{color:var(--text3);font-style:italic;}
 .fiche-score { font-size: 11px; color: var(--text3); font-family: 'JetBrains Mono', monospace; }
 .fiche-btn { display: flex; align-items: center; justify-content: center; gap: 6px; background: var(--navy); color: #fff; padding: 9px; border-radius: var(--r); font-size: 12px; font-weight: 500; text-decoration: none; transition: background .15s; margin-top: 4px; }
 .fiche-btn:hover { background: #142248; }
 .fiche-btn.done-btn { background: var(--green-l); color: var(--green); }
 .fiche-btn.done-btn:hover { background: var(--green-m); }
 .fiche-btn.bientot-btn { background: var(--surface2); color: var(--text3); cursor: default; pointer-events: none; }
-.loading-overlay { display: none; position: fixed; inset: 0; background: rgba(247,246,242,.85); z-index: 999; align-items: center; justify-content: center; flex-direction: column; gap: 1rem; }
-.loading-overlay.visible { display: flex; }
-.spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--navy); border-radius: 50%; animation: spin .7s linear infinite; }
-.loading-txt { font-size: 13px; color: var(--text3); }
-/* EVAL BANNER */
 .eval-banner { background: var(--surface); border: 1.5px solid var(--navy); border-radius: var(--rl); padding: 1.75rem 2rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
 .eval-banner-left { display: flex; align-items: center; gap: 14px; }
 .eval-icon { width: 44px; height: 44px; border-radius: 10px; background: #EEF2FF; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
@@ -159,6 +166,40 @@ body.dys-mode .dys-badge { display: inline-flex; }
 .btn-passer-eval { padding: 10px 22px; border-radius: 999px; background: var(--navy); color: #fff; border: none; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s; white-space: nowrap; text-decoration: none; display: inline-block; }
 .btn-passer-eval:hover { background: #142248; transform: translateY(-1px); }
 .eval-done-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; background: var(--green-l); color: var(--green); font-size: 11px; font-weight: 600; }
+
+/* ═══ PROGRESSION ═══ */
+.prog-section-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 1rem; letter-spacing: -.1px; }
+.prog-kpi-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.75rem; }
+.prog-kpi { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 1.25rem 1.5rem; }
+.prog-kpi-val { font-size: 36px; font-weight: 700; color: var(--navy); line-height: 1; letter-spacing: -1.5px; font-family: 'JetBrains Mono', monospace; margin-bottom: .25rem; }
+.prog-kpi.green .prog-kpi-val { color: var(--green); }
+.prog-kpi.amber .prog-kpi-val { color: var(--amber); }
+.prog-kpi-lbl { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--text3); }
+.prog-charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.75rem; }
+.prog-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 1.5rem; }
+.prog-panel-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 1.25rem; }
+/* Donut */
+.donut-wrap { display: flex; align-items: center; gap: 1.5rem; }
+.donut-svg { flex-shrink: 0; }
+.donut-legend { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.donut-leg-item { display: flex; align-items: center; gap: 8px; }
+.donut-leg-dot { width: 9px; height: 9px; border-radius: 3px; flex-shrink: 0; }
+.donut-leg-label { font-size: 12px; color: var(--text2); flex: 1; }
+.donut-leg-val { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--text3); }
+/* Barres thèmes */
+.prog-bars { display: flex; flex-direction: column; gap: 14px; }
+.prog-bar-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; }
+.prog-bar-label { font-size: 12px; font-weight: 500; color: var(--text2); }
+.prog-bar-val { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--text3); }
+.prog-bar-track { height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+.prog-bar-fill { height: 100%; border-radius: 3px; transition: width 1s cubic-bezier(.4,0,.2,1); width: 0%; }
+/* Tentatives */
+.prog-tentatives { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); overflow: hidden; }
+.prog-tent-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 1.5rem; border-bottom: 1px solid #F0EFE9; font-size: 12.5px; }
+.prog-tent-row:last-child { border-bottom: none; }
+.prog-tent-name { font-weight: 600; color: var(--text); }
+.prog-tent-meta { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.prog-tent-score { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; }
 </style>
 </head>
 <body>
@@ -168,6 +209,7 @@ body.dys-mode .dys-badge { display: inline-flex; }
   <div class="loading-txt" id="loading-txt">Chargement...</div>
 </div>
 
+<!-- ══ LOGIN ══ -->
 <div class="auth-wrap" id="auth-wrap">
   <div class="auth-card">
     <div class="auth-logo">R</div>
@@ -178,326 +220,423 @@ body.dys-mode .dys-badge { display: inline-flex; }
       <button class="auth-tab" onclick="switchTab('inscription')">Créer un compte</button>
     </div>
     <div class="form-panel active" id="panel-connexion">
-      <div class="form-group"><label class="form-label">Adresse email</label><input class="form-input" type="email" id="co-email" placeholder="ton.email@exemple.fr" autocomplete="email" /></div>
-      <div class="form-group"><label class="form-label">Mot de passe</label><input class="form-input" type="password" id="co-mdp" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" /></div>
+      <div class="form-group"><label class="form-label">Adresse email</label><input class="form-input" type="email" id="co-email" placeholder="ton.email@exemple.fr" autocomplete="email"/></div>
+      <div class="form-group"><label class="form-label">Mot de passe</label><input class="form-input" type="password" id="co-mdp" placeholder="••••••••"/></div>
       <div class="form-err" id="co-err"></div>
-      <button class="btn-auth" id="co-btn" onclick="seConnecter()">Se connecter &rarr;</button>
+      <button class="btn-auth" id="co-btn" onclick="seConnecter()">Se connecter →</button>
     </div>
     <div class="form-panel" id="panel-inscription">
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Prénom *</label><input class="form-input" type="text" id="in-prenom" placeholder="Prénom" /></div>
-        <div class="form-group"><label class="form-label">Nom *</label><input class="form-input" type="text" id="in-nom" placeholder="Nom" /></div>
+        <div class="form-group"><label class="form-label">Prénom *</label><input class="form-input" type="text" id="in-prenom" placeholder="Prénom"/></div>
+        <div class="form-group"><label class="form-label">Nom *</label><input class="form-input" type="text" id="in-nom" placeholder="Nom"/></div>
       </div>
-      <div class="form-group"><label class="form-label">Adresse email *</label><input class="form-input" type="email" id="in-email" placeholder="ton.email@exemple.fr" /></div>
-      <div class="form-group"><label class="form-label">Mot de passe *</label><input class="form-input" type="password" id="in-mdp" placeholder="Choisis un mot de passe" /></div>
+      <div class="form-group"><label class="form-label">Adresse email *</label><input class="form-input" type="email" id="in-email" placeholder="ton.email@exemple.fr"/></div>
+      <div class="form-group"><label class="form-label">Mot de passe *</label><input class="form-input" type="password" id="in-mdp" placeholder="Choisis un mot de passe"/></div>
       <div class="form-group">
         <label class="form-label">Niveau *</label>
         <select class="form-select" id="in-niveau" onchange="mettreAJourClasses()">
-          <option value="">&mdash; Choisir son niveau &mdash;</option>
+          <option value="">— Choisir son niveau —</option>
           <option value="Seconde CAP">Seconde CAP</option>
           <option value="Seconde Bac Pro">Seconde Bac Pro</option>
         </select>
       </div>
       <div class="form-group">
         <label class="form-label">Classe *</label>
-        <select class="form-select" id="in-classe" disabled><option value="">&mdash; Choisir d'abord son niveau &mdash;</option></select>
+        <select class="form-select" id="in-classe" disabled><option value="">— Choisir d'abord son niveau —</option></select>
       </div>
-
-      <!-- ═══ CHECKBOX DYS ═══ -->
       <label class="form-dys" for="in-dys">
-        <input type="checkbox" id="in-dys" />
+        <input type="checkbox" id="in-dys"/>
         <div class="form-dys-label">
           <div class="form-dys-title">Je suis dyslexique ou dyspraxique</div>
           <div class="form-dys-desc">Active le mode adapté : police plus lisible, espacements augmentés, tailles plus grandes.</div>
         </div>
       </label>
-
       <div class="form-err" id="in-err"></div>
-      <button class="btn-auth" id="in-btn" onclick="sInscrire()">Créer mon compte &rarr;</button>
+      <button class="btn-auth" id="in-btn" onclick="sInscrire()">Créer mon compte →</button>
     </div>
   </div>
 </div>
 
+<!-- ══ DASHBOARD ══ -->
 <div class="dashboard" id="dashboard">
+
   <div class="dash-header">
     <div class="dash-header-left">
-      <div class="dash-logo">R</div>
-      <div><div class="dash-title">Mon espace remédiation</div><div class="dash-sub">Lycée Benoît Fourneyron</div></div>
+      <div class="dash-logo">AM</div>
+      <div class="dash-brand">Mon espace remédiation</div>
     </div>
-    <div style="display:flex;align-items:center;">
+    <nav class="dash-nav">
+      <button class="nav-tab active" id="nav-accueil" onclick="navVers('accueil')">Accueil</button>
+      <button class="nav-tab" id="nav-progression" onclick="navVers('progression')">Ma progression</button>
+    </nav>
+    <div class="dash-header-right">
       <span class="dys-badge">Mode adapté DYS</span>
-      <div class="dash-user" onclick="seDeconnecter()">&larr; Se déconnecter</div>
+      <div class="dash-user" onclick="seDeconnecter()">← Se déconnecter</div>
     </div>
   </div>
+
   <div class="dash-main">
-    <div class="eleve-hero">
-      <div><div class="eleve-name" id="eleve-name">&mdash;</div><div class="eleve-meta" id="eleve-meta">&mdash;</div></div>
-      <div class="eleve-stats">
-        <div class="estat"><div class="estat-val" id="stat-total">&mdash;</div><div class="estat-lbl">Fiches</div></div>
-        <div class="estat"><div class="estat-val" style="color:var(--green);" id="stat-validees">&mdash;</div><div class="estat-lbl">Validées</div></div>
-        <div class="estat"><div class="estat-val" style="color:var(--red);" id="stat-alertes">&mdash;</div><div class="estat-lbl">Bloquées</div></div>
+
+    <!-- ══ ACCUEIL ══ -->
+    <div class="section active" id="section-accueil">
+      <div class="eleve-hero">
+        <div><div class="eleve-name" id="eleve-name">—</div><div class="eleve-meta" id="eleve-meta">—</div></div>
+        <div class="eleve-stats">
+          <div class="estat"><div class="estat-val" id="stat-total">—</div><div class="estat-lbl">Fiches</div></div>
+          <div class="estat"><div class="estat-val" style="color:var(--green);" id="stat-validees">—</div><div class="estat-lbl">Validées</div></div>
+          <div class="estat"><div class="estat-val" style="color:var(--red);" id="stat-alertes">—</div><div class="estat-lbl">Bloquées</div></div>
+        </div>
       </div>
+      <div class="progress-panel" id="progress-panel" style="display:none;">
+        <div class="progress-panel-header">
+          <div class="progress-panel-title">Ta progression globale</div>
+          <div class="progress-panel-pct" id="progress-pct">0%</div>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+        <div class="progress-sub" id="progress-sub">—</div>
+      </div>
+      <div id="fiches-section"></div>
     </div>
-    <div class="progress-panel" id="progress-panel" style="display:none;">
-      <div class="progress-panel-header"><div class="progress-panel-title">Ta progression globale</div><div class="progress-panel-pct" id="progress-pct">0%</div></div>
-      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
-      <div class="progress-sub" id="progress-sub">&mdash;</div>
+
+    <!-- ══ PROGRESSION ══ -->
+    <div class="section" id="section-progression">
+
+      <!-- KPI row -->
+      <div class="prog-kpi-row">
+        <div class="prog-kpi green">
+          <div class="prog-kpi-val" id="pk-validees">—</div>
+          <div class="prog-kpi-lbl">Fiches validées</div>
+        </div>
+        <div class="prog-kpi">
+          <div class="prog-kpi-val" id="pk-total">—</div>
+          <div class="prog-kpi-lbl">Fiches assignées</div>
+        </div>
+        <div class="prog-kpi amber">
+          <div class="prog-kpi-val" id="pk-meilleur">—</div>
+          <div class="prog-kpi-lbl">Meilleur score</div>
+        </div>
+      </div>
+
+      <!-- Camembert + barres -->
+      <div class="prog-charts-row">
+        <div class="prog-panel">
+          <div class="prog-panel-title">Lacunes par thème</div>
+          <div class="donut-wrap">
+            <svg class="donut-svg" width="130" height="130" viewBox="0 0 130 130" id="donut-svg">
+              <circle cx="65" cy="65" r="50" fill="none" stroke="#F0EFE9" stroke-width="20"/>
+            </svg>
+            <div class="donut-legend" id="donut-legend"></div>
+          </div>
+        </div>
+        <div class="prog-panel">
+          <div class="prog-panel-title">Lacunes comblées par thème</div>
+          <div class="prog-bars" id="prog-bars"></div>
+        </div>
+      </div>
+
+      <!-- Historique tentatives -->
+      <div class="prog-panel-title">Historique de tes tentatives</div>
+      <div class="prog-tentatives" id="prog-tentatives">
+        <div style="padding:1.5rem;text-align:center;font-size:12px;color:var(--text3);">Aucune tentative enregistrée.</div>
+      </div>
+
     </div>
-    <div id="fiches-section"></div>
   </div>
 </div>
-
 <script>
-var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxlBMjVXIg58lsopoeQ5sEZW-jcQIOrOtnWwCGVtHLGjcmpi9exaYZ3oAEre4deZum2/exec";
-var EVAL_URL   = "https://arnaudreydellet.github.io/evaluation-fractions/";
+var SCRIPT_URL="https://script.google.com/macros/s/AKfycbxlBMjVXIg58lsopoeQ5sEZW-jcQIOrOtnWwCGVtHLGjcmpi9exaYZ3oAEre4deZum2/exec";
+var EVAL_URL="https://arnaudreydellet.github.io/evaluation-fractions/";
+var currentUser=null;
 
-var CLASSES = {
-  "Seconde CAP": ["2nde BMA Armurerie", "2nde CAP Cuisine", "2nde CAP Coiffure", "2nde CAP Autre"],
-  "Seconde Bac Pro": ["2nde AMA Bac Pro", "2nde TEBE", "2nde Bac Pro Autre"]
+var CLASSES={
+  "Seconde CAP":["2nde BMA Armurerie","2nde CAP Cuisine","2nde CAP Coiffure","2nde CAP Autre"],
+  "Seconde Bac Pro":["2nde AMA Bac Pro","2nde TEBE","2nde Bac Pro Autre"]
 };
 
-var THEMES = [
-  { id: "fractions", titre: "Fractions", icon: "\uD83D\uDD22", iconClass: "ic-fractions",
-    fiches: [
-      { id: "fractions_comprendre",         titre: "Comprendre les fractions",                         url: "https://arnaudreydellet.github.io/fiche-rem-diation-1/" },
-      { id: "fractions_reconnaitre_egales", titre: "Reconna\u00eetre deux fractions \u00e9gales",    url: "https://arnaudreydellet.github.io/fiche-2/" },
-      { id: "fractions_irreductible",       titre: "Rendre une fraction irr\u00e9ductible",           url: "https://arnaudreydellet.github.io/fiche-3/" },
-      { id: "fractions_add_meme_denom",     titre: "Additionner fractions de m\u00eame d\u00e9nominateur", url: "https://arnaudreydellet.github.io/fiche-4/" },
-      { id: "fractions_denom_commun_1",     titre: "Trouver un d\u00e9nominateur commun (1)",         url: "https://arnaudreydellet.github.io/fiche-5/" },
-      { id: "fractions_denom_commun_2",     titre: "Trouver un d\u00e9nominateur commun (2)",         url: "https://arnaudreydellet.github.io/fiche-6/" },
-      { id: "fractions_mult_entier",        titre: "Multiplier une fraction par un entier",            url: "https://arnaudreydellet.github.io/fiche-7/" },
-      { id: "fractions_mult_fractions",     titre: "Multiplier deux fractions entre elles",            url: "https://arnaudreydellet.github.io/fiche-8/" },
-      { id: "fractions_inverse",            titre: "Comprendre l\u2019inverse d\u2019une fraction",  url: "https://arnaudreydellet.github.io/fiche-9/" },
-      { id: "fractions_division",           titre: "Diviser par une fraction",                         url: "https://arnaudreydellet.github.io/fiche-10/" }
-    ]
-  },
-  { id: "proportionnalite", titre: "Proportionnalit\u00e9 et pourcentages", icon: "\uD83D\uDCCA", iconClass: "ic-propor",    fiches: [] },
-  { id: "calcul_litteral",  titre: "Calcul litt\u00e9ral et \u00e9quations",  icon: "\u270F\uFE0F", iconClass: "ic-litteral",  fiches: [] },
-  { id: "fonctions",        titre: "Fonctions",                                 icon: "\uD83D\uDCC8", iconClass: "ic-fonctions", fiches: [] },
-  { id: "geometrie",        titre: "G\u00e9om\u00e9trie",                    icon: "\uD83D\uDCD0", iconClass: "ic-geometrie", fiches: [] },
-  { id: "nombres",          titre: "Nombres et calculs num\u00e9riques",       icon: "\uD83D\uDD23", iconClass: "ic-nombres",   fiches: [] },
-  { id: "stats",            titre: "Statistiques et probabilit\u00e9s",        icon: "\uD83C\uDFB2", iconClass: "ic-stats",     fiches: [] }
+var THEMES=[
+  {id:"fractions",titre:"Fractions",icon:"🔢",iconClass:"ic-fractions",
+   fiches:[
+    {id:"fractions_comprendre",titre:"Comprendre les fractions",url:"https://arnaudreydellet.github.io/fiche-rem-diation-1/"},
+    {id:"fractions_reconnaitre_egales",titre:"Reconnaître deux fractions égales",url:"https://arnaudreydellet.github.io/fiche-2/"},
+    {id:"fractions_irreductible",titre:"Rendre une fraction irréductible",url:"https://arnaudreydellet.github.io/fiche-3/"},
+    {id:"fractions_add_meme_denom",titre:"Additionner fractions de même dénominateur",url:"https://arnaudreydellet.github.io/fiche-4/"},
+    {id:"fractions_denom_commun_1",titre:"Trouver un dénominateur commun (1)",url:"https://arnaudreydellet.github.io/fiche-5/"},
+    {id:"fractions_denom_commun_2",titre:"Trouver un dénominateur commun (2)",url:"https://arnaudreydellet.github.io/fiche-6/"},
+    {id:"fractions_mult_entier",titre:"Multiplier une fraction par un entier",url:"https://arnaudreydellet.github.io/fiche-7/"},
+    {id:"fractions_mult_fractions",titre:"Multiplier deux fractions entre elles",url:"https://arnaudreydellet.github.io/fiche-8/"},
+    {id:"fractions_inverse",titre:"Comprendre l'inverse d'une fraction",url:"https://arnaudreydellet.github.io/fiche-9/"},
+    {id:"fractions_division",titre:"Diviser par une fraction",url:"https://arnaudreydellet.github.io/fiche-10/"}
+   ]},
+  {id:"proportionnalite",titre:"Proportionnalité et pourcentages",icon:"📊",iconClass:"ic-propor",fiches:[]},
+  {id:"calcul_litteral",titre:"Calcul littéral et équations",icon:"✏️",iconClass:"ic-litteral",fiches:[]},
+  {id:"fonctions",titre:"Fonctions",icon:"📈",iconClass:"ic-fonctions",fiches:[]},
+  {id:"geometrie",titre:"Géométrie",icon:"📐",iconClass:"ic-geometrie",fiches:[]},
+  {id:"nombres",titre:"Nombres et calculs numériques",icon:"🔣",iconClass:"ic-nombres",fiches:[]},
+  {id:"stats",titre:"Statistiques et probabilités",icon:"🎲",iconClass:"ic-stats",fiches:[]}
 ];
 
-var currentUser = null;
+var THEME_COLORS=["#4A90E2","#F59E0B","#10B981","#8B5CF6","#EF4444","#06B6D4","#F97316"];
 
-function switchTab(tab) {
-  document.querySelectorAll(".auth-tab").forEach(function(t, i) {
-    t.classList.toggle("active", (i===0 && tab==="connexion") || (i===1 && tab==="inscription"));
+function switchTab(tab){
+  document.querySelectorAll(".auth-tab").forEach(function(t,i){
+    t.classList.toggle("active",(i===0&&tab==="connexion")||(i===1&&tab==="inscription"));
   });
-  document.getElementById("panel-connexion").classList.toggle("active", tab==="connexion");
-  document.getElementById("panel-inscription").classList.toggle("active", tab==="inscription");
+  document.getElementById("panel-connexion").classList.toggle("active",tab==="connexion");
+  document.getElementById("panel-inscription").classList.toggle("active",tab==="inscription");
 }
 
-document.getElementById("co-email").addEventListener("keydown", function(e){ if(e.key==="Enter") seConnecter(); });
-document.getElementById("co-mdp").addEventListener("keydown",   function(e){ if(e.key==="Enter") seConnecter(); });
+document.getElementById("co-email").addEventListener("keydown",function(e){if(e.key==="Enter")seConnecter();});
+document.getElementById("co-mdp").addEventListener("keydown",function(e){if(e.key==="Enter")seConnecter();});
 
-function mettreAJourClasses() {
-  var niveau = document.getElementById("in-niveau").value;
-  var sel = document.getElementById("in-classe");
-  sel.innerHTML = "<option value=\"\">\u2014 Choisir sa classe \u2014</option>";
-  if (niveau && CLASSES[niveau]) {
-    CLASSES[niveau].forEach(function(c){ sel.innerHTML += "<option value=\"" + c + "\">" + c + "</option>"; });
-    sel.disabled = false;
-  } else { sel.disabled = true; }
+function mettreAJourClasses(){
+  var niveau=document.getElementById("in-niveau").value;
+  var sel=document.getElementById("in-classe");
+  sel.innerHTML="<option value=''>— Choisir sa classe —</option>";
+  if(niveau&&CLASSES[niveau]){CLASSES[niveau].forEach(function(c){sel.innerHTML+="<option value='"+c+"'>"+c+"</option>";});sel.disabled=false;}
+  else sel.disabled=true;
 }
 
-function setLoading(v, txt) {
-  document.getElementById("loading-overlay").classList.toggle("visible", v);
-  if (txt) document.getElementById("loading-txt").textContent = txt;
+function setLoading(v,txt){
+  document.getElementById("loading-overlay").classList.toggle("visible",v);
+  if(txt) document.getElementById("loading-txt").textContent=txt;
 }
 
-// Applique ou retire le mode DYS sur le body
-function appliquerModeDys(dys) {
-  if (dys) {
-    document.body.classList.add("dys-mode");
-  } else {
-    document.body.classList.remove("dys-mode");
-  }
+function appliquerModeDys(dys){
+  document.body.classList.toggle("dys-mode",!!dys);
 }
 
-function seConnecter() {
-  var email = document.getElementById("co-email").value.trim();
-  var mdp   = document.getElementById("co-mdp").value;
-  var err   = document.getElementById("co-err");
+function seConnecter(){
+  var email=document.getElementById("co-email").value.trim();
+  var mdp=document.getElementById("co-mdp").value;
+  var err=document.getElementById("co-err");
   err.classList.remove("visible");
-  if (!email || !mdp) { err.textContent = "Remplis tous les champs."; err.classList.add("visible"); return; }
-  setLoading(true, "Connexion en cours...");
-  document.getElementById("co-btn").disabled = true;
-  fetch(SCRIPT_URL, { method:"POST", body: JSON.stringify({ type:"connexion_compte", email:email, mot_de_passe:mdp }) })
-    .then(function(r){ return r.json(); })
+  if(!email||!mdp){err.textContent="Remplis tous les champs.";err.classList.add("visible");return;}
+  setLoading(true,"Connexion en cours...");
+  document.getElementById("co-btn").disabled=true;
+  fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify({type:"connexion_compte",email:email,mot_de_passe:mdp})})
+    .then(function(r){return r.json();})
     .then(function(json){
-      setLoading(false);
-      document.getElementById("co-btn").disabled = false;
-      if (json.status === "ok") {
-        currentUser = json;
-        appliquerModeDys(json.dys === true);
-        afficherDashboard(json);
-      }
-      else { err.textContent = json.message || "Email ou mot de passe incorrect."; err.classList.add("visible"); }
+      setLoading(false);document.getElementById("co-btn").disabled=false;
+      if(json.status==="ok"){currentUser=json;appliquerModeDys(json.dys===true);afficherDashboard(json);}
+      else{err.textContent=json.message||"Email ou mot de passe incorrect.";err.classList.add("visible");}
     })
-    .catch(function(){
-      setLoading(false);
-      document.getElementById("co-btn").disabled = false;
-      err.textContent = "Erreur de connexion. R\u00e9essaie.";
-      err.classList.add("visible");
-    });
+    .catch(function(){setLoading(false);document.getElementById("co-btn").disabled=false;err.textContent="Erreur de connexion. Réessaie.";err.classList.add("visible");});
 }
 
-function sInscrire() {
-  var prenom = document.getElementById("in-prenom").value.trim();
-  var nom    = document.getElementById("in-nom").value.trim();
-  var email  = document.getElementById("in-email").value.trim();
-  var mdp    = document.getElementById("in-mdp").value;
-  var niveau = document.getElementById("in-niveau").value;
-  var classe = document.getElementById("in-classe").value;
-  var dys    = document.getElementById("in-dys").checked;
-  var err    = document.getElementById("in-err");
+function sInscrire(){
+  var prenom=document.getElementById("in-prenom").value.trim();
+  var nom=document.getElementById("in-nom").value.trim();
+  var email=document.getElementById("in-email").value.trim();
+  var mdp=document.getElementById("in-mdp").value;
+  var niveau=document.getElementById("in-niveau").value;
+  var classe=document.getElementById("in-classe").value;
+  var dys=document.getElementById("in-dys").checked;
+  var err=document.getElementById("in-err");
   err.classList.remove("visible");
-  if (!prenom||!nom||!email||!mdp||!niveau||!classe) { err.textContent="Remplis tous les champs obligatoires."; err.classList.add("visible"); return; }
-  if (mdp.length < 4) { err.textContent="Le mot de passe doit faire au moins 4 caract\u00e8res."; err.classList.add("visible"); return; }
-  setLoading(true, "Cr\u00e9ation du compte...");
-  document.getElementById("in-btn").disabled = true;
-  fetch(SCRIPT_URL, { method:"POST", body: JSON.stringify({ type:"creer_compte", email:email, mot_de_passe:mdp, prenom:prenom, nom:nom, niveau:niveau, classe:classe, dys:dys }) })
-    .then(function(r){ return r.json(); })
+  if(!prenom||!nom||!email||!mdp||!niveau||!classe){err.textContent="Remplis tous les champs obligatoires.";err.classList.add("visible");return;}
+  if(mdp.length<4){err.textContent="Le mot de passe doit faire au moins 4 caractères.";err.classList.add("visible");return;}
+  setLoading(true,"Création du compte...");
+  document.getElementById("in-btn").disabled=true;
+  fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify({type:"creer_compte",email:email,mot_de_passe:mdp,prenom:prenom,nom:nom,niveau:niveau,classe:classe,dys:dys})})
+    .then(function(r){return r.json();})
     .then(function(json){
-      setLoading(false);
-      document.getElementById("in-btn").disabled = false;
-      if (json.status === "ok") {
-        currentUser = { email:email, prenom:prenom, nom:nom, niveau:niveau, classe:classe, prof:json.prof, dys:dys, fiches:[], fiches_assignees:[], eval_faite:false };
-        appliquerModeDys(dys);
-        afficherDashboard(currentUser);
-      } else { err.textContent = json.message || "Erreur lors de la cr\u00e9ation du compte."; err.classList.add("visible"); }
+      setLoading(false);document.getElementById("in-btn").disabled=false;
+      if(json.status==="ok"){
+        currentUser={email:email,prenom:prenom,nom:nom,niveau:niveau,classe:classe,prof:json.prof,dys:dys,fiches:[],fiches_assignees:[],eval_faite:false};
+        appliquerModeDys(dys);afficherDashboard(currentUser);
+      } else{err.textContent=json.message||"Erreur lors de la création.";err.classList.add("visible");}
     })
-    .catch(function(){
-      setLoading(false);
-      document.getElementById("in-btn").disabled = false;
-      err.textContent = "Erreur de connexion. R\u00e9essaie.";
-      err.classList.add("visible");
-    });
+    .catch(function(){setLoading(false);document.getElementById("in-btn").disabled=false;err.textContent="Erreur de connexion. Réessaie.";err.classList.add("visible");});
 }
 
-function afficherDashboard(user) {
-  document.getElementById("auth-wrap").style.display  = "none";
-  document.getElementById("dashboard").style.display  = "block";
+function afficherDashboard(user){
+  document.getElementById("auth-wrap").style.display="none";
+  document.getElementById("dashboard").style.display="block";
 
-  var fiches          = user.fiches          || [];
-  var fichesAssignees = user.fiches_assignees || [];
-  var evalFaite       = user.eval_faite      || false;
-  var dysActif        = user.dys === true;
+  var fiches=user.fiches||[];
+  var fichesAssignees=user.fiches_assignees||[];
+  var evalFaite=user.eval_faite||false;
+  var dysActif=user.dys===true;
 
-  document.getElementById("eleve-name").textContent = user.prenom + " " + user.nom;
-  document.getElementById("eleve-meta").textContent = "Lyc\u00e9e Beno\u00eet Fourneyron \u00b7 " + (user.classe || "");
-
-  var total    = fichesAssignees.length;
-  var validees = fiches.filter(function(f){ return f.statut==="quiz_final_valide" && fichesAssignees.indexOf(f.fiche_id)!==-1; }).length;
-  var alertes  = fiches.filter(function(f){ return f.statut==="echec_3_tentatives"; }).length;
-
-  document.getElementById("stat-total").textContent    = evalFaite ? total    : "\u2014";
-  document.getElementById("stat-validees").textContent = evalFaite ? validees : "\u2014";
-  document.getElementById("stat-alertes").textContent  = evalFaite ? alertes  : "\u2014";
-
-  if (evalFaite && total > 0) {
-    var pct = Math.round(validees / total * 100);
-    document.getElementById("progress-panel").style.display = "block";
-    document.getElementById("progress-pct").textContent = pct + "%";
-    setTimeout(function(){ document.getElementById("progress-fill").style.width = pct + "%"; }, 100);
-    document.getElementById("progress-sub").textContent = validees + " fiche" + (validees>1?"s valid\u00e9es":" valid\u00e9e") + " sur " + total;
-  }
-
-  var statutsMap = {};
+  var statutsMap={};
   fiches.forEach(function(f){
-    if (!statutsMap[f.fiche_id] || (f.tentative_num||0) > (statutsMap[f.fiche_id].tentative_num||0)) statutsMap[f.fiche_id] = f;
+    if(!statutsMap[f.fiche_id]||(parseInt(f.tentative_num)||0)>(parseInt(statutsMap[f.fiche_id].tentative_num)||0)) statutsMap[f.fiche_id]=f;
   });
 
-  // Construction du lien d'évaluation diagnostique avec flag DYS
-  var evalLien = EVAL_URL
-    + "?nom="        + encodeURIComponent(user.prenom + " " + user.nom)
-    + "&classe="     + encodeURIComponent(user.classe || "")
-    + "&lycee="      + encodeURIComponent("Lyc\u00e9e Beno\u00eet Fourneyron")
-    + "&email="      + encodeURIComponent(user.email || "")
-    + "&prof="       + encodeURIComponent(user.prof || "")
-    + "&prof_email=" + encodeURIComponent("ar.reydellet@gmail.com")
-    + (dysActif ? "&dys=1" : "");
+  var total=fichesAssignees.length;
+  var validees=fiches.filter(function(f){return f.statut==="quiz_final_valide"&&fichesAssignees.indexOf(f.fiche_id)!==-1;}).length;
+  var alertes=fiches.filter(function(f){return f.statut==="echec_3_tentatives";}).length;
+  var meilleurScore=0;
+  fiches.forEach(function(f){var s=parseInt(f.score_quiz)||0;if(s>meilleurScore)meilleurScore=s;});
 
-  var html = "";
-  THEMES.forEach(function(theme) {
-    html += "<div class=\"theme-section\">";
-    html += "<div class=\"theme-header\">";
-    html += "<div class=\"theme-header-left\">";
-    html += "<div class=\"theme-icon " + theme.iconClass + "\">" + theme.icon + "</div>";
-    html += "<div><div class=\"theme-title\">" + theme.titre + "</div></div>";
-    html += "</div></div>";
+  // Stocker pour progression
+  user._validees=validees; user._total=total; user._evalFaite=evalFaite;
+  user._meilleurScore=meilleurScore; user._statutsMap=statutsMap; user._fiches=fiches;
 
-    if (theme.fiches.length === 0) {
-      html += "<div style=\"background:var(--surface);border:1px dashed var(--border);border-radius:var(--rl);padding:1.25rem 1.5rem;display:flex;align-items:center;gap:12px;\">";
-      html += "<span style=\"font-size:18px;\">\uD83D\uDEE0\uFE0F</span>";
-      html += "<span style=\"font-size:13px;color:var(--text3);font-style:italic;\">Les fiches sont en cours de cr\u00e9ation\u2026</span>";
-      html += "</div>";
-    } else if (!evalFaite) {
-      html += "<div class=\"eval-banner\">";
-      html += "<div class=\"eval-banner-left\"><div class=\"eval-icon\">\uD83D\uDCCB</div>";
-      html += "<div><div class=\"eval-titre\">\u00c9valuation diagnostique</div>";
-      html += "<div class=\"eval-sub\">Passe l'\u00e9valuation pour d\u00e9couvrir tes fiches personnalis\u00e9es.</div></div></div>";
-      html += "<a href=\"" + evalLien + "\" target=\"_blank\" class=\"btn-passer-eval\">Passer l'\u00e9valuation \u2192</a>";
-      html += "</div>";
+  // ── Accueil hero
+  document.getElementById("eleve-name").textContent=(user.prenom||"")+" "+(user.nom||"");
+  document.getElementById("eleve-meta").textContent="Lycée Benoît Fourneyron · "+(user.classe||"");
+  document.getElementById("stat-total").textContent=evalFaite?total:"—";
+  document.getElementById("stat-validees").textContent=evalFaite?validees:"—";
+  document.getElementById("stat-alertes").textContent=evalFaite?alertes:"—";
+
+  if(evalFaite&&total>0){
+    var pct=Math.round(validees/total*100);
+    document.getElementById("progress-panel").style.display="block";
+    document.getElementById("progress-pct").textContent=pct+"%";
+    setTimeout(function(){document.getElementById("progress-fill").style.width=pct+"%";},100);
+    document.getElementById("progress-sub").textContent=validees+" fiche"+(validees>1?"s validées":" validée")+" sur "+total;
+  }
+
+  // ── Fiches section
+  var html="";
+
+  var evalLien=EVAL_URL+"?nom="+encodeURIComponent((user.prenom||"")+" "+(user.nom||""))+"&classe="+encodeURIComponent(user.classe||"")+"&lycee="+encodeURIComponent("Lycée Benoît Fourneyron")+"&email="+encodeURIComponent(user.email||"")+"&prof="+encodeURIComponent(user.prof||"")+"&prof_email="+encodeURIComponent("ar.reydellet@gmail.com")+(dysActif?"&dys=1":"");
+
+  html+="<div class='themes-grid'>";
+  THEMES.forEach(function(theme){
+    html+="<div class='theme-card'>";
+    html+="<div class='theme-header' style='margin-bottom:.875rem;'><div class='theme-header-left'><div class='theme-icon "+theme.iconClass+"'>"+theme.icon+"</div><div class='theme-title'>"+theme.titre+"</div></div></div>";
+
+    if(theme.fiches.length===0){
+      html+="<div style='font-size:12px;color:var(--text3);font-style:italic;'>Fiches en cours de création…</div>";
+    } else if(!evalFaite){
+      html+="<div style='font-size:12px;color:var(--text2);margin-bottom:.75rem;'>Passe l'évaluation diagnostique pour découvrir tes fiches personnalisées.</div>";
+      html+="<a href='"+evalLien+"' target='_blank' class='btn-passer-eval' style='display:inline-block;font-size:12px;padding:8px 18px;'>Passer l'évaluation →</a>";
     } else {
-      var fa = theme.fiches.filter(function(f){ return fichesAssignees.indexOf(f.id) !== -1; });
-      if (fa.length === 0) {
-        html += "<div style=\"background:var(--surface);border:1px solid var(--green-m);border-radius:var(--rl);padding:1.25rem 1.5rem;display:flex;align-items:center;gap:12px;\">";
-        html += "<span style=\"font-size:18px;\">\u2705</span>";
-        html += "<span style=\"font-size:13px;color:var(--green);font-weight:600;\">Tu ma\u00eetrises toutes les notions de ce th\u00e8me !</span>";
-        html += "</div>";
+      var fa=theme.fiches.filter(function(f){return fichesAssignees.indexOf(f.id)!==-1;});
+      if(fa.length===0){
+        html+="<div style='font-size:12px;color:var(--green);font-weight:600;'>✅ Toutes les notions maîtrisées</div>";
       } else {
-        html += "<div style=\"display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;\">";
-        html += "<span style=\"font-size:12px;color:var(--text3);\">" + fa.length + " fiche" + (fa.length>1?"s":"") + " \u00e0 travailler</span>";
-        html += "<span class=\"eval-done-badge\">\u2713 \u00c9valuation pass\u00e9e</span>";
-        html += "</div>";
-        html += "<div class=\"fiches-grid\">";
-        fa.forEach(function(fiche) {
-          var fd  = statutsMap[fiche.id] || null;
-          var st  = fd ? fd.statut : "todo";
-          var sc  = fd && fd.score_quiz ? fd.score_quiz + "%" : null;
-          var aUrl = fiche.url && fiche.url !== "";
-          var lien = "#";
-          if (aUrl) lien = fiche.url
-            + "?nom=" + encodeURIComponent(user.prenom+" "+user.nom)
-            + "&classe=" + encodeURIComponent(user.classe||"")
-            + "&lycee=" + encodeURIComponent("Lyc\u00e9e Beno\u00eet Fourneyron")
-            + "&email=" + encodeURIComponent(user.email||"")
-            + "&prof=" + encodeURIComponent(user.prof||"")
-            + "&prof_email=ar.reydellet%40gmail.com"
-            + (dysActif ? "&dys=1" : "");
-          var scls = "s-todo", stxt = "\u00c0 faire", ccls = aUrl ? "active" : "bientot";
-          if (st==="quiz_final_valide")   { scls="s-valide"; stxt="Valid\u00e9e \u2713"; ccls="done active"; }
-          else if (st==="echec_3_tentatives") { scls="s-echec"; stxt="Intervention requise"; }
-          var bcls="", btxt="Commencer \u2192";
-          if (st==="quiz_final_valide") { bcls="done-btn"; btxt="\u2713 Revoir la fiche"; }
-          html += "<div class=\"fiche-card " + ccls + "\">";
-          html += "<div class=\"fiche-theme\">" + fiche.titre + "</div>";
-          html += "<div class=\"fiche-statut " + scls + "\"><div class=\"statut-dot\"></div><div class=\"statut-txt\">" + stxt + "</div></div>";
-          if (sc) html += "<div class=\"fiche-score\">Dernier score : " + sc + "</div>";
-          if (aUrl) html += "<a href=\"" + lien + "\" target=\"_blank\" class=\"fiche-btn " + bcls + "\">" + btxt + "</a>";
-          html += "</div>";
+        var valideesDansTheme=fa.filter(function(f){return statutsMap[f.id]&&statutsMap[f.id].statut==="quiz_final_valide";}).length;
+        var pct=Math.round(valideesDansTheme/fa.length*100);
+        html+="<div style='font-size:12px;color:var(--text3);margin-bottom:.6rem;'>"+fa.length+" fiche"+(fa.length>1?"s":"")+" · "+valideesDansTheme+" validée"+(valideesDansTheme>1?"s":"")+"</div>";
+        html+="<div style='height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;'><div style='height:100%;width:"+pct+"%;background:"+(pct>=80?"var(--green)":pct>=40?"var(--amber)":"#4A90E2")+";border-radius:3px;transition:width 1s;'></div></div>";
+        html+="<div style='margin-top:.875rem;display:flex;flex-direction:column;gap:6px;'>";
+        fa.forEach(function(fiche){
+          var fd=statutsMap[fiche.id]||null;
+          var st=fd?fd.statut:"todo";
+          var aUrl=fiche.url&&fiche.url!=="";
+          var lien=aUrl?fiche.url+"?nom="+encodeURIComponent((user.prenom||"")+" "+(user.nom||""))+"&classe="+encodeURIComponent(user.classe||"")+"&lycee="+encodeURIComponent("Lycée Benoît Fourneyron")+"&email="+encodeURIComponent(user.email||"")+"&prof="+encodeURIComponent(user.prof||"")+"&prof_email=ar.reydellet%40gmail.com"+(dysActif?"&dys=1":""):"#";
+          var scls="s-todo";
+          if(st==="quiz_final_valide") scls="s-valide";
+          else if(st==="echec_3_tentatives") scls="s-echec";
+          html+="<div style='display:flex;align-items:center;justify-content:space-between;gap:8px;'>";
+          html+="<span style='font-size:12px;color:var(--text);flex:1;line-height:1.35;'>"+fiche.titre+"</span>";
+          if(aUrl) html+="<a href='"+lien+"' target='_blank' class='fiche-btn "+(st==="quiz_final_valide"?"done-btn":"")+"' style='flex-shrink:0;padding:5px 10px;font-size:10.5px;margin-top:0;'>"+(st==="quiz_final_valide"?"✓ Revoir":"Commencer →")+"</a>";
+          html+="</div>";
         });
-        html += "</div>";
+        html+="</div>";
       }
     }
-    html += "</div>";
+    html+="</div>";
   });
+  html+="</div>";
+  document.getElementById("fiches-section").innerHTML=html;
 
-  document.getElementById("fiches-section").innerHTML = html;
+  // Rendre la progression
+  renderProgression(user);
 }
 
-function seDeconnecter() {
-  currentUser = null;
+function renderProgression(user){
+  var validees=user._validees||0;
+  var total=user._total||0;
+  var meilleurScore=user._meilleurScore||0;
+  var fiches=user._fiches||[];
+  var fichesAssignees=user.fiches_assignees||[];
+
+  document.getElementById("pk-validees").textContent=validees;
+  document.getElementById("pk-total").textContent=total;
+  document.getElementById("pk-meilleur").textContent=meilleurScore>0?meilleurScore+"%":"—";
+
+  // ── Camembert lacunes par thème
+  var themeData=THEMES.map(function(t,i){
+    var n=fichesAssignees.filter(function(fid){return t.fiches.some(function(f){return f.id===fid;});}).length;
+    return {titre:t.titre,lacunes:n,couleur:THEME_COLORS[i]};
+  });
+  var totalLacunes=themeData.reduce(function(s,t){return s+t.lacunes;},0);
+
+  var cx=65,cy=65,r=50,strokeW=20,circ=2*Math.PI*r;
+  var paths="<circle cx='65' cy='65' r='50' fill='none' stroke='#F0EFE9' stroke-width='20'/>";
+  var legendHtml="";
+  var offset=0;
+
+  if(totalLacunes===0){
+    legendHtml="<div style='font-size:12px;color:var(--text3);font-style:italic;'>Passe l'évaluation<br>pour voir tes lacunes.</div>";
+  } else {
+    themeData.forEach(function(t){
+      if(t.lacunes===0){
+        legendHtml+="<div class='donut-leg-item'><div class='donut-leg-dot' style='background:#E2E0D8;'></div><div class='donut-leg-label' style='color:var(--text3);'>"+t.titre.split(" ")[0]+"</div><div class='donut-leg-val'>0</div></div>";
+        return;
+      }
+      var pct=t.lacunes/totalLacunes;
+      var dashLen=pct*circ;
+      var dashOffset=circ-(offset*circ);
+      paths+="<circle cx='65' cy='65' r='50' fill='none' stroke='"+t.couleur+"' stroke-width='20' stroke-dasharray='"+dashLen+" "+(circ-dashLen)+"' stroke-dashoffset='"+dashOffset+"' transform='rotate(-90 65 65)' style='stroke-linecap:butt;'/>";
+      offset+=pct;
+      legendHtml+="<div class='donut-leg-item'><div class='donut-leg-dot' style='background:"+t.couleur+";'></div><div class='donut-leg-label'>"+t.titre.split(" ")[0]+"</div><div class='donut-leg-val'>"+t.lacunes+"</div></div>";
+    });
+  }
+  paths+="<text x='65' y='60' text-anchor='middle' font-size='18' font-weight='700' fill='#1A2C5B' font-family='JetBrains Mono'>"+totalLacunes+"</text><text x='65' y='74' text-anchor='middle' font-size='9' fill='#A8A69E' font-family='Sora'>lacunes</text>";
+  document.getElementById("donut-svg").innerHTML=paths;
+  document.getElementById("donut-legend").innerHTML=legendHtml;
+
+  // ── Barres lacunes comblées
+  var barsHtml="";
+  var auMoinsUn=false;
+  themeData.forEach(function(t,i){
+    var valideesDansTheme=0;
+    fiches.forEach(function(f){
+      if(f.statut==="quiz_final_valide"&&THEMES[i].fiches.some(function(tf){return tf.id===f.fiche_id;})) valideesDansTheme++;
+    });
+    if(t.lacunes===0&&valideesDansTheme===0) return;
+    auMoinsUn=true;
+    var pct=t.lacunes>0?Math.round(valideesDansTheme/t.lacunes*100):100;
+    var couleur=pct>=80?"var(--green)":pct>=40?"var(--amber)":THEME_COLORS[i];
+    barsHtml+="<div class='prog-bar-item'><div class='prog-bar-head'><span class='prog-bar-label'>"+t.titre.split(" ").slice(0,2).join(" ")+"</span><span class='prog-bar-val'>"+valideesDansTheme+"/"+t.lacunes+"</span></div><div class='prog-bar-track'><div class='prog-bar-fill' data-width='"+pct+"' style='background:"+couleur+";'></div></div></div>";
+  });
+  document.getElementById("prog-bars").innerHTML=auMoinsUn?barsHtml:"<div style='font-size:12px;color:var(--text3);font-style:italic;'>Passe d'abord l'évaluation diagnostique.</div>";
+  setTimeout(function(){
+    document.querySelectorAll(".prog-bar-fill").forEach(function(el){el.style.width=(el.dataset.width||"0")+"%";});
+  },300);
+
+  // ── Historique tentatives
+  var tentHtml="";
+  if(fiches.length===0){
+    tentHtml="<div style='padding:1.5rem;text-align:center;font-size:12px;color:var(--text3);'>Aucune tentative enregistrée.</div>";
+  } else {
+    // Trier par tentative_num desc pour avoir les plus récentes en premier
+    var sorted=fiches.slice().sort(function(a,b){return (parseInt(b.tentative_num)||0)-(parseInt(a.tentative_num)||0);});
+    sorted.forEach(function(f){
+      var nomFiche=f.fiche_id||"Fiche inconnue";
+      // Chercher le titre dans THEMES
+      THEMES.forEach(function(t){t.fiches.forEach(function(tf){if(tf.id===f.fiche_id) nomFiche=tf.titre;});});
+      var scoreColor=f.statut==="quiz_final_valide"?"var(--green)":f.statut==="echec_3_tentatives"?"var(--red)":"var(--amber)";
+      var score=f.score_quiz?f.score_quiz+"%":"—";
+      tentHtml+="<div class='prog-tent-row'><div><div class='prog-tent-name'>"+nomFiche+"</div><div class='prog-tent-meta'>Tentative n°"+(f.tentative_num||"1")+"</div></div><div class='prog-tent-score' style='color:"+scoreColor+";'>"+score+"</div></div>";
+    });
+  }
+  document.getElementById("prog-tentatives").innerHTML=tentHtml;
+}
+
+// ── NAVIGATION ──
+function navVers(dest){
+  document.querySelectorAll(".section").forEach(function(s){s.classList.remove("active");});
+  document.querySelectorAll(".nav-tab").forEach(function(n){n.classList.remove("active");});
+  document.getElementById("section-"+dest).classList.add("active");
+  document.getElementById("nav-"+dest).classList.add("active");
+}
+
+function seDeconnecter(){
+  currentUser=null;
   appliquerModeDys(false);
-  document.getElementById("dashboard").style.display = "none";
-  document.getElementById("auth-wrap").style.display  = "flex";
-  document.getElementById("co-email").value = "";
-  document.getElementById("co-mdp").value   = "";
-  document.getElementById("fiches-section").innerHTML = "";
-  document.getElementById("progress-panel").style.display = "none";
+  document.getElementById("dashboard").style.display="none";
+  document.getElementById("auth-wrap").style.display="flex";
+  document.getElementById("co-email").value="";
+  document.getElementById("co-mdp").value="";
+  document.getElementById("fiches-section").innerHTML="";
+  document.getElementById("progress-panel").style.display="none";
+  navVers("accueil");
   switchTab("connexion");
 }
 </script>
