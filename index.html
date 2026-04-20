@@ -167,6 +167,26 @@ body.dys-mode .dys-badge { display: inline-flex; }
 .btn-passer-eval:hover { background: #142248; transform: translateY(-1px); }
 .eval-done-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; background: var(--green-l); color: var(--green); font-size: 11px; font-weight: 600; }
 
+/* ═══ VOIR MES FICHES — overlay ═══ */
+.btn-voir-fiches { display: inline-flex; align-items: center; gap: 7px; background: var(--navy); color: #fff; border: none; padding: 9px 18px; border-radius: var(--r); font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s; margin-top: .5rem; }
+.btn-voir-fiches:hover { background: #142248; transform: translateY(-1px); }
+.fiches-overlay { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 200; overflow-y: auto; animation: fadeUp .2s ease; }
+.fiches-overlay.visible { display: block; }
+.fiches-overlay-inner { max-width: 900px; margin: 0 auto; padding: 2rem; }
+.fiches-overlay-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.75rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); }
+.fiches-overlay-back { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 500; color: var(--text2); cursor: pointer; background: var(--surface); border: 1px solid var(--border); padding: 7px 16px; border-radius: var(--r); transition: all .15s; font-family: inherit; }
+.fiches-overlay-back:hover { border-color: var(--navy); color: var(--navy); }
+.fiches-overlay-title { display: flex; align-items: center; gap: 10px; }
+.fiches-overlay-icon { width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.fiches-overlay-name { font-size: 20px; font-weight: 700; color: var(--text); letter-spacing: -.4px; }
+.fiches-overlay-progress { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1.5rem; }
+.fop-pct { font-size: 36px; font-weight: 700; color: var(--navy); font-family: 'JetBrains Mono', monospace; letter-spacing: -1px; flex-shrink: 0; }
+.fop-right { flex: 1; }
+.fop-track { height: 7px; background: var(--surface2); border-radius: 4px; overflow: hidden; margin-bottom: .4rem; }
+.fop-fill { height: 100%; border-radius: 4px; transition: width 1s; }
+.fop-sub { font-size: 12px; color: var(--text3); }
+.fiches-overlay-list { display: flex; flex-direction: column; gap: .875rem; }
+
 /* ═══ PROGRESSION ═══ */
 .prog-section-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 1rem; letter-spacing: -.1px; }
 .prog-kpi-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.75rem; }
@@ -343,6 +363,29 @@ body.dys-mode .dys-badge { display: inline-flex; }
     </div>
   </div>
 </div>
+
+<!-- ══ FICHES OVERLAY ══ -->
+<div class="fiches-overlay" id="fiches-overlay">
+  <div class="fiches-overlay-inner">
+    <div class="fiches-overlay-head">
+      <button class="fiches-overlay-back" onclick="fermerFiches()">← Retour</button>
+      <div class="fiches-overlay-title">
+        <div class="fiches-overlay-icon" id="overlay-icon"></div>
+        <div class="fiches-overlay-name" id="overlay-name"></div>
+      </div>
+      <div style="width:100px;"></div>
+    </div>
+    <div class="fiches-overlay-progress">
+      <div class="fop-pct" id="overlay-pct">0%</div>
+      <div class="fop-right">
+        <div class="fop-track"><div class="fop-fill" id="overlay-fill"></div></div>
+        <div class="fop-sub" id="overlay-sub"></div>
+      </div>
+    </div>
+    <div class="fiches-overlay-list" id="overlay-list"></div>
+  </div>
+</div>
+
 <script>
 var SCRIPT_URL="https://script.google.com/macros/s/AKfycbxlBMjVXIg58lsopoeQ5sEZW-jcQIOrOtnWwCGVtHLGjcmpi9exaYZ3oAEre4deZum2/exec";
 var EVAL_URL="https://arnaudreydellet.github.io/evaluation-fractions/";
@@ -521,23 +564,11 @@ function afficherDashboard(user){
       } else {
         var valideesDansTheme=fa.filter(function(f){return statutsMap[f.id]&&statutsMap[f.id].statut==="quiz_final_valide";}).length;
         var pct=Math.round(valideesDansTheme/fa.length*100);
-        html+="<div style='font-size:12px;color:var(--text3);margin-bottom:.6rem;'>"+fa.length+" fiche"+(fa.length>1?"s":"")+" · "+valideesDansTheme+" validée"+(valideesDansTheme>1?"s":"")+"</div>";
-        html+="<div style='height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;'><div style='height:100%;width:"+pct+"%;background:"+(pct>=80?"var(--green)":pct>=40?"var(--amber)":"#4A90E2")+";border-radius:3px;transition:width 1s;'></div></div>";
-        html+="<div style='margin-top:.875rem;display:flex;flex-direction:column;gap:6px;'>";
-        fa.forEach(function(fiche){
-          var fd=statutsMap[fiche.id]||null;
-          var st=fd?fd.statut:"todo";
-          var aUrl=fiche.url&&fiche.url!=="";
-          var lien=aUrl?fiche.url+"?nom="+encodeURIComponent((user.prenom||"")+" "+(user.nom||""))+"&classe="+encodeURIComponent(user.classe||"")+"&lycee="+encodeURIComponent("Lycée Benoît Fourneyron")+"&email="+encodeURIComponent(user.email||"")+"&prof="+encodeURIComponent(user.prof||"")+"&prof_email=ar.reydellet%40gmail.com"+(dysActif?"&dys=1":""):"#";
-          var scls="s-todo";
-          if(st==="quiz_final_valide") scls="s-valide";
-          else if(st==="echec_3_tentatives") scls="s-echec";
-          html+="<div style='display:flex;align-items:center;justify-content:space-between;gap:8px;'>";
-          html+="<span style='font-size:12px;color:var(--text);flex:1;line-height:1.35;'>"+fiche.titre+"</span>";
-          if(aUrl) html+="<a href='"+lien+"' target='_blank' class='fiche-btn "+(st==="quiz_final_valide"?"done-btn":"")+"' style='flex-shrink:0;padding:5px 10px;font-size:10.5px;margin-top:0;'>"+(st==="quiz_final_valide"?"✓ Revoir":"Commencer →")+"</a>";
-          html+="</div>";
-        });
-        html+="</div>";
+        var panelId="fiches-panel-"+theme.id;
+        var btnId="btn-fiches-"+theme.id;
+        html+="<div style='font-size:12px;color:var(--text3);margin-bottom:.6rem;'>"+fa.length+" fiche"+(fa.length>1?"s assignées":" assignée")+" · "+valideesDansTheme+" validée"+(valideesDansTheme>1?"s":"")+"</div>";
+        html+="<div style='height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;margin-bottom:.75rem;'><div style='height:100%;width:"+pct+"%;background:"+(pct>=80?"var(--green)":pct>=40?"var(--amber)":"#4A90E2")+";border-radius:3px;transition:width 1s;'></div></div>";
+        html+="<button class='btn-voir-fiches' id='"+btnId+"' onclick='ouvrirFiches(\""+theme.id+"\")'>Voir mes fiches →</button>";
       }
     }
     html+="</div>";
@@ -628,6 +659,65 @@ function renderProgression(user){
     });
   }
   document.getElementById("prog-tentatives").innerHTML=tentHtml;
+}
+
+// ── OVERLAY FICHES ──
+function ouvrirFiches(themeId){
+  var theme=THEMES.find(function(t){return t.id===themeId;});
+  if(!theme||!currentUser) return;
+  var user=currentUser;
+  var fichesAssignees=user.fiches_assignees||[];
+  var fiches=user._fiches||[];
+  var statutsMap=user._statutsMap||{};
+  var dysActif=user.dys===true;
+  var fa=theme.fiches.filter(function(f){return fichesAssignees.indexOf(f.id)!==-1;});
+  var validees=fa.filter(function(f){return statutsMap[f.id]&&statutsMap[f.id].statut==="quiz_final_valide";}).length;
+  var pct=fa.length>0?Math.round(validees/fa.length*100):0;
+  var fillColor=pct>=80?"var(--green)":pct>=40?"var(--amber)":"#4A90E2";
+
+  // Remplir l'overlay
+  document.getElementById("overlay-icon").style.background=theme.iconClass==="ic-fractions"?"#EEF2FF":theme.iconClass==="ic-propor"?"#FFF7ED":"#F0FDF4";
+  document.getElementById("overlay-icon").textContent=theme.icon;
+  document.getElementById("overlay-name").textContent=theme.titre;
+  document.getElementById("overlay-pct").textContent=pct+"%";
+  document.getElementById("overlay-pct").style.color=fillColor;
+  setTimeout(function(){
+    var fill=document.getElementById("overlay-fill");
+    if(fill){fill.style.width=pct+"%";fill.style.background=fillColor;}
+  },100);
+  document.getElementById("overlay-sub").textContent=validees+" fiche"+(validees>1?"s validées":" validée")+" sur "+fa.length+" assignée"+(fa.length>1?"s":"");
+
+  var html="";
+  if(fa.length===0){
+    html="<div style='text-align:center;padding:3rem;font-size:13px;color:var(--text3);'>Aucune fiche assignée dans ce thème.</div>";
+  } else {
+    fa.forEach(function(fiche){
+      var fd=statutsMap[fiche.id]||null;
+      var st=fd?fd.statut:"todo";
+      var sc=fd&&fd.score_quiz?fd.score_quiz+"%":null;
+      var aUrl=fiche.url&&fiche.url!=="";
+      var lien=aUrl?fiche.url+"?nom="+encodeURIComponent((user.prenom||"")+" "+(user.nom||""))+"&classe="+encodeURIComponent(user.classe||"")+"&lycee="+encodeURIComponent("Lycée Benoît Fourneyron")+"&email="+encodeURIComponent(user.email||"")+"&prof="+encodeURIComponent(user.prof||"")+"&prof_email=ar.reydellet%40gmail.com"+(dysActif?"&dys=1":""):"#";
+      var statutTxt=st==="quiz_final_valide"?"Validée ✓":st==="echec_3_tentatives"?"Bloquée — intervention requise":"À faire";
+      var statutColor=st==="quiz_final_valide"?"var(--green)":st==="echec_3_tentatives"?"var(--red)":"var(--text3)";
+      var borderLeft=st==="quiz_final_valide"?"3px solid var(--green)":st==="echec_3_tentatives"?"3px solid var(--red)":"3px solid var(--border)";
+      html+="<div style='background:var(--surface);border:1px solid var(--border);border-left:"+borderLeft+";border-radius:var(--rl);padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;'>";
+      html+="<div style='flex:1;'>";
+      html+="<div style='font-size:14px;font-weight:600;color:var(--text);margin-bottom:.3rem;'>"+fiche.titre+"</div>";
+      html+="<div style='font-size:12px;font-weight:500;color:"+statutColor+";'>"+statutTxt+"</div>";
+      if(sc) html+="<div style='font-size:11px;color:var(--text3);margin-top:.2rem;font-family:JetBrains Mono,monospace;'>Dernier score : "+sc+"</div>";
+      html+="</div>";
+      if(aUrl) html+="<a href='"+lien+"' target='_blank' class='fiche-btn "+(st==="quiz_final_valide"?"done-btn":"")+"' style='flex-shrink:0;'>"+(st==="quiz_final_valide"?"✓ Revoir":"Commencer →")+"</a>";
+      html+="</div>";
+    });
+  }
+  document.getElementById("overlay-list").innerHTML=html;
+  document.getElementById("fiches-overlay").classList.add("visible");
+  document.body.style.overflow="hidden";
+}
+
+function fermerFiches(){
+  document.getElementById("fiches-overlay").classList.remove("visible");
+  document.body.style.overflow="";
 }
 
 // ── NAVIGATION ──
