@@ -620,8 +620,10 @@ function sInscrire(){
 // HELPERS — RÉÉVALUATION (éval 2)
 // ═══════════════════════════════════════════════════════════════
 
-// Construit le lien d'évaluation (identique éval 1 / éval 2 — Apps Script incrémente numero_eval automatiquement)
-function getEvalLink(user){
+// Construit le lien d'évaluation
+// Si reeval=true, ajoute &reeval=1 pour que la page d'éval lance directement le questionnaire
+// (sinon elle détecterait "déjà fait" et afficherait les résultats au lieu de relancer)
+function getEvalLink(user, reeval){
   var dysActif=user.dys===true;
   return EVAL_URL
     +"?nom="+encodeURIComponent((user.prenom||"")+" "+(user.nom||""))
@@ -630,7 +632,8 @@ function getEvalLink(user){
     +"&email="+encodeURIComponent(user.email||"")
     +"&prof="+encodeURIComponent(user.prof||"")
     +"&prof_email="+encodeURIComponent("ar.reydellet@gmail.com")
-    +(dysActif?"&dys=1":"");
+    +(dysActif?"&dys=1":"")
+    +(reeval?"&reeval=1":"");
 }
 
 // Éligible à passer la 2ème évaluation ?
@@ -746,7 +749,7 @@ function renderReevalBanner(user){
   if(!wrap) return;
 
   if(eligibleReeval(user)){
-    var lien=getEvalLink(user);
+    var lien=getEvalLink(user, true); // true = mode réévaluation
     wrap.innerHTML=
       "<div class='reeval-banner'>"
         +"<div class='reeval-banner-left'>"
@@ -787,7 +790,7 @@ function renderProgression(user){
   var celebWrap=document.getElementById("prog-celebration-wrap");
   if(celebWrap){
     if(eligibleReeval(user)){
-      var lien=getEvalLink(user);
+      var lien=getEvalLink(user, true); // true = mode réévaluation
       celebWrap.innerHTML=
         "<div class='prog-celebration prog-celeb'>"
           +"<div class='prog-celeb-icon'>🎉</div>"
