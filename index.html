@@ -39,11 +39,17 @@ body.dys-mode .eval-titre { font-size: 16.5px; }
 body.dys-mode .eval-sub { font-size: 13.5px; }
 body.dys-mode .btn-passer-eval { font-size: 14px; padding: 12px 24px; }
 body.dys-mode .fiche-card { padding: 1.4rem 1.35rem; gap: 12px; }
+body.dys-mode .reeval-titre { font-size: 18px; }
+body.dys-mode .reeval-sub { font-size: 14.5px; }
+body.dys-mode .btn-reeval { font-size: 14.5px; padding: 13px 26px; }
+body.dys-mode .prog-celeb-titre { font-size: 22px; }
+body.dys-mode .prog-celeb-sub { font-size: 14.5px; }
 
 @keyframes fadeUp { from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);} }
 @keyframes fadeIn { from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);} }
 @keyframes pulse  { 0%,100%{opacity:1;}50%{opacity:.3;} }
 @keyframes spin   { to{transform:rotate(360deg);} }
+@keyframes shine  { 0%{transform:translateX(-100%);}100%{transform:translateX(100%);} }
 
 /* ═══ LOGIN ═══ */
 .auth-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
@@ -91,14 +97,10 @@ body.dys-mode .fiche-card { padding: 1.4rem 1.35rem; gap: 12px; }
 .dash-header-left { display: flex; align-items: center; gap: 14px; }
 .dash-logo { width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,.12); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; }
 .dash-brand { font-size: 13.5px; font-weight: 600; color: #fff; }
-
-/* ═══ NAVBAR HORIZONTALE — centrée ═══ */
 .dash-nav { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 2px; }
 .nav-tab { padding: 6px 16px; border-radius: 999px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,.55); cursor: pointer; transition: all .15s; background: transparent; border: none; font-family: 'Sora', sans-serif; }
 .nav-tab:hover { color: rgba(255,255,255,.9); background: rgba(255,255,255,.08); }
 .nav-tab.active { color: #fff; background: rgba(255,255,255,.15); font-weight: 600; }
-
-/* Badge DYS + déconnexion */
 .dash-header-right { display: flex; align-items: center; gap: 12px; }
 .dys-badge { display: none; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 999px; background: rgba(255,255,255,.12); color: #fff; font-size: 10.5px; font-weight: 600; letter-spacing: .04em; }
 .dys-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #7ABA9C; }
@@ -111,7 +113,7 @@ body.dys-mode .dys-badge { display: inline-flex; }
 .section { display: none; animation: fadeIn .2s ease; }
 .section.active { display: block; }
 
-/* ═══ ACCUEIL (identique à l'original) ═══ */
+/* ═══ ACCUEIL ═══ */
 .eleve-hero { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 1.75rem 2rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
 .eleve-name { font-size: 22px; font-weight: 600; letter-spacing: -.3px; margin-bottom: 3px; }
 .eleve-meta { font-size: 13px; color: var(--text2); }
@@ -167,6 +169,115 @@ body.dys-mode .dys-badge { display: inline-flex; }
 .btn-passer-eval:hover { background: #142248; transform: translateY(-1px); }
 .eval-done-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; background: var(--green-l); color: var(--green); font-size: 11px; font-weight: 600; }
 
+/* ═══ BANDEAU RÉÉVALUATION (accueil) ═══ */
+.reeval-banner {
+  background: linear-gradient(135deg, #E3F4EE 0%, #F0F9F5 100%);
+  border: 1.5px solid var(--green);
+  border-radius: var(--rl);
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 1.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1.25rem;
+  position: relative; overflow: hidden;
+  animation: fadeUp .4s ease;
+}
+.reeval-banner::before {
+  content: ""; position: absolute; top: 0; right: 0;
+  width: 140px; height: 140px;
+  background: radial-gradient(circle, rgba(26,122,94,.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.reeval-banner-left { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 280px; }
+.reeval-icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  background: var(--green); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(26,122,94,.3);
+}
+.reeval-titre { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 3px; letter-spacing: -.1px; }
+.reeval-sub { font-size: 12.5px; color: var(--text2); line-height: 1.55; }
+.reeval-sub strong { color: var(--green); font-weight: 700; }
+.btn-reeval {
+  padding: 11px 22px; border-radius: 999px;
+  background: var(--green); color: #fff; border: none;
+  font-family: inherit; font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all .15s; white-space: nowrap;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 7px;
+  box-shadow: 0 4px 12px rgba(26,122,94,.25);
+  position: relative; overflow: hidden;
+}
+.btn-reeval::after {
+  content: ""; position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
+  animation: shine 2.5s infinite;
+}
+.btn-reeval:hover { background: #146849; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(26,122,94,.35); }
+
+/* Version "déjà fait" (éval 2 passée) */
+.reeval-done-banner {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--rl);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: 14px;
+  animation: fadeUp .3s ease;
+}
+.reeval-done-icon {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: var(--green-l); color: var(--green);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; flex-shrink: 0;
+}
+.reeval-done-titre { font-size: 13.5px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+.reeval-done-sub { font-size: 12px; color: var(--text2); line-height: 1.5; }
+
+/* ═══ CARTE CÉLÉBRATION (progression) ═══ */
+.prog-celebration {
+  background: linear-gradient(135deg, #E3F4EE 0%, #F0F9F5 100%);
+  border: 1.5px solid var(--green);
+  border-radius: var(--rl);
+  padding: 2rem;
+  margin-bottom: 1.75rem;
+  text-align: center;
+  position: relative; overflow: hidden;
+  animation: fadeUp .4s ease;
+}
+.prog-celebration::before {
+  content: ""; position: absolute; top: -20px; right: -20px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(26,122,94,.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+.prog-celeb-icon {
+  width: 68px; height: 68px; border-radius: 18px;
+  background: var(--green); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 34px; margin: 0 auto 1rem;
+  box-shadow: 0 6px 20px rgba(26,122,94,.3);
+  position: relative; z-index: 1;
+}
+.prog-celeb-titre {
+  font-size: 20px; font-weight: 700; color: var(--text);
+  margin-bottom: .5rem; letter-spacing: -.3px; position: relative; z-index: 1;
+}
+.prog-celeb-sub {
+  font-size: 13px; color: var(--text2); line-height: 1.6;
+  max-width: 520px; margin: 0 auto 1.5rem; position: relative; z-index: 1;
+}
+.prog-celeb-sub strong { color: var(--green); font-weight: 700; }
+.prog-celeb .btn-reeval { position: relative; z-index: 1; }
+
+/* Version "déjà fait" dans progression */
+.prog-celebration.done {
+  background: var(--surface);
+  border-color: var(--border);
+}
+.prog-celebration.done .prog-celeb-icon { background: var(--navy); box-shadow: 0 6px 20px rgba(26,44,91,.25); }
+.prog-celebration.done::before { display: none; }
+
 /* ═══ VOIR MES FICHES — overlay ═══ */
 .btn-voir-fiches { display: inline-flex; align-items: center; gap: 7px; background: var(--navy); color: #fff; border: none; padding: 9px 18px; border-radius: var(--r); font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s; margin-top: .5rem; }
 .btn-voir-fiches:hover { background: #142248; transform: translateY(-1px); }
@@ -198,7 +309,6 @@ body.dys-mode .dys-badge { display: inline-flex; }
 .prog-charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.75rem; }
 .prog-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 1.5rem; }
 .prog-panel-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 1.25rem; }
-/* Donut */
 .donut-wrap { display: flex; align-items: center; gap: 1.5rem; }
 .donut-svg { flex-shrink: 0; }
 .donut-legend { flex: 1; display: flex; flex-direction: column; gap: 8px; }
@@ -206,14 +316,12 @@ body.dys-mode .dys-badge { display: inline-flex; }
 .donut-leg-dot { width: 9px; height: 9px; border-radius: 3px; flex-shrink: 0; }
 .donut-leg-label { font-size: 12px; color: var(--text2); flex: 1; }
 .donut-leg-val { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--text3); }
-/* Barres thèmes */
 .prog-bars { display: flex; flex-direction: column; gap: 14px; }
 .prog-bar-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; }
 .prog-bar-label { font-size: 12px; font-weight: 500; color: var(--text2); }
 .prog-bar-val { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--text3); }
 .prog-bar-track { height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
 .prog-bar-fill { height: 100%; border-radius: 3px; transition: width 1s cubic-bezier(.4,0,.2,1); width: 0%; }
-/* Tentatives */
 .prog-tentatives { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); overflow: hidden; }
 .prog-tent-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 1.5rem; border-bottom: 1px solid #F0EFE9; font-size: 12.5px; }
 .prog-tent-row:last-child { border-bottom: none; }
@@ -307,6 +415,8 @@ body.dys-mode .dys-badge { display: inline-flex; }
           <div class="estat"><div class="estat-val" style="color:var(--red);" id="stat-alertes">—</div><div class="estat-lbl">Bloquées</div></div>
         </div>
       </div>
+      <!-- Bandeau de réévaluation (éval 2) -->
+      <div id="reeval-banner-wrap"></div>
       <div class="progress-panel" id="progress-panel" style="display:none;">
         <div class="progress-panel-header">
           <div class="progress-panel-title">Ta progression globale</div>
@@ -320,6 +430,9 @@ body.dys-mode .dys-badge { display: inline-flex; }
 
     <!-- ══ PROGRESSION ══ -->
     <div class="section" id="section-progression">
+
+      <!-- Carte de célébration si éligible/déjà réévalué -->
+      <div id="prog-celebration-wrap"></div>
 
       <!-- KPI row -->
       <div class="prog-kpi-row">
@@ -496,12 +609,54 @@ function sInscrire(){
     .then(function(json){
       setLoading(false);document.getElementById("in-btn").disabled=false;
       if(json.status==="ok"){
-        currentUser={email:email,prenom:prenom,nom:nom,niveau:niveau,classe:classe,prof:json.prof,dys:dys,fiches:[],fiches_assignees:[],eval_faite:false};
+        currentUser={email:email,prenom:prenom,nom:nom,niveau:niveau,classe:classe,prof:json.prof,dys:dys,fiches:[],fiches_assignees:[],eval_faite:false,numero_eval:0};
         appliquerModeDys(dys);afficherDashboard(currentUser);
       } else{err.textContent=json.message||"Erreur lors de la création.";err.classList.add("visible");}
     })
     .catch(function(){setLoading(false);document.getElementById("in-btn").disabled=false;err.textContent="Erreur de connexion. Réessaie.";err.classList.add("visible");});
 }
+
+// ═══════════════════════════════════════════════════════════════
+// HELPERS — RÉÉVALUATION (éval 2)
+// ═══════════════════════════════════════════════════════════════
+
+// Construit le lien d'évaluation (identique éval 1 / éval 2 — Apps Script incrémente numero_eval automatiquement)
+function getEvalLink(user){
+  var dysActif=user.dys===true;
+  return EVAL_URL
+    +"?nom="+encodeURIComponent((user.prenom||"")+" "+(user.nom||""))
+    +"&classe="+encodeURIComponent(user.classe||"")
+    +"&lycee="+encodeURIComponent("Lycée Benoît Fourneyron")
+    +"&email="+encodeURIComponent(user.email||"")
+    +"&prof="+encodeURIComponent(user.prof||"")
+    +"&prof_email="+encodeURIComponent("ar.reydellet@gmail.com")
+    +(dysActif?"&dys=1":"");
+}
+
+// Éligible à passer la 2ème évaluation ?
+// Conditions : a passé l'éval 1 (numero_eval=1), avait des fiches assignées, TOUTES validées, et pas encore repassé
+function eligibleReeval(user){
+  if(!user) return false;
+  if(!user.eval_faite) return false;
+  var numEval=parseInt(user.numero_eval)||1;
+  if(numEval>=2) return false;
+  var fa=user.fiches_assignees||[];
+  if(fa.length===0) return false; // 100% à l'éval 1 → inutile
+  var statutsMap=user._statutsMap||{};
+  return fa.every(function(fid){
+    return statutsMap[fid] && statutsMap[fid].statut==="quiz_final_valide";
+  });
+}
+
+// A déjà passé l'éval 2 ?
+function aDejaReeval(user){
+  if(!user) return false;
+  return (parseInt(user.numero_eval)||1) >= 2;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DASHBOARD PRINCIPAL
+// ═══════════════════════════════════════════════════════════════
 
 function afficherDashboard(user){
   document.getElementById("auth-wrap").style.display="none";
@@ -523,7 +678,7 @@ function afficherDashboard(user){
   var meilleurScore=0;
   fiches.forEach(function(f){var s=parseInt(f.score_quiz)||0;if(s>meilleurScore)meilleurScore=s;});
 
-  // Stocker pour progression
+  // Stocker pour progression + helpers réeval
   user._validees=validees; user._total=total; user._evalFaite=evalFaite;
   user._meilleurScore=meilleurScore; user._statutsMap=statutsMap; user._fiches=fiches;
 
@@ -540,12 +695,16 @@ function afficherDashboard(user){
     document.getElementById("progress-pct").textContent=pct+"%";
     setTimeout(function(){document.getElementById("progress-fill").style.width=pct+"%";},100);
     document.getElementById("progress-sub").textContent=validees+" fiche"+(validees>1?"s validées":" validée")+" sur "+total;
+  } else {
+    document.getElementById("progress-panel").style.display="none";
   }
+
+  // ── Bandeau de réévaluation (accueil)
+  renderReevalBanner(user);
 
   // ── Fiches section
   var html="";
-
-  var evalLien=EVAL_URL+"?nom="+encodeURIComponent((user.prenom||"")+" "+(user.nom||""))+"&classe="+encodeURIComponent(user.classe||"")+"&lycee="+encodeURIComponent("Lycée Benoît Fourneyron")+"&email="+encodeURIComponent(user.email||"")+"&prof="+encodeURIComponent(user.prof||"")+"&prof_email="+encodeURIComponent("ar.reydellet@gmail.com")+(dysActif?"&dys=1":"");
+  var evalLien=getEvalLink(user);
 
   html+="<div class='themes-grid'>";
   THEMES.forEach(function(theme){
@@ -564,7 +723,6 @@ function afficherDashboard(user){
       } else {
         var valideesDansTheme=fa.filter(function(f){return statutsMap[f.id]&&statutsMap[f.id].statut==="quiz_final_valide";}).length;
         var pct=Math.round(valideesDansTheme/fa.length*100);
-        var panelId="fiches-panel-"+theme.id;
         var btnId="btn-fiches-"+theme.id;
         html+="<div style='font-size:12px;color:var(--text3);margin-bottom:.6rem;'>"+fa.length+" fiche"+(fa.length>1?"s assignées":" assignée")+" · "+valideesDansTheme+" validée"+(valideesDansTheme>1?"s":"")+"</div>";
         html+="<div style='height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;margin-bottom:.75rem;'><div style='height:100%;width:"+pct+"%;background:"+(pct>=80?"var(--green)":pct>=40?"var(--amber)":"#4A90E2")+";border-radius:3px;transition:width 1s;'></div></div>";
@@ -580,6 +738,40 @@ function afficherDashboard(user){
   renderProgression(user);
 }
 
+// ═══════════════════════════════════════════════════════════════
+// BANDEAU RÉÉVALUATION (accueil)
+// ═══════════════════════════════════════════════════════════════
+function renderReevalBanner(user){
+  var wrap=document.getElementById("reeval-banner-wrap");
+  if(!wrap) return;
+
+  if(eligibleReeval(user)){
+    var lien=getEvalLink(user);
+    wrap.innerHTML=
+      "<div class='reeval-banner'>"
+        +"<div class='reeval-banner-left'>"
+          +"<div class='reeval-icon'>🎯</div>"
+          +"<div>"
+            +"<div class='reeval-titre'>Bravo ! Tu as validé toutes tes fiches.</div>"
+            +"<div class='reeval-sub'>Tu peux maintenant <strong>repasser l'évaluation diagnostique</strong> pour mesurer tes progrès et voir l'impact concret de ton travail.</div>"
+          +"</div>"
+        +"</div>"
+        +"<a href='"+lien+"' target='_blank' class='btn-reeval'>Repasser l'évaluation →</a>"
+      +"</div>";
+  } else if(aDejaReeval(user)){
+    wrap.innerHTML=
+      "<div class='reeval-done-banner'>"
+        +"<div class='reeval-done-icon'>✓</div>"
+        +"<div>"
+          +"<div class='reeval-done-titre'>Évaluation de progression passée</div>"
+          +"<div class='reeval-done-sub'>Tu as repassé l'évaluation diagnostique — félicitations pour ton engagement dans la remédiation !</div>"
+        +"</div>"
+      +"</div>";
+  } else {
+    wrap.innerHTML="";
+  }
+}
+
 function renderProgression(user){
   var validees=user._validees||0;
   var total=user._total||0;
@@ -590,6 +782,30 @@ function renderProgression(user){
   document.getElementById("pk-validees").textContent=validees;
   document.getElementById("pk-total").textContent=total;
   document.getElementById("pk-meilleur").textContent=meilleurScore>0?meilleurScore+"%":"—";
+
+  // ── Carte de célébration (progression)
+  var celebWrap=document.getElementById("prog-celebration-wrap");
+  if(celebWrap){
+    if(eligibleReeval(user)){
+      var lien=getEvalLink(user);
+      celebWrap.innerHTML=
+        "<div class='prog-celebration prog-celeb'>"
+          +"<div class='prog-celeb-icon'>🎉</div>"
+          +"<div class='prog-celeb-titre'>Toutes tes fiches sont validées !</div>"
+          +"<div class='prog-celeb-sub'>Tu as complété <strong>100% de ta remédiation</strong>. Repasse l'évaluation diagnostique pour voir concrètement l'évolution de ton score avant et après le travail sur les fiches.</div>"
+          +"<a href='"+lien+"' target='_blank' class='btn-reeval'>Repasser l'évaluation →</a>"
+        +"</div>";
+    } else if(aDejaReeval(user)){
+      celebWrap.innerHTML=
+        "<div class='prog-celebration done'>"
+          +"<div class='prog-celeb-icon'>✓</div>"
+          +"<div class='prog-celeb-titre'>Parcours complet</div>"
+          +"<div class='prog-celeb-sub'>Tu as passé <strong>les deux évaluations</strong> et travaillé toutes tes fiches de remédiation. Ton engagement est exemplaire.</div>"
+        +"</div>";
+    } else {
+      celebWrap.innerHTML="";
+    }
+  }
 
   // ── Camembert lacunes par thème
   var themeData=THEMES.map(function(t,i){
@@ -647,11 +863,9 @@ function renderProgression(user){
   if(fiches.length===0){
     tentHtml="<div style='padding:1.5rem;text-align:center;font-size:12px;color:var(--text3);'>Aucune tentative enregistrée.</div>";
   } else {
-    // Trier par tentative_num desc pour avoir les plus récentes en premier
     var sorted=fiches.slice().sort(function(a,b){return (parseInt(b.tentative_num)||0)-(parseInt(a.tentative_num)||0);});
     sorted.forEach(function(f){
       var nomFiche=f.fiche_id||"Fiche inconnue";
-      // Chercher le titre dans THEMES
       THEMES.forEach(function(t){t.fiches.forEach(function(tf){if(tf.id===f.fiche_id) nomFiche=tf.titre;});});
       var scoreColor=f.statut==="quiz_final_valide"?"var(--green)":f.statut==="echec_3_tentatives"?"var(--red)":"var(--amber)";
       var score=f.score_quiz?f.score_quiz+"%":"—";
@@ -675,7 +889,6 @@ function ouvrirFiches(themeId){
   var pct=fa.length>0?Math.round(validees/fa.length*100):0;
   var fillColor=pct>=80?"var(--green)":pct>=40?"var(--amber)":"#4A90E2";
 
-  // Remplir l'overlay
   document.getElementById("overlay-icon").style.background=theme.iconClass==="ic-fractions"?"#EEF2FF":theme.iconClass==="ic-propor"?"#FFF7ED":"#F0FDF4";
   document.getElementById("overlay-icon").textContent=theme.icon;
   document.getElementById("overlay-name").textContent=theme.titre;
@@ -737,6 +950,8 @@ function seDeconnecter(){
   document.getElementById("co-mdp").value="";
   document.getElementById("fiches-section").innerHTML="";
   document.getElementById("progress-panel").style.display="none";
+  var rb=document.getElementById("reeval-banner-wrap"); if(rb) rb.innerHTML="";
+  var cw=document.getElementById("prog-celebration-wrap"); if(cw) cw.innerHTML="";
   navVers("accueil");
   switchTab("connexion");
 }
