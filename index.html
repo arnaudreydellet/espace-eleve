@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mon espace · Académie des Maths</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter+Tight:wght@400;500;600;700&family=Fraunces:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=OpenDyslexic:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter+Tight:wght@400;500;600;700&family=Fraunces:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=OpenDyslexic:wght@400;700&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
   --navy: #1A2C4F;
@@ -614,8 +614,8 @@ body.dys-mode .tb-avatar {
 }
 .eleve-hero-left { flex: 0 1 auto; min-width: 280px; }
 
-/* Citation au centre du hero — discrète, rotation auto */
-.hero-quote {
+/* Logo AlphΩ au centre du hero — identité visuelle (raccord avec index) */
+.hero-logo {
   flex: 1 1 0;
   min-width: 200px;
   max-width: 380px;
@@ -626,8 +626,8 @@ body.dys-mode .tb-avatar {
   padding: 0 1.5rem;
   position: relative;
 }
-.hero-quote::before,
-.hero-quote::after {
+.hero-logo::before,
+.hero-logo::after {
   content: '';
   position: absolute;
   top: 50%;
@@ -636,42 +636,44 @@ body.dys-mode .tb-avatar {
   background: linear-gradient(180deg, transparent, rgba(212,164,100,.35), transparent);
   transform: translateY(-50%);
 }
-.hero-quote::before { left: 0; }
-.hero-quote::after { right: 0; }
-.hero-quote-content {
-  width: 100%;
-  transition: opacity .5s ease;
+.hero-logo::before { left: 0; }
+.hero-logo::after { right: 0; }
+.hero-logo-mark {
+  font-family: 'Montserrat', 'Sora', sans-serif;
+  font-weight: 600;
+  font-size: 72px;
+  letter-spacing: -1.5px;
+  line-height: 1;
+  color: var(--navy);
+  user-select: none;
+  display: inline-flex;
+  align-items: baseline;
 }
-.hero-quote-content.fading { opacity: 0; }
-.hero-quote-text {
-  font-family: 'Fraunces', Georgia, serif;
-  font-style: italic;
-  font-weight: 400;
-  font-size: 15px;
-  line-height: 1.45;
-  color: #2D2D2D;
-  letter-spacing: -.1px;
-  margin-bottom: .45rem;
+.hero-logo-omega-svg {
+  display: inline-block;
+  height: 0.78em;
+  width: auto;
+  margin-left: 4px;
+  vertical-align: -0.04em;
 }
-.hero-quote-author {
-  font-family: 'Inter Tight', sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--gold-deep);
+.hero-logo-omega-svg path {
+  fill: var(--gold);
 }
 
 @media (max-width: 900px) {
-  .hero-quote {
+  .hero-logo {
     max-width: none;
     padding: 1rem 0;
     flex-basis: 100%;
     order: 3;
   }
-  .hero-quote::before,
-  .hero-quote::after {
+  .hero-logo::before,
+  .hero-logo::after {
     display: none;
+  }
+  .hero-logo-mark {
+    font-size: 58px;
+    letter-spacing: -1px;
   }
 }
 .hero-kicker {
@@ -2678,11 +2680,8 @@ body.dys-mode .tb-avatar {
             </div>
             <div class="hero-meta" id="eleve-meta">—</div>
           </div>
-          <div class="hero-quote">
-            <div class="hero-quote-content" id="hero-quote-content">
-              <div class="hero-quote-text" id="quote-text">—</div>
-              <div class="hero-quote-author" id="quote-author">—</div>
-            </div>
+          <div class="hero-logo">
+            <div class="hero-logo-mark">Alph<svg class="hero-logo-omega-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"><path d="M 50 6 C 25 6, 14 26, 14 48 C 14 64, 22 75, 30 81 L 8 81 L 8 94 L 40 94 L 40 81 L 36 81 C 29 75, 24 65, 24 50 C 24 32, 35 20, 50 20 C 65 20, 76 32, 76 50 C 76 65, 71 75, 64 81 L 60 81 L 60 94 L 92 94 L 92 81 L 70 81 C 78 75, 86 64, 86 48 C 86 26, 75 6, 50 6 Z"/></svg></div>
           </div>
           <button class="btn-voir-progression" onclick="navVers('progression')">
             Voir le détail de ma progression →
@@ -3105,7 +3104,6 @@ function afficherDashboard(user){
   renderReevalBanner(user);
   renderThemes(user);
   renderProgression(user);
-  initQuotes();
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -3405,101 +3403,6 @@ function renderReevalBanner(user){
 var THEME_COLORS=["#C28A42","#15A362","#7C3AED","#D47B06","#22D37C","#4A90E2","#D42626"];
 
 // ═══════════════════════════════════════════════════════════════
-// CITATIONS MOTIVANTES (rotation auto)
-// ═══════════════════════════════════════════════════════════════
-var QUOTES=[
-  {text:"Je n'abandonnerai jamais, c'est ça mon nindō.",author:"Naruto Uzumaki"},
-  {text:"Un génie, c'est juste quelqu'un qui travaille plus dur que les autres.",author:"Rock Lee — Naruto"},
-  {text:"Ce qui blesse vraiment, ce n'est pas la défaite, c'est de ne plus essayer.",author:"Eren Jäger — L'Attaque des Titans"},
-  {text:"Si tu racontes tes rêves et que personne ne rit, c'est que tu ne rêves pas assez grand.",author:"Tony Parker"},
-  {text:"J'ai raté plus de 9000 tirs dans ma carrière. C'est pour ça que je réussis.",author:"Michael Jordan"},
-  {text:"Le talent sans travail n'est rien.",author:"Cristiano Ronaldo"},
-  {text:"Je n'ai jamais perdu. Soit je gagne, soit j'apprends.",author:"Nelson Mandela"},
-  {text:"Ne laisse personne te dire que tu ne peux pas faire quelque chose.",author:"Will Smith"},
-  {text:"Le seul endroit où le succès vient avant le travail, c'est dans le dictionnaire.",author:"Vince Lombardi"},
-  {text:"Ce n'est pas la chute qui compte, c'est l'atterrissage.",author:"La Haine"},
-  {text:"Le succès, c'est tomber sept fois et se relever huit.",author:"Proverbe japonais"},
-  {text:"Le travail acharné bat le talent quand le talent ne travaille pas dur.",author:"Tim Notke"},
-  {text:"Ça paraît toujours impossible jusqu'à ce qu'on le fasse.",author:"Nelson Mandela"}
-];
-
-var quoteIndex=-1;
-var quoteTimer=null;
-var quoteQueue=[];
-
-// Mélange Fisher-Yates et garantit que la 1re citation du nouveau cycle
-// n'est pas identique à la dernière du cycle précédent
-function _rebuildQuoteQueue(){
-  var n=QUOTES.length;
-  var lastShown=quoteIndex;
-  var arr=[];
-  for(var i=0;i<n;i++) arr.push(i);
-  for(var i=n-1;i>0;i--){
-    var j=Math.floor(Math.random()*(i+1));
-    var tmp=arr[i]; arr[i]=arr[j]; arr[j]=tmp;
-  }
-  if(n>1 && arr[0]===lastShown){
-    var tmp=arr[0]; arr[0]=arr[1]; arr[1]=tmp;
-  }
-  quoteQueue=arr;
-}
-
-function _nextQuoteIndex(){
-  if(quoteQueue.length===0) _rebuildQuoteQueue();
-  return quoteQueue.shift();
-}
-
-function renderQuote(i){
-  var q=QUOTES[i];
-  if(!q) return;
-  var content=document.getElementById("hero-quote-content");
-  if(!content) return;
-  // Fondu sortant
-  content.classList.add("fading");
-  setTimeout(function(){
-    document.getElementById("quote-text").textContent="« "+q.text+" »";
-    document.getElementById("quote-author").textContent=q.author;
-    // Fondu entrant
-    content.classList.remove("fading");
-  },500);
-}
-
-function startQuoteRotation(){
-  if(quoteTimer) clearInterval(quoteTimer);
-  quoteTimer=setInterval(function(){
-    quoteIndex=_nextQuoteIndex();
-    renderQuote(quoteIndex);
-  },8000);
-}
-
-function stopQuoteRotation(){
-  if(quoteTimer){ clearInterval(quoteTimer); quoteTimer=null; }
-}
-
-function initQuotes(){
-  // Construit une nouvelle queue aléatoire et démarre dessus
-  quoteQueue=[];
-  quoteIndex=-1;
-  quoteIndex=_nextQuoteIndex();
-  // Premier rendu en fondu : on cache, on injecte, puis on révèle après un délai
-  var content=document.getElementById("hero-quote-content");
-  var q=QUOTES[quoteIndex];
-  var textEl=document.getElementById("quote-text");
-  var authorEl=document.getElementById("quote-author");
-  if(content&&textEl&&authorEl){
-    content.classList.add("fading"); // état caché
-    textEl.textContent="« "+q.text+" »";
-    authorEl.textContent=q.author;
-    // Délai avant que la citation n'apparaisse en fondu
-    // (le temps que le hero et la grille des thèmes s'installent visuellement)
-    setTimeout(function(){
-      content.classList.remove("fading");
-    },1200);
-  }
-  startQuoteRotation();
-}
-
-// ═══════════════════════════════════════════════════════════════
 // PALIERS DE PROGRESSION — calculés à partir du % de notions solides dans un thème
 // (Aujourd'hui basé sur fiches assignées/validées comme proxy.
 //  Plus tard on pourra brancher le vrai score d'évaluation par thème.)
@@ -3773,7 +3676,6 @@ function navVers(dest){
 function seDeconnecter(){
   currentUser=null;
   appliquerModeDys(false);
-  stopQuoteRotation();
   document.getElementById("dashboard").classList.remove("visible");
   document.getElementById("auth-wrap").style.display="grid";
   document.getElementById("co-email").value="";
