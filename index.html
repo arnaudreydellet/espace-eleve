@@ -323,6 +323,52 @@ body { font-family: 'Inter Tight', sans-serif; background: var(--bg); color: var
   font-size: 11px; color: var(--text3);
   line-height: 1.45;
 }
+
+/* ── Choix de genre : 2 pastilles radio ── */
+.form-genre {
+  display: flex;
+  gap: 10px;
+}
+.form-genre-opt {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 11px 14px;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r);
+  cursor: pointer;
+  transition: all .2s;
+  font-size: 13px; font-weight: 600;
+  color: var(--text2);
+  user-select: none;
+}
+.form-genre-opt:hover {
+  border-color: var(--gold-l);
+  background: var(--white);
+  color: var(--text);
+}
+.form-genre-opt input[type="radio"] {
+  appearance: none;
+  width: 16px; height: 16px;
+  border: 2px solid var(--border-md);
+  border-radius: 50%;
+  background: var(--white);
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  transition: all .15s;
+  margin: 0;
+}
+.form-genre-opt input[type="radio"]:checked {
+  border-color: var(--navy);
+  border-width: 5px;
+}
+.form-genre-opt:has(input[type="radio"]:checked) {
+  border-color: var(--navy);
+  background: var(--white);
+  color: var(--text);
+  box-shadow: 0 3px 10px rgba(26,44,79,.1);
+}
 .btn-auth {
   width: 100%; height: 44px;
   background: linear-gradient(180deg, var(--navy), var(--navy-deep));
@@ -821,6 +867,9 @@ body.dys-mode .tb-avatar {
   background: rgba(20,19,16,.06);
   transition: background .25s;
 }
+.theme-card.has-fiches {
+  cursor: pointer;
+}
 .theme-card.has-fiches:hover {
   border-color: rgba(212,164,100,.4);
   transform: translateY(-2px);
@@ -828,6 +877,114 @@ body.dys-mode .tb-avatar {
 }
 .theme-card.has-fiches:hover::before {
   background: linear-gradient(180deg, var(--gold-l), var(--gold-deep));
+}
+
+/* ── ÉTAT "À FAIRE MAINTENANT" — la carte que l'élève doit attaquer ── */
+.theme-card.theme-actif {
+  border-color: var(--gold-deep);
+  background: linear-gradient(180deg, #FFFCF5, #FFFFFF);
+  box-shadow: 0 4px 18px rgba(212,164,100,.18);
+  animation: themePulse 2.4s ease-in-out infinite;
+}
+.theme-card.theme-actif::before {
+  background: linear-gradient(180deg, var(--gold-l), var(--gold-deep));
+  width: 4px;
+}
+.theme-card.theme-actif:hover {
+  border-color: var(--gold-deep);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(212,164,100,.28);
+  animation: none;
+}
+@keyframes themePulse {
+  0%, 100% { box-shadow: 0 4px 18px rgba(212,164,100,.18); }
+  50%      { box-shadow: 0 4px 24px rgba(212,164,100,.42); }
+}
+/* Badge "À faire maintenant" en haut de la carte active */
+.theme-badge-actif {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: linear-gradient(180deg, var(--gold-l), var(--gold-deep));
+  color: #fff;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 10.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  align-self: flex-start;
+  box-shadow: 0 2px 6px rgba(212,164,100,.3);
+}
+.theme-badge-actif::before {
+  content: '▸';
+  font-size: 10px;
+}
+/* Chevron renforcé sur la carte active */
+.theme-card.theme-actif .theme-chevron {
+  background: linear-gradient(180deg, var(--gold-l), var(--gold-deep));
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(212,164,100,.3);
+}
+
+/* ── ÉTAT "TERMINÉ" — toutes les fiches du thème sont validées ── */
+.theme-card.theme-fini {
+  background: linear-gradient(180deg, #F7FBF7, #FFFFFF);
+  border-color: rgba(21,163,98,.25);
+  cursor: default;
+}
+.theme-card.theme-fini::before {
+  background: linear-gradient(180deg, #6DD89E, var(--green-dark));
+  width: 3px;
+}
+.theme-card.theme-fini:hover {
+  transform: none;
+  box-shadow: none;
+}
+.theme-card.theme-fini .theme-title {
+  color: var(--text2);
+}
+.theme-card.theme-fini .theme-chevron {
+  display: none;
+}
+.theme-card.theme-fini .theme-icon {
+  opacity: .75;
+}
+/* Pastille "✓ Terminé" qui remplace la chevron */
+.theme-pastille-fini {
+  position: absolute;
+  top: 1.25rem; right: 1.25rem;
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(21,163,98,.12);
+  color: var(--green-dark);
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 11px; font-weight: 700;
+  padding: 4px 9px;
+  border-radius: 999px;
+}
+
+/* ── ÉTAT "EN ATTENTE" — pas encore le tour de cette carte ── */
+.theme-card.theme-attente {
+  opacity: .68;
+}
+.theme-card.theme-attente:hover {
+  opacity: 1;
+}
+/* Chevron en haut à droite — affordance discrète de carte cliquable */
+.theme-chevron {
+  position: absolute;
+  top: 1.25rem; right: 1.25rem;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg2);
+  color: var(--text3);
+  font-size: 14px;
+  transition: all .25s;
+  pointer-events: none;
+}
+.theme-card.has-fiches:hover .theme-chevron {
+  background: linear-gradient(180deg, var(--navy), var(--navy-deep));
+  color: #fff;
+  transform: translateX(3px);
+  box-shadow: 0 3px 10px rgba(26,44,79,.18);
 }
 .theme-header { display: flex; align-items: center; gap: 11px; }
 .theme-icon {
@@ -837,18 +994,21 @@ body.dys-mode .tb-avatar {
   font-size: 17px;
   flex-shrink: 0;
 }
-.ic-fractions { background: linear-gradient(135deg, #EEF2FF, #DDE7FF); }
-.ic-propor    { background: linear-gradient(135deg, #FFF7ED, #FFEAD0); }
-.ic-litteral  { background: linear-gradient(135deg, #F0FDF4, #DCFCE7); }
-.ic-fonctions { background: linear-gradient(135deg, #EFF6FF, #DBEAFE); }
-.ic-geometrie { background: linear-gradient(135deg, #FDF4FF, #F5D0FE); }
-.ic-nombres   { background: linear-gradient(135deg, #FFFBEB, #FEF3C7); }
-.ic-stats     { background: linear-gradient(135deg, #FFF1F2, #FECDD3); }
+.ic-fractions  { background: linear-gradient(135deg, #EEF2FF, #DDE7FF); }
+.ic-propor     { background: linear-gradient(135deg, #FFF7ED, #FFEAD0); }
+.ic-litteral   { background: linear-gradient(135deg, #F0FDF4, #DCFCE7); }
+.ic-fonctions  { background: linear-gradient(135deg, #EFF6FF, #DBEAFE); }
+.ic-geometrie  { background: linear-gradient(135deg, #FDF4FF, #F5D0FE); }
+.ic-nombres    { background: linear-gradient(135deg, #FFFBEB, #FEF3C7); }
+.ic-stats      { background: linear-gradient(135deg, #FFF1F2, #FECDD3); }
+.ic-puissances { background: linear-gradient(135deg, #ECFEFF, #CFFAFE); }
+.ic-equations  { background: linear-gradient(135deg, #FAF5FF, #E9D5FF); }
 .theme-title {
-  font-family: 'Sora', sans-serif;
-  font-size: 14px; font-weight: 700;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 19px; font-weight: 600;
   color: var(--text);
-  letter-spacing: -.2px;
+  letter-spacing: -.3px;
+  line-height: 1.2;
 }
 .theme-empty {
   font-family: 'Inter Tight', sans-serif;
@@ -869,7 +1029,12 @@ body.dys-mode .tb-avatar {
 }
 .theme-progress-meta {
   font-family: 'Inter Tight', sans-serif;
-  font-size: 11.5px; color: var(--text3);
+  font-size: 12.5px; color: var(--text2);
+  font-weight: 500;
+}
+.theme-progress-meta strong {
+  color: var(--text);
+  font-weight: 700;
 }
 .theme-progress-track {
   height: 6px;
@@ -881,25 +1046,6 @@ body.dys-mode .tb-avatar {
   height: 100%;
   border-radius: 3px;
   transition: width 1s;
-}
-.btn-voir-fiches {
-  display: inline-flex; align-items: center; gap: 7px;
-  background: linear-gradient(180deg, var(--navy), var(--navy-deep));
-  color: #fff;
-  border: none;
-  padding: 10px 18px;
-  border-radius: var(--r);
-  font-family: 'Inter Tight', sans-serif;
-  font-size: 12.5px; font-weight: 600;
-  cursor: pointer;
-  transition: all .2s;
-  margin-top: .25rem;
-  align-self: flex-start;
-  box-shadow: 0 3px 10px rgba(26,44,79,.18);
-}
-.btn-voir-fiches:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 5px 16px rgba(26,44,79,.25);
 }
 .btn-passer-eval {
   display: inline-flex; align-items: center; gap: 7px;
@@ -1271,6 +1417,97 @@ body.dys-mode .tb-avatar {
   font-size: 12.5px;
   color: var(--text3);
 }
+/* ═══ PROGRESSION EN PROSE — un paragraphe par thème ═══ */
+.progression-intro {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 14.5px;
+  color: var(--text2);
+  line-height: 1.65;
+  margin-bottom: 2rem;
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(180deg, #FFFCF5, #FFFFFF);
+  border-left: 3px solid var(--gold-deep);
+  border-radius: var(--r);
+}
+.progression-intro strong {
+  color: var(--text);
+  font-weight: 600;
+}
+.progression-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.progression-bloc {
+  display: flex;
+  gap: 1.1rem;
+  padding: 1.2rem 1.4rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--rl);
+  position: relative;
+  overflow: hidden;
+}
+.progression-bloc::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: rgba(20,19,16,.08);
+}
+.progression-bloc.palier-solide::before     { background: linear-gradient(180deg, #34D399, #0E7348); }
+.progression-bloc.palier-alaise::before     { background: linear-gradient(180deg, #34D399, var(--green)); }
+.progression-bloc.palier-chemin::before     { background: linear-gradient(180deg, var(--gold-l), var(--gold-deep)); }
+.progression-bloc.palier-construire::before { background: linear-gradient(180deg, #F0A030, var(--amber)); }
+.progression-bloc.palier-decouvrir::before  { background: linear-gradient(180deg, #F87171, #B91C1C); }
+.progression-bloc.locked::before            { background: rgba(20,19,16,.05); }
+.progression-bloc-icon {
+  width: 42px; height: 42px;
+  border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.progression-bloc-body { flex: 1; min-width: 0; }
+.progression-bloc-titre {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 18px; font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+  display: flex; align-items: center; gap: 10px;
+  flex-wrap: wrap;
+}
+.progression-bloc-palier {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 10.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+.progression-bloc-palier.col-solide     { background: rgba(21,163,98,.15); color: var(--green-dark); }
+.progression-bloc-palier.col-alaise     { background: rgba(21,163,98,.12); color: var(--green-dark); }
+.progression-bloc-palier.col-chemin     { background: rgba(212,164,100,.18); color: #8B6515; }
+.progression-bloc-palier.col-construire { background: rgba(245,158,11,.18); color: #8C4A00; }
+.progression-bloc-palier.col-decouvrir  { background: rgba(212,38,38,.12); color: var(--red-dark); }
+.progression-bloc-palier.col-locked     { background: var(--bg2); color: var(--text3); }
+.progression-bloc-texte {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.65;
+}
+.progression-bloc-texte strong {
+  color: var(--text);
+  font-weight: 600;
+}
+.progression-bloc-texte em {
+  font-style: normal;
+  background: linear-gradient(180deg, transparent 60%, rgba(212,164,100,.25) 60%);
+  padding: 0 2px;
+  color: var(--text);
+}
+
 .domains-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -1865,6 +2102,157 @@ body.dys-mode .tb-avatar {
 .analyse-section-body {
   display: flex; flex-direction: column;
   gap: .9rem;
+}
+
+/* Bilan en prose — un commentaire de prof, en plusieurs paragraphes */
+.analyse-bilan-prose {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 15.5px;
+  line-height: 1.75;
+  color: var(--text);
+  padding: 1.4rem 1.6rem;
+  background: linear-gradient(180deg, #FFFCF5, #FFFFFF);
+  border-left: 3px solid var(--gold-deep);
+  border-radius: var(--r);
+  margin-bottom: 1.5rem;
+}
+.analyse-bilan-prose p {
+  margin: 0 0 .95rem 0;
+}
+.analyse-bilan-prose p:last-child {
+  margin-bottom: 0;
+}
+.analyse-bilan-prose strong {
+  color: var(--text);
+  font-weight: 700;
+}
+.analyse-bilan-prose em {
+  font-style: normal;
+  background: linear-gradient(180deg, transparent 60%, rgba(212,164,100,.28) 60%);
+  padding: 0 3px;
+  color: var(--text);
+}
+
+/* ── Donut "ce que tu maîtrises / ce qu'il te reste" ── */
+.analyse-donut-wrap {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 1.5rem 1.6rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--rl);
+  margin-bottom: 1.5rem;
+}
+.analyse-donut {
+  width: 140px; height: 140px;
+  flex-shrink: 0;
+}
+.analyse-donut-arc-transition {
+  transition: stroke-dasharray 1.2s cubic-bezier(.22,1,.36,1);
+}
+.analyse-donut-pct {
+  font-family: 'Sora', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  fill: var(--text);
+}
+.analyse-donut-label {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 11px;
+  fill: var(--text3);
+  letter-spacing: .3px;
+  text-transform: uppercase;
+}
+.analyse-donut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: .65rem;
+  flex: 1;
+}
+.analyse-donut-leg {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.4;
+}
+.analyse-donut-leg strong {
+  font-weight: 700;
+}
+.analyse-donut-dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.analyse-donut-leg.solide .analyse-donut-dot {
+  background: linear-gradient(135deg, #34D399, #0E7348);
+}
+.analyse-donut-leg.restant .analyse-donut-dot {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+}
+@media (max-width: 600px) {
+  .analyse-donut-wrap { flex-direction: column; gap: 1.2rem; }
+  .analyse-donut { width: 120px; height: 120px; }
+  .analyse-donut-legend { width: 100%; }
+}
+
+/* ── Encart "Pourquoi ce thème compte pour la suite" ── */
+.analyse-pourquoi {
+  margin-top: .5rem;
+  padding: 1.4rem 1.6rem;
+  background: linear-gradient(180deg, #F5F7FA, #FFFFFF);
+  border: 1px solid var(--border);
+  border-radius: var(--rl);
+  border-left: 3px solid var(--navy);
+}
+.analyse-pourquoi-head {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 1.1rem;
+  padding-bottom: .8rem;
+  border-bottom: 1px solid var(--border);
+}
+.analyse-pourquoi-icon {
+  font-size: 18px;
+}
+.analyse-pourquoi-titre {
+  font-family: 'Sora', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -.2px;
+}
+.analyse-pourquoi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.2rem;
+}
+@media (max-width: 760px) {
+  .analyse-pourquoi-grid { grid-template-columns: 1fr; gap: 1rem; }
+}
+.analyse-pourquoi-bloc {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+}
+.analyse-pourquoi-kicker {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  color: var(--gold-deep);
+}
+.analyse-pourquoi-texte {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--text2);
+}
+.analyse-pourquoi-texte strong {
+  color: var(--text);
+  font-weight: 600;
 }
 
 /* === Style mentor : prose + listes === */
@@ -2609,6 +2997,19 @@ body.dys-mode .tb-avatar {
             <label class="form-label">Classe *</label>
             <select class="form-select" id="in-classe" disabled><option value="">— Choisir d'abord son niveau —</option></select>
           </div>
+          <div class="form-group">
+            <label class="form-label">Je suis *</label>
+            <div class="form-genre">
+              <label class="form-genre-opt">
+                <input type="radio" name="in-genre" value="fille"/>
+                <span>👧 Une fille</span>
+              </label>
+              <label class="form-genre-opt">
+                <input type="radio" name="in-genre" value="garcon"/>
+                <span>👦 Un garçon</span>
+              </label>
+            </div>
+          </div>
           <label class="form-dys" for="in-dys">
             <input type="checkbox" id="in-dys"/>
             <div class="form-dys-label">
@@ -2734,14 +3135,17 @@ body.dys-mode .tb-avatar {
             <span class="section-header-kicker-text">Ma progression</span>
             <span class="section-header-kicker-line"></span>
           </div>
-          <div class="section-title-hero">Mes progrès <span class="accent">en chiffres</span></div>
-          <div class="section-subtitle">Visualise concrètement où tu en es dans ton parcours de remédiation.</div>
+          <div class="section-title-hero">Où j'en suis, <span class="accent">thème par thème</span></div>
+          <div class="section-subtitle">Un bilan en clair de ce que tu maîtrises déjà et de ce qui reste à travailler.</div>
         </div>
 
-        <!-- Grille des thèmes — chaque carte ouvre la vue détail -->
+        <!-- Intro en prose : bilan global -->
+        <div class="progression-intro" id="progression-intro"></div>
+
+        <!-- Grille des thèmes — clic ouvre l'analyse en prose du thème -->
         <div class="domains-header">
-          <div class="domains-title">Tous les domaines</div>
-          <div class="domains-sub">Clique sur un thème pour voir le détail de tes notions.</div>
+          <div class="domains-title">Tous les thèmes</div>
+          <div class="domains-sub">Clique sur un thème pour voir ton bilan détaillé.</div>
         </div>
         <div class="domains-grid" id="domains-grid"></div>
 
@@ -2800,22 +3204,63 @@ body.dys-mode .tb-avatar {
       </div>
     </div>
 
-    <!-- Section : Tes points forts -->
-    <div class="analyse-section forts" id="analyse-section-forts">
-      <div class="analyse-section-head">
-        <div class="analyse-section-icon green">✓</div>
-        <div class="analyse-section-title">Tes points forts</div>
+    <!-- Section : Bilan en prose + donut + projection lycée -->
+    <div class="analyse-section bilan" id="analyse-section-bilan">
+      <!-- Donut : ce que tu maîtrises / ce qu'il te reste -->
+      <div class="analyse-donut-wrap" id="analyse-donut-wrap">
+        <svg class="analyse-donut" id="analyse-donut" viewBox="0 0 120 120">
+          <!-- Track (fond) -->
+          <circle cx="60" cy="60" r="48" fill="none" stroke="var(--bg2)" stroke-width="16"/>
+          <!-- Arc des notions solides (vert) -->
+          <circle cx="60" cy="60" r="48" fill="none" stroke="url(#donutGradGreen)" stroke-width="16"
+                  stroke-dasharray="0 301.6" stroke-linecap="round"
+                  transform="rotate(-90 60 60)" id="analyse-donut-arc"/>
+          <defs>
+            <linearGradient id="donutGradGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#34D399"/>
+              <stop offset="100%" stop-color="#0E7348"/>
+            </linearGradient>
+          </defs>
+          <!-- Texte au centre -->
+          <text x="60" y="56" text-anchor="middle" class="analyse-donut-pct" id="analyse-donut-pct">0%</text>
+          <text x="60" y="74" text-anchor="middle" class="analyse-donut-label">acquis</text>
+        </svg>
+        <div class="analyse-donut-legend">
+          <div class="analyse-donut-leg solide">
+            <span class="analyse-donut-dot"></span>
+            <span><strong id="analyse-donut-nb-solides">—</strong> notion<span id="analyse-donut-s1"></span> <strong>déjà acquise<span id="analyse-donut-s2"></span></strong></span>
+          </div>
+          <div class="analyse-donut-leg restant">
+            <span class="analyse-donut-dot"></span>
+            <span><strong id="analyse-donut-nb-restant">—</strong> notion<span id="analyse-donut-s3"></span> <strong>à travailler</strong></span>
+          </div>
+        </div>
       </div>
-      <div class="analyse-section-body" id="analyse-forts-list"></div>
-    </div>
 
-    <!-- Section : Tes axes de progression -->
-    <div class="analyse-section axes" id="analyse-section-axes">
-      <div class="analyse-section-head">
-        <div class="analyse-section-icon gold">↗</div>
-        <div class="analyse-section-title">Tes axes de progression</div>
+      <!-- Appréciation en prose -->
+      <div class="analyse-bilan-prose" id="analyse-bilan-prose"></div>
+
+      <!-- Encart : pourquoi ce thème est important pour la suite du lycée -->
+      <div class="analyse-pourquoi" id="analyse-pourquoi">
+        <div class="analyse-pourquoi-head">
+          <span class="analyse-pourquoi-icon">🎯</span>
+          <span class="analyse-pourquoi-titre">Pourquoi ce thème compte pour la suite</span>
+        </div>
+        <div class="analyse-pourquoi-grid">
+          <div class="analyse-pourquoi-bloc">
+            <div class="analyse-pourquoi-kicker">Cette année</div>
+            <div class="analyse-pourquoi-texte" id="analyse-pourquoi-seconde"></div>
+          </div>
+          <div class="analyse-pourquoi-bloc">
+            <div class="analyse-pourquoi-kicker">Après la seconde</div>
+            <div class="analyse-pourquoi-texte" id="analyse-pourquoi-apres"></div>
+          </div>
+          <div class="analyse-pourquoi-bloc">
+            <div class="analyse-pourquoi-kicker">Au-delà du lycée</div>
+            <div class="analyse-pourquoi-texte" id="analyse-pourquoi-metier"></div>
+          </div>
+        </div>
       </div>
-      <div class="analyse-section-body" id="analyse-axes-list"></div>
     </div>
 
     <!-- Section : Ton cap -->
@@ -2990,13 +3435,15 @@ function sInscrire(){
   var niveau=document.getElementById("in-niveau").value;
   var classe=document.getElementById("in-classe").value;
   var dys=document.getElementById("in-dys").checked;
+  var genreInput=document.querySelector('input[name="in-genre"]:checked');
+  var genre=genreInput?genreInput.value:"";
   var err=document.getElementById("in-err");
   err.classList.remove("visible");
-  if(!prenom||!nom||!email||!mdp||!niveau||!classe){err.textContent="Remplis tous les champs obligatoires.";err.classList.add("visible");return;}
+  if(!prenom||!nom||!email||!mdp||!niveau||!classe||!genre){err.textContent="Remplis tous les champs obligatoires.";err.classList.add("visible");return;}
   if(mdp.length<4){err.textContent="Le mot de passe doit faire au moins 4 caractères.";err.classList.add("visible");return;}
   setLoading(true,"Création du compte...");
   document.getElementById("in-btn").disabled=true;
-  fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify({type:"creer_compte",email:email,mot_de_passe:mdp,prenom:prenom,nom:nom,niveau:niveau,classe:classe,dys:dys})})
+  fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify({type:"creer_compte",email:email,mot_de_passe:mdp,prenom:prenom,nom:nom,niveau:niveau,classe:classe,dys:dys,genre:genre})})
     .then(function(r){return r.json();})
     .then(function(json){
       setLoading(false);document.getElementById("in-btn").disabled=false;
@@ -3033,23 +3480,29 @@ var THEMES=[
     {id:"fractions_inverse",titre:"Comprendre l'inverse d'une fraction",url:"https://arnaudreydellet.github.io/fiche-9/"},
     {id:"fractions_division",titre:"Diviser par une fraction",url:"https://arnaudreydellet.github.io/fiche-10/"}
    ]},
-  {id:"proportionnalite",titre:"Proportionnalité et %",icon:"📊",iconClass:"ic-propor",
-   pourquoi:"Comprendre une remise, une TVA, lire une échelle de plan, ajuster une recette. Le socle de tout ce qui se mesure et se compare.",
+  {id:"calcul_numerique",titre:"Calcul numérique",icon:"🔣",iconClass:"ic-nombres",
+   pourquoi:"L'aisance avec les nombres rend tout le reste plus simple. Maîtriser les priorités, les décimaux, les relatifs et les racines, c'est la fondation sur laquelle s'appuieront toutes les autres notions de l'année.",
+   fiches:[]},
+  {id:"puissances_notation",titre:"Puissances et notation scientifique",icon:"🔟",iconClass:"ic-puissances",
+   pourquoi:"Manipuler des très grands et très petits nombres sans se tromper. Indispensable pour les sciences, l'informatique et toute lecture de données chiffrées au quotidien.",
    fiches:[]},
   {id:"calcul_litteral",titre:"Calcul littéral",icon:"✏️",iconClass:"ic-litteral",
-   pourquoi:"Mettre un problème en équation pour le résoudre proprement. Indispensable dès qu'il s'agit de dimensionner ou prévoir.",
+   pourquoi:"Mettre un problème en équation pour le résoudre proprement. Développer, factoriser, réduire : la clé pour manipuler les expressions sans se perdre.",
    fiches:[]},
-  {id:"fonctions",titre:"Fonctions",icon:"📈",iconClass:"ic-fonctions",
-   pourquoi:"Comprendre comment une grandeur dépend d'une autre. Lire un graphique, anticiper un résultat, modéliser une situation.",
+  {id:"equations_inequations",titre:"Équations et inéquations",icon:"⚖️",iconClass:"ic-equations",
+   pourquoi:"Résoudre un problème en trouvant l'inconnue, ou en encadrant une solution. Au cœur de toute la seconde, et omniprésent ensuite.",
+   fiches:[]},
+  {id:"proportionnalite_evolution",titre:"Proportionnalité et évolution",icon:"📊",iconClass:"ic-propor",
+   pourquoi:"Comprendre une remise, une TVA, une hausse ou une baisse en pourcentage. Lire une échelle, comparer des évolutions : utile partout.",
+   fiches:[]},
+  {id:"fonctions_reperage",titre:"Fonctions affines, linéaires et repérage",icon:"📈",iconClass:"ic-fonctions",
+   pourquoi:"Comprendre comment une grandeur dépend d'une autre, et savoir la représenter dans un repère. Lire un graphique, anticiper un résultat, modéliser une situation.",
    fiches:[]},
   {id:"geometrie",titre:"Géométrie",icon:"📐",iconClass:"ic-geometrie",
-   pourquoi:"Mesurer, tracer, calculer surfaces et volumes. La base de tout travail manuel et de la lecture de plans.",
+   pourquoi:"Mesurer, tracer, démontrer. Théorèmes, configurations, calculs de longueurs et d'angles : la base du raisonnement géométrique.",
    fiches:[]},
-  {id:"nombres",titre:"Nombres et calculs",icon:"🔣",iconClass:"ic-nombres",
-   pourquoi:"L'aisance avec les nombres rend tout le reste plus simple. C'est l'outil de base de toutes les autres notions.",
-   fiches:[]},
-  {id:"stats",titre:"Statistiques",icon:"🎲",iconClass:"ic-stats",
-   pourquoi:"Lire les chiffres sans se faire avoir : moyennes, écarts, données trompeuses. Utile partout au boulot et dans la vie.",
+  {id:"grandeurs_statistiques",titre:"Grandeurs, mesures et statistiques",icon:"📏",iconClass:"ic-stats",
+   pourquoi:"Manipuler des unités, calculer aires et volumes, lire et interpréter des données : moyennes, écarts, indicateurs. Utile au quotidien comme dans toutes les disciplines.",
    fiches:[]}
 ];
 
@@ -3138,7 +3591,9 @@ var ANALYSE_ICON_BG={
   "ic-fonctions":"linear-gradient(135deg, #EFF6FF, #DBEAFE)",
   "ic-geometrie":"linear-gradient(135deg, #FDF4FF, #F5D0FE)",
   "ic-nombres":"linear-gradient(135deg, #FFFBEB, #FEF3C7)",
-  "ic-stats":"linear-gradient(135deg, #FFF1F2, #FECDD3)"
+  "ic-stats":"linear-gradient(135deg, #FFF1F2, #FECDD3)",
+  "ic-puissances":"linear-gradient(135deg, #ECFEFF, #CFFAFE)",
+  "ic-equations":"linear-gradient(135deg, #FAF5FF, #E9D5FF)"
 };
 
 // Phrases d'usage concrètes pour les notions de Fractions
@@ -3211,106 +3666,37 @@ function ouvrirAnalyseTheme(themeId){
     goldFill.style.width=pctAcons+"%";
   },200);
 
-  // ── Section : Tes points forts ──
-  // Toutes les notions solides (non assignées + validées), pas de troncature
-  var solides=theme.fiches.filter(function(f){
-    var nonAssignee=fichesAssignees.indexOf(f.id)===-1;
-    var validee=statutsMap[f.id]&&statutsMap[f.id].statut==="quiz_final_valide";
-    return nonAssignee||validee;
-  });
+  // ── Section : Bilan en prose ──
+  document.getElementById("analyse-bilan-prose").innerHTML=genererParagrapheTheme(theme, user);
 
-  var fortsHtml="";
-  if(solides.length===0){
-    fortsHtml=
-      "<div class='analyse-prose intro'>Tu n'as pas encore validé de notion dans ce thème — et c'est complètement normal au début. Chaque fiche que tu vas travailler va construire un point fort que tu pourras revendiquer ici.</div>";
+  // ── Donut "ce que tu maîtrises / ce qu'il te reste" ──
+  // Le donut compte les notions solides (maîtrisées au diagnostic + validées) vs à travailler
+  document.getElementById("analyse-donut-pct").textContent=pctSolides+"%";
+  document.getElementById("analyse-donut-nb-solides").textContent=nbSolides;
+  document.getElementById("analyse-donut-nb-restant").textContent=nbAConsolider;
+  document.getElementById("analyse-donut-s1").textContent=pluriel(nbSolides);
+  document.getElementById("analyse-donut-s2").textContent=pluriel(nbSolides);
+  document.getElementById("analyse-donut-s3").textContent=pluriel(nbAConsolider);
+  // Animation : circonférence d'un cercle de rayon 48 ≈ 301.6
+  var circ=2*Math.PI*48;
+  var arcLen=(pctSolides/100)*circ;
+  var donutArc=document.getElementById("analyse-donut-arc");
+  donutArc.setAttribute("stroke-dasharray","0 "+circ);
+  donutArc.classList.add("analyse-donut-arc-transition");
+  setTimeout(function(){
+    donutArc.setAttribute("stroke-dasharray",arcLen+" "+circ);
+  },200);
+
+  // ── Encart "Pourquoi ce thème compte pour la suite" ──
+  var proj=PROJECTION_LYCEE[theme.id];
+  if(proj){
+    document.getElementById("analyse-pourquoi").style.display="block";
+    document.getElementById("analyse-pourquoi-seconde").innerHTML=proj.seconde||"";
+    document.getElementById("analyse-pourquoi-apres").innerHTML=proj.apres||"";
+    document.getElementById("analyse-pourquoi-metier").innerHTML=proj.metier||"";
   } else {
-    // Intro adaptée au nombre de notions solides
-    var introForts;
-    if(solides.length===1){
-      introForts="Tu as déjà un appui solide dans ce thème. C'est peu mais c'est un vrai point d'ancrage :";
-    } else if(solides.length<=3){
-      introForts="Tu es à l'aise avec plusieurs gestes essentiels. Voilà ce que tu maîtrises déjà :";
-    } else if(solides.length<=6){
-      introForts="Tu as déjà construit une vraie base dans ce thème. Voici tout ce sur quoi tu peux t'appuyer :";
-    } else {
-      introForts="Ce thème est presque acquis pour toi. Voici l'ensemble de tes points forts :";
-    }
-    fortsHtml="<div class='analyse-prose intro'>"+introForts+"</div>";
-
-    // Liste des notions
-    fortsHtml+="<ul class='analyse-list green'>";
-    solides.forEach(function(fiche){
-      fortsHtml+="<li><span class='analyse-list-mark'>✓</span><div class='analyse-list-content'>";
-      fortsHtml+="<span class='analyse-list-title'>"+fiche.titre+"</span>";
-      fortsHtml+=" <span class='analyse-list-dash'>—</span> <span class='analyse-list-usage'>"+_phraseUsage(fiche)+"</span>";
-      fortsHtml+="</div></li>";
-    });
-    fortsHtml+="</ul>";
-
-    // Conclusion adaptée
-    var concluForts;
-    if(solides.length===1){
-      concluForts="Garde-le précieusement : c'est sur ce point que tu peux t'appuyer quand tu butes ailleurs.";
-    } else if(solides.length<theme.fiches.length){
-      concluForts="Ces acquis ne sont pas anodins. Ils te donnent une base sur laquelle construire la suite.";
-    } else {
-      concluForts="Tu as tout en main pour ce thème. Bravo, c'est une vraie réussite.";
-    }
-    fortsHtml+="<div class='analyse-prose conclu'>"+concluForts+"</div>";
+    document.getElementById("analyse-pourquoi").style.display="none";
   }
-  document.getElementById("analyse-forts-list").innerHTML=fortsHtml;
-
-  // ── Section : Tes axes de progression ──
-  // Toutes les fiches assignées non encore validées, dans l'ordre du parcours
-  var axes=theme.fiches.filter(function(f){
-    var assignee=fichesAssignees.indexOf(f.id)!==-1;
-    var validee=statutsMap[f.id]&&statutsMap[f.id].statut==="quiz_final_valide";
-    return assignee&&!validee;
-  });
-
-  var axesHtml="";
-  if(axes.length===0){
-    if(palier.key==="solide"||palier.key==="alaise"){
-      axesHtml="<div class='analyse-prose intro'>Bravo — tu n'as plus de notion à consolider dans ce thème. Tu peux passer à la suite la tête haute.</div>";
-    } else {
-      axesHtml="<div class='analyse-prose intro'>Aucune fiche n'est assignée dans ce thème pour l'instant.</div>";
-    }
-  } else {
-    // Intro adaptée au nombre d'axes
-    var introAxes;
-    if(axes.length===1){
-      introAxes="Il te reste une seule notion à travailler. Tu y es presque :";
-    } else if(axes.length<=3){
-      introAxes="Voilà ce qu'il te reste à consolider. Pas grand-chose en réalité — quelques fiches et c'est plié :";
-    } else if(axes.length<=6){
-      introAxes="Voilà ce qu'il te reste à travailler. Pas de panique — ce sont des gestes qui s'apprennent un à un, et chacun débloque le suivant :";
-    } else {
-      introAxes="Voilà l'ensemble du chantier qui t'attend. Ça paraît beaucoup, mais en réalité chaque notion en débloque une autre — tu vas avancer plus vite que tu crois :";
-    }
-    axesHtml="<div class='analyse-prose intro'>"+introAxes+"</div>";
-
-    // Liste des notions à travailler
-    axesHtml+="<ul class='analyse-list gold'>";
-    axes.forEach(function(fiche){
-      axesHtml+="<li><span class='analyse-list-mark'>↗</span><div class='analyse-list-content'>";
-      axesHtml+="<span class='analyse-list-title'>"+fiche.titre+"</span>";
-      axesHtml+=" <span class='analyse-list-dash'>—</span> <span class='analyse-list-usage'>"+_phraseUsage(fiche)+"</span>";
-      axesHtml+="</div></li>";
-    });
-    axesHtml+="</ul>";
-
-    // Conclusion adaptée
-    var concluAxes;
-    if(axes.length===1){
-      concluAxes="Une seule fiche te sépare d'avoir ce thème complètement acquis. Lance-toi.";
-    } else if(axes.length<=3){
-      concluAxes="La meilleure approche : commencer par la première et avancer dans l'ordre. Chaque fiche en prépare une autre.";
-    } else {
-      concluAxes="L'ordre compte : commence par la première et descends. Chaque notion validée débloque la suivante, et tu vas vite te surprendre toi-même.";
-    }
-    axesHtml+="<div class='analyse-prose conclu'>"+concluAxes+"</div>";
-  }
-  document.getElementById("analyse-axes-list").innerHTML=axesHtml;
 
   // ── Section : Ton cap ──
   document.getElementById("analyse-cap-phrase").textContent=getProjection(palier.key);
@@ -3358,13 +3744,58 @@ function renderThemes(user){
   var evalFaite=user.eval_faite||false;
   var evalLien=getEvalLink(user);
 
+  // ─── PRÉ-CALCUL : déterminer l'état de chaque thème ──────────
+  // - "fini"    : toutes les fiches assignées du thème sont validées
+  // - "actif"   : premier thème dans l'ordre avec des fiches non validées
+  // - "attente" : thème avec fiches assignées mais après le thème actif
+  // - "vide"    : pas de fiches assignées (notions maîtrisées au diagnostic)
+  // - "locked"  : pas encore passé l'évaluation
+  // - "empty"   : pas encore de fiches développées dans le thème
+  var etatThemes={}, themeActifId=null;
+  if(evalFaite){
+    for(var ti=0;ti<THEMES.length;ti++){
+      var t=THEMES[ti];
+      if(t.fiches.length===0){ etatThemes[t.id]="empty"; continue; }
+      var faT=t.fiches.filter(function(f){return fichesAssignees.indexOf(f.id)!==-1;});
+      if(faT.length===0){ etatThemes[t.id]="vide"; continue; }
+      var valideesT=faT.filter(function(f){return statutsMap[f.id]&&statutsMap[f.id].statut==="quiz_final_valide";}).length;
+      if(valideesT===faT.length){ etatThemes[t.id]="fini"; continue; }
+      // Premier thème avec fiches non terminées = actif
+      if(!themeActifId){ themeActifId=t.id; etatThemes[t.id]="actif"; }
+      else { etatThemes[t.id]="attente"; }
+    }
+  }
+
   var html="<div class='themes-grid'>";
   THEMES.forEach(function(theme){
     var hasFiches=theme.fiches.length>0;
     var fa=hasFiches?theme.fiches.filter(function(f){return fichesAssignees.indexOf(f.id)!==-1;}):[];
     var hasAssigned=evalFaite&&fa.length>0;
+    var etat=etatThemes[theme.id]||(evalFaite?"":"locked");
+    var clickable=hasAssigned&&etat!=="fini";
 
-    html+="<div class='theme-card"+(hasAssigned?" has-fiches":"")+"'>";
+    // Classes CSS selon l'état
+    var classes="theme-card";
+    if(hasAssigned) classes+=" has-fiches";
+    if(etat==="actif")   classes+=" theme-actif";
+    if(etat==="fini")    classes+=" theme-fini";
+    if(etat==="attente") classes+=" theme-attente";
+
+    var onclickAttr=clickable?" onclick='ouvrirFiches(\""+theme.id+"\")'":"";
+    html+="<div class='"+classes+"'"+onclickAttr+">";
+
+    // Pastille/chevron en haut à droite selon l'état
+    if(etat==="fini"){
+      html+="<div class='theme-pastille-fini'>✓ Terminé</div>";
+    } else if(clickable){
+      html+="<div class='theme-chevron'>→</div>";
+    }
+
+    // Badge "À faire maintenant" pour la carte active
+    if(etat==="actif"){
+      html+="<div class='theme-badge-actif'>À faire maintenant</div>";
+    }
+
     html+="<div class='theme-header'><div class='theme-icon "+theme.iconClass+"'>"+theme.icon+"</div><div class='theme-title'>"+theme.titre+"</div></div>";
 
     if(!hasFiches){
@@ -3378,9 +3809,8 @@ function renderThemes(user){
       var valideesDansTheme=fa.filter(function(f){return statutsMap[f.id]&&statutsMap[f.id].statut==="quiz_final_valide";}).length;
       var pct=Math.round(valideesDansTheme/fa.length*100);
       var fillCol=pct>=80?"var(--green)":pct>=40?"var(--amber)":"var(--gold-l)";
-      html+="<div class='theme-progress-meta'>"+fa.length+" fiche"+(fa.length>1?"s assignées":" assignée")+" · "+valideesDansTheme+" validée"+(valideesDansTheme>1?"s":"")+"</div>";
+      html+="<div class='theme-progress-meta'><strong>"+fa.length+"</strong> fiche"+(fa.length>1?"s assignées":" assignée")+" · <strong>"+valideesDansTheme+"</strong> validée"+(valideesDansTheme>1?"s":"")+"</div>";
       html+="<div class='theme-progress-track'><div class='theme-progress-fill' style='width:"+pct+"%;background:"+fillCol+";'></div></div>";
-      html+="<button class='btn-voir-fiches' onclick='ouvrirFiches(\""+theme.id+"\")'>Voir mes fiches →</button>";
     }
     html+="</div>";
   });
@@ -3452,15 +3882,41 @@ function renderProgression(user){
   var statutsMap=user._statutsMap||{};
   var evalFaite=user.eval_faite||false;
 
-  // Grille des thèmes — version analyse personnalisée
+  var intro=document.getElementById("progression-intro");
   var grid=document.getElementById("domains-grid");
   if(!grid) return;
 
+  // ── Cas global : élève n'a pas encore passé l'évaluation ────────
+  if(!evalFaite){
+    if(intro) intro.innerHTML="Tu n'as <strong>pas encore passé l'évaluation diagnostique</strong>. Une fois passée, tu retrouveras ici un bilan personnalisé pour chaque thème — ce que tu maîtrises déjà, et ce qu'il te reste à travailler.";
+  } else {
+    // Vue d'ensemble globale
+    var totalSolides=0, totalNotions=0;
+    THEMES.forEach(function(theme){
+      if(theme.fiches.length===0) return;
+      var assign=theme.fiches.filter(function(f){return fichesAssignees.indexOf(f.id)!==-1;});
+      var valid=assign.filter(function(f){return statutsMap[f.id]&&statutsMap[f.id].statut==="quiz_final_valide";}).length;
+      totalSolides+=(theme.fiches.length-assign.length)+valid;
+      totalNotions+=theme.fiches.length;
+    });
+    var pctGlobal=totalNotions>0?Math.round(totalSolides/totalNotions*100):0;
+    var phraseIntro;
+    if(pctGlobal>=80){
+      phraseIntro="Tu as un <strong>très bon niveau global</strong> : "+pctGlobal+"% des notions sont déjà acquises. Continue ce qui te reste, tu vas vite arriver au bout.";
+    } else if(pctGlobal>=60){
+      phraseIntro="Tu es <strong>sur une bonne base</strong> : "+pctGlobal+"% des notions sont déjà acquises. Clique sur chaque thème pour voir ton bilan détaillé.";
+    } else if(pctGlobal>=40){
+      phraseIntro="Tu es <strong>en construction</strong> : "+pctGlobal+"% des notions sont acquises. Plusieurs thèmes à travailler, on avance dans l'ordre, une fiche après l'autre.";
+    } else {
+      phraseIntro="<strong>Le travail démarre</strong> : "+pctGlobal+"% des notions sont déjà acquises. C'est ici que tu vas faire les plus gros progrès cette année.";
+    }
+    if(intro) intro.innerHTML=phraseIntro;
+  }
+
+  // ── Grille des cartes cliquables (comme avant) ──────────────────
   var html="";
   THEMES.forEach(function(theme){
     var hasFiches=theme.fiches.length>0;
-
-    // Calcul du % solides pour ce thème
     var totalNotionsTheme=theme.fiches.length;
     var assignDansTheme=hasFiches?theme.fiches.filter(function(f){return fichesAssignees.indexOf(f.id)!==-1;}):[];
     var nbAssign=assignDansTheme.length;
@@ -3469,9 +3925,7 @@ function renderProgression(user){
     var nbSolides=nbMaitrisees+nbValide;
     var pctSolides=totalNotionsTheme>0?Math.round(nbSolides/totalNotionsTheme*100):0;
 
-    // Cas non-évaluable
     var nonEvaluable=!hasFiches || !evalFaite;
-
     var cardCls="domain-card";
     if(nonEvaluable) cardCls+=" locked";
     else cardCls+=" palier-"+getPalier(pctSolides).key;
@@ -3499,6 +3953,195 @@ function renderProgression(user){
     html+="</div>";
   });
   grid.innerHTML=html;
+}
+
+// Helper : transformer une liste de fiches en énumération naturelle ("X, Y et Z")
+// avec mise en surbrillance discrète des titres de notions.
+function listerNotionsEnTexte(fiches){
+  if(!fiches||fiches.length===0) return "";
+  var titres=fiches.map(function(f){
+    var t=String(f.titre||"").toLowerCase();
+    return "<em>"+t+"</em>";
+  });
+  if(titres.length===1) return titres[0];
+  if(titres.length===2) return titres[0]+" et "+titres[1];
+  return titres.slice(0,-1).join(", ")+" et "+titres[titres.length-1];
+}
+
+// Construire le paragraphe en prose pour un thème donné
+// ═══════════════════════════════════════════════════════════════
+// APPRÉCIATIONS PAR THÈME — ton "commentaire de prof"
+// On parle du parcours de l'élève (rythme, progrès, méthode),
+// pas du contenu mécanique des fiches.
+// ═══════════════════════════════════════════════════════════════
+
+// Petite touche spécifique au thème pour ouvrir l'appréciation
+// (rend chaque commentaire moins générique).
+var TOUCHE_THEME={
+  "fractions":"Les fractions sont le langage que tu vas réutiliser partout cette année — proportions, probabilités, vecteurs. Avoir ce socle solide te débloquera énormément.",
+  "calcul_numerique":"Le calcul numérique, c'est la base sur laquelle tout le reste s'appuie. Quand il devient automatique, tu peux concentrer ton énergie sur le raisonnement.",
+  "puissances_notation":"Les puissances et la notation scientifique sont indispensables dès qu'on touche aux sciences. Maîtriser les règles de calcul, c'est ce qui fait toute la différence.",
+  "calcul_litteral":"Le calcul littéral, c'est ce qui te permet de raisonner sur des situations générales, pas seulement sur des cas particuliers. Un vrai outil de pensée.",
+  "equations_inequations":"Les équations et inéquations sont au cœur de la seconde. Tu vas en utiliser dans tous les autres chapitres — c'est rentable de les maîtriser.",
+  "proportionnalite_evolution":"La proportionnalité et les pourcentages, tu les croises partout : remises, hausses, comparaisons. Solide ici, c'est de la confiance gagnée dans la vie courante.",
+  "fonctions_reperage":"Les fonctions, c'est le langage qui te permet de modéliser à peu près tout. Bien posées en seconde, elles te suivront jusqu'au bac.",
+  "geometrie":"La géométrie te fait travailler le raisonnement et la rigueur. Ce qu'on y apprend, c'est autant les théorèmes que la manière de structurer une démonstration.",
+  "grandeurs_statistiques":"Lire des données, manipuler des unités, comparer des moyennes — des gestes qui vont bien au-delà du cours de maths."
+};
+
+// Projection lycée détaillée — pourquoi ce thème compte pour la suite
+// (seconde / première-terminale / au-delà)
+var PROJECTION_LYCEE={
+  "fractions":{
+    seconde:"Tu manipules des fractions <strong>dès le premier trimestre</strong> : probabilités, calculs avec radicaux, équations à résoudre. C'est l'outil quotidien.",
+    apres:"En <strong>1ère</strong>, tu en croises dans le second degré, les suites, les probabilités conditionnelles, la dérivation. En <strong>terminale</strong>, elles sont partout : limites, intégrales, lois de probabilité. Même en <strong>enseignement scientifique</strong> (qui concerne tout le monde), on les utilise pour parler de croissance et de taux. C'est l'un des rares gestes qu'on garde quelle que soit la filière.",
+    metier:"Au-delà des maths, c'est utile en <strong>sciences expérimentales</strong> (concentrations, dilutions), en économie, partout où on compare des proportions."
+  },
+  "calcul_numerique":{
+    seconde:"Tu en as besoin <strong>à chaque exercice</strong> : développer, résoudre, calculer une valeur exacte. C'est le geste de base de tous les chapitres.",
+    apres:"En <strong>1ère et terminale</strong>, on ne note plus jamais une erreur de signe ou un mauvais calcul — c'est supposé acquis. Que tu fasses spé maths, maths complémentaires, ou physique-chimie en spé, ce sont les mêmes exigences. C'est souvent ce qui fait la différence entre un élève qui réussit et un élève qui se perd dans des erreurs bêtes.",
+    metier:"Sans calcul numérique fiable, <strong>toutes les filières scientifiques</strong> deviennent compliquées. Et pour les autres : impôts, prêt, devis... ça reste utile partout."
+  },
+  "puissances_notation":{
+    seconde:"Tu les utilises pour <strong>les statistiques</strong>, l'écriture scientifique des grands nombres, les calculs avec radicaux.",
+    apres:"En <strong>1ère</strong>, les suites géométriques reposent entièrement dessus, et la fonction exponentielle arrive en fin d'année. En <strong>terminale</strong>, c'est la fonction exponentielle, le logarithme, les croissances exponentielles — chapitres centraux quelle que soit la spé. En <strong>enseignement scientifique</strong>, on travaille les ordres de grandeur (de l'atome à l'univers) et c'est là que ça sert tous les jours.",
+    metier:"Indispensable en <strong>sciences, ingénierie, informatique</strong>. Et lire un ordre de grandeur dans la presse (un milliard, un nanomètre...), c'est aussi grâce à ça."
+  },
+  "calcul_litteral":{
+    seconde:"Tout le chapitre <strong>équations et inéquations</strong> en dépend, et toutes les démonstrations en géométrie aussi. Tu en fais à chaque cours, même sans t'en rendre compte.",
+    apres:"En <strong>1ère</strong>, le second degré, les suites, la dérivation, la trigonométrie — tout repose sur ta capacité à développer, factoriser, manipuler des expressions. En <strong>terminale</strong>, c'est encore plus marqué : les calculs deviennent longs et plus abstraits. Que tu prennes spé maths, maths complémentaires ou physique, l'exigence est la même. <strong>C'est <em>la</em> compétence qui sépare ceux qui suivent de ceux qui décrochent.</strong>",
+    metier:"Le calcul littéral, c'est apprendre à <strong>raisonner avec des variables</strong> — utile bien au-delà des maths (informatique, sciences, finance, recherche)."
+  },
+  "equations_inequations":{
+    seconde:"Tu les utilises dans <strong>presque tous les exercices</strong> de l'année : problème de géométrie, optimisation, modélisation. C'est l'outil pour passer d'une situation concrète à une réponse précise.",
+    apres:"En <strong>1ère</strong>, les équations du second degré sont un chapitre entier, et les inéquations reviennent dès qu'on étudie le signe d'une fonction (donc tout le temps). En <strong>terminale</strong>, on résout des équations avec exponentielle, logarithme, trigonométrie — toujours avec les mêmes réflexes acquis en seconde. Ça concerne aussi bien spé maths que physique-chimie.",
+    metier:"C'est le geste mental de base de <strong>toute discipline scientifique</strong>. Et la logique des inéquations sert dès qu'on doit comparer, encadrer, optimiser quelque chose."
+  },
+  "proportionnalite_evolution":{
+    seconde:"Tu en as besoin pour les <strong>statistiques</strong>, les pourcentages d'évolution, les comparaisons de données. C'est aussi un outil pour les sciences et la physique.",
+    apres:"En <strong>1ère</strong>, le chapitre <strong>évolutions et taux</strong> (évolutions successives, taux d'évolution moyen, indices) s'appuie directement sur ce que tu apprends maintenant — et il concerne <strong>tout le monde</strong>, en spé maths comme en maths complémentaires. En <strong>enseignement scientifique</strong>, on travaille les évolutions de population, de température, qui reposent dessus.",
+    metier:"Lire un graphique, comparer des prix, calculer une remise, comprendre une hausse en pourcentage — <strong>la maths la plus utile au quotidien</strong>, sans hésitation."
+  },
+  "fonctions_reperage":{
+    seconde:"C'est <strong>le chapitre central</strong> de l'année : presque tout le reste s'y rattache. Tu travailles la lecture graphique, les tableaux de variation, les images et antécédents.",
+    apres:"En <strong>1ère</strong>, tu vas étudier le second degré, les fonctions trigonométriques, la dérivation — toutes des fonctions, qu'on lit, qu'on dérive, qu'on étudie sur un repère. En <strong>terminale</strong>, l'exponentielle, le logarithme, les primitives, l'intégration. Tout ça, ce sont des fonctions. Même en <strong>enseignement scientifique</strong> (tronc commun), on étudie des courbes de croissance, des évolutions, des modèles. Si tu es à l'aise ici, tu auras une avance énorme sur tout le lycée.",
+    metier:"Modéliser une situation, prévoir un comportement, lire un graphique — utile en <strong>sciences, économie, informatique, gestion</strong>."
+  },
+  "geometrie":{
+    seconde:"Tu approfondis les <strong>vecteurs, la trigonométrie, le repérage</strong>. C'est aussi là que tu apprends à structurer une vraie démonstration mathématique.",
+    apres:"En <strong>1ère</strong>, le produit scalaire et la géométrie repérée prennent le relais — chapitre dense qui suppose les vecteurs maîtrisés. En <strong>terminale</strong> (spé maths), la géométrie dans l'espace, les droites et plans, les vecteurs en 3D. La rigueur de raisonnement que tu construis ici te servira partout, <strong>même hors géométrie</strong> : c'est ce qui te permet de structurer une démonstration propre.",
+    metier:"Indispensable en <strong>architecture, design, ingénierie, infographie</strong>. Et le raisonnement géométrique entraîne une logique précieuse pour le droit, la philo, la programmation."
+  },
+  "grandeurs_statistiques":{
+    seconde:"Tu travailles les <strong>statistiques descriptives</strong> (moyenne, médiane, écart-type) et les unités composées (vitesses, débits, densités).",
+    apres:"En <strong>1ère</strong>, les statistiques croisées et les probabilités conditionnelles s'appuient directement dessus — autant en spé maths qu'en maths complémentaires. En <strong>terminale</strong>, la loi binomiale, les intervalles de confiance, les variables aléatoires. Et l'<strong>enseignement scientifique</strong> (tronc commun) est rempli de lectures de données : il faut savoir interpréter une moyenne, un écart-type, une tendance.",
+    metier:"Lire un sondage, comprendre un indicateur économique, interpréter une étude — <strong>une compétence citoyenne</strong> autant que scolaire. Et indispensable dans toutes les filières qui touchent aux données."
+  }
+};
+
+function genererParagrapheTheme(theme, user){
+  var fichesAssignees=user.fiches_assignees||[];
+  var statutsMap=user._statutsMap||{};
+
+  var assign=theme.fiches.filter(function(f){return fichesAssignees.indexOf(f.id)!==-1;});
+  var valid=assign.filter(function(f){return statutsMap[f.id]&&statutsMap[f.id].statut==="quiz_final_valide";});
+  var bloquees=assign.filter(function(f){return statutsMap[f.id]&&statutsMap[f.id].statut==="echec_3_tentatives";});
+  var aTravailler=assign.filter(function(f){return !statutsMap[f.id]||statutsMap[f.id].statut!=="quiz_final_valide";});
+  var enCours=aTravailler.filter(function(f){return statutsMap[f.id]&&statutsMap[f.id].statut!=="echec_3_tentatives";});
+
+  var totalT=theme.fiches.length;
+  var nbAssign=assign.length;
+  var nbValide=valid.length;
+  var nbBloque=bloquees.length;
+  var nbEnCours=enCours.length;
+  var pct=totalT>0?Math.round(((totalT-nbAssign)+nbValide)/totalT*100):0;
+
+  // Avancement sur les fiches DEMANDÉES (pour distinguer "rien fait" / "en chemin" / "presque fini")
+  var pctAssignFait=nbAssign>0?Math.round(nbValide/nbAssign*100):0;
+
+  var touche=TOUCHE_THEME[theme.id]||"";
+  var parts=[];
+
+  // ═══ CAS 1 — Aucune fiche assignée ═══════════════════════════
+  // L'élève maîtrise déjà tout au diagnostic
+  if(nbAssign===0){
+    parts.push("<strong>Très bon travail.</strong> L'évaluation diagnostique a montré que tu maîtrises déjà <strong>l'ensemble des notions</strong> de ce thème — il n'y a donc rien à reprendre.");
+    parts.push(touche);
+    parts.push("Tu peux <strong>te concentrer sur les autres thèmes</strong> avec la certitude que ce socle est en place. Et si tu veux entretenir, n'hésite pas à revenir feuilleter les fiches : ça ne fait jamais de mal de revoir.");
+    return wrapParagraphes(parts);
+  }
+
+  // ═══ CAS 2 — Thème entièrement terminé ═══════════════════════
+  // Toutes les fiches assignées ont été validées
+  if(nbValide===nbAssign){
+    parts.push("<strong>Bravo — tu as fait tout le chemin sur ce thème.</strong> Tu as validé l'ensemble des fiches qui t'étaient assignées, et le diagnostic a confirmé tes acquis. C'est un <strong>vrai jalon</strong>.");
+    parts.push(touche);
+    parts.push("Ne sous-estime pas ce que tu viens d'accomplir : tu as transformé des notions fragiles en automatismes. Garde cette même méthode — régularité, calme, fiche après fiche — pour les autres thèmes.");
+    return wrapParagraphes(parts);
+  }
+
+  // ═══ CAS 3 — L'élève est bloqué sur une ou plusieurs fiches ══
+  // Statut echec_3_tentatives : signal fort qu'il faut être vigilant
+  if(nbBloque>0){
+    if(nbValide===0){
+      parts.push("Je vois que tu as déjà essayé sérieusement sur ce thème, mais que <strong>tu butes</strong> sur "+(nbBloque===1?"une fiche":nbBloque+" fiches")+". <strong>Ce n'est pas un échec</strong> — c'est exactement le signal qui me dit qu'il faut qu'on en parle ensemble.");
+    } else {
+      parts.push("Tu avances sur ce thème — déjà <strong>"+nbValide+" fiche"+(nbValide>1?"s":"")+" validée"+(nbValide>1?"s":"")+"</strong>. Mais "+(nbBloque===1?"une fiche te résiste":nbBloque+" fiches te résistent")+" malgré tes tentatives. <strong>Ne reste pas seul là-dessus</strong> : c'est précisément le moment où un coup de main vaut tout l'effort solitaire.");
+    }
+    parts.push("Quand on bloque après plusieurs essais, ce n'est presque jamais un problème d'intelligence — c'est qu'un détail méthodologique cloche. <strong>Viens me voir, ou attire mon attention en cours</strong>, et on débloque ça en cinq minutes.");
+    parts.push("En attendant, n'insiste pas seul indéfiniment : tu vas finir par t'agacer pour rien. Passe à une autre fiche si tu veux continuer à avancer.");
+    return wrapParagraphes(parts);
+  }
+
+  // ═══ CAS 4 — Rien encore commencé sur les fiches assignées ═══
+  if(nbValide===0&&nbEnCours===0){
+    // Différencier selon l'ampleur du chantier
+    if(nbAssign<=2){
+      parts.push("Le diagnostic a repéré <strong>quelques points à consolider</strong> ici — pas grand-chose, mais des notions importantes. <strong>Lance-toi dès que tu peux</strong> : en l'état tu as l'essentiel, il s'agit juste de combler des trous précis.");
+    } else if(nbAssign<=5){
+      parts.push("Sur ce thème, le diagnostic a identifié <strong>plusieurs notions à reprendre</strong>. <strong>Rien d'insurmontable</strong>, mais il va falloir t'y mettre. La bonne nouvelle : chaque fiche est courte et ciblée, donc tu vas avancer vite.");
+    } else {
+      parts.push("Le diagnostic a montré que ce thème a <strong>besoin d'être repris en profondeur</strong> — ce n'est pas une critique, c'est juste l'état des lieux. <strong>Tu n'as pas à tout savoir d'avance</strong>, c'est précisément ce qu'on est là pour faire.");
+    }
+    parts.push(touche);
+    return wrapParagraphes(parts);
+  }
+
+  // ═══ CAS 5 — Presque fini (>=80% des fiches assignées validées) ═══
+  if(pctAssignFait>=80){
+    parts.push("<strong>Tu touches au but sur ce thème.</strong> Sur "+nbAssign+" fiches assignées, tu en as déjà validé <strong>"+nbValide+"</strong> — c'est du sérieux. Le travail commence à porter ses fruits et tu peux le sentir.");
+    parts.push("<strong>Termine ce qui reste</strong> sans relâcher : c'est dans les dernières fiches qu'on consolide vraiment l'ensemble. Garde le même rythme que jusqu'ici, tu seras au bout dans peu de temps.");
+    parts.push("Et n'oublie pas : <strong>une fois ce thème bouclé</strong>, tu auras transformé une fragilité en force. C'est précisément ça qu'on cherche à faire.");
+    return wrapParagraphes(parts);
+  }
+
+  // ═══ CAS 6 — Bien avancé (>=50% validé) ══════════════════════
+  if(pctAssignFait>=50){
+    parts.push("<strong>Tu es sur une vraie dynamique sur ce thème.</strong> Plus de la moitié des fiches sont validées (<strong>"+nbValide+" sur "+nbAssign+"</strong>), et ça se voit que tu y mets du tien. C'est exactement la bonne approche.");
+    parts.push("<strong>Continue dans cette logique :</strong> une fiche à la fois, dans l'ordre. Tu n'es plus très loin du moment où ce thème basculera du côté de tes points forts — et ce n'est pas rien.");
+    parts.push("<strong>Petit rappel :</strong> si une fiche te résiste, ne t'acharne pas seul. Une question posée vaut souvent plus que trois tentatives ratées.");
+    return wrapParagraphes(parts);
+  }
+
+  // ═══ CAS 7 — Démarrage en cours (<50% validé, mais qqch d'engagé) ═
+  if(nbValide>0){
+    parts.push("<strong>Tu as commencé à travailler ce thème, et c'est déjà bien.</strong> "+nbValide+" fiche"+(nbValide>1?"s":"")+" validée"+(nbValide>1?"s":"")+" sur "+nbAssign+" — c'est un début sur lequel construire. Il reste du chemin, mais le mouvement est lancé.");
+    parts.push("<strong>L'enjeu maintenant, c'est la régularité.</strong> Pas besoin d'enchaîner toutes les fiches d'un coup — mieux vaut deux fiches par semaine, faites sérieusement, qu'une session marathon dont tu ne retiendras rien.");
+    parts.push("Et si tu sens qu'un point résiste plusieurs fois, <strong>parles-en</strong>. C'est en cassant les blocages tôt qu'on évite qu'ils s'installent.");
+    return wrapParagraphes(parts);
+  }
+
+  // ═══ CAS 8 — En cours mais rien encore validé (engagé sans victoire) ═
+  // L'élève a ouvert/tenté des fiches mais n'a encore rien validé
+  parts.push("<strong>Tu t'es lancé sur ce thème, c'est l'essentiel.</strong> Aucune fiche n'est encore validée, mais le mouvement est amorcé — et c'est souvent l'étape la plus difficile.");
+  parts.push("<strong>Ce qu'il faut maintenant, c'est <em>aller au bout</em> d'une première fiche.</strong> Une fiche validée, c'est une notion qui devient solide à vie. Mieux vaut en finir une vraiment que d'en ouvrir cinq à moitié.");
+  parts.push("Si tu butes sur quelque chose, dis-le. Ce serait dommage de perdre ton élan pour un détail qu'on peut éclaircir en cinq minutes ensemble.");
+  return wrapParagraphes(parts);
+}
+
+// Helper : enveloppe chaque morceau de texte dans une balise <p>
+function wrapParagraphes(parts){
+  return parts.filter(Boolean).map(function(p){return "<p>"+p+"</p>";}).join("");
 }
 
 // ═══════════════════════════════════════════════════════════════
