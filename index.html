@@ -6,6 +6,8 @@
 <title>Mon espace · AlphΩ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter+Tight:wght@400;500;600;700&family=Fraunces:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=OpenDyslexic:wght@400;700&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+<!-- jsPDF pour générer le PDF des fiches mémo côté client -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root {
   --navy: #1A2C4F;
@@ -36,7 +38,7 @@
   --purple: #7C3AED;
   --purple-l: #EDE3FE;
   --purple-deep: #6D28D9;
-  --sidebar-w: 86px;
+  --sidebar-w: 120px;
   --header-h: 58px;
   --r: 10px;
   --rl: 16px;
@@ -529,10 +531,13 @@ body { font-family: 'Inter Tight', sans-serif; background: var(--bg); color: var
 }
 .sb-item-lbl {
   font-family: 'Sora', sans-serif;
-  font-size: 8.5px; font-weight: 500;
-  letter-spacing: .06em;
+  font-size: 10px; font-weight: 500;
+  letter-spacing: .04em;
+  line-height: 1.25;
+  text-align: center;
   position: relative; z-index: 1;
   opacity: .75;
+  padding: 0 4px;
 }
 .sb-item.active .sb-item-lbl {
   opacity: 1;
@@ -967,6 +972,128 @@ body.dys-mode .tb-avatar {
 .theme-card.theme-attente:hover {
   opacity: 1;
 }
+
+/* ── ÉTAT "PREMIER THÈME" — la carte par laquelle l'élève doit commencer ──
+   Mise en évidence forte façon "objectif suivant" dans un jeu vidéo :
+   fond bleu plus clair (meilleur contraste avec le doré), glow pulsant amplifié,
+   pas de barre latérale (purement visuelle, retirée). */
+@keyframes themePremierPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 0 rgba(212, 164, 100, .75),
+      0 8px 28px rgba(15, 27, 53, .25),
+      0 0 0 2px rgba(212, 164, 100, .55) inset;
+  }
+  50% {
+    box-shadow:
+      0 0 0 18px rgba(212, 164, 100, 0),
+      0 14px 40px rgba(15, 27, 53, .35),
+      0 0 0 2px rgba(212, 164, 100, .75) inset;
+  }
+}
+.theme-card.theme-premier {
+  /* Bleu un cran plus clair que navy pour booster le contraste avec le doré */
+  background: linear-gradient(160deg, #2A4275 0%, #1E2F58 100%);
+  border-color: var(--gold-l);
+  opacity: 1 !important; /* prévaut sur theme-attente si jamais combiné */
+  animation: themePremierPulse 1.8s ease-in-out infinite;
+  position: relative;
+  overflow: visible;
+}
+/* Suppression complète de la barre latérale dorée du premier thème */
+.theme-card.theme-premier::before {
+  display: none !important;
+}
+.theme-card.theme-premier:hover {
+  transform: translateY(-3px);
+  border-color: var(--gold);
+}
+.theme-card.theme-premier .theme-title {
+  color: #fff;
+}
+.theme-card.theme-premier .theme-icon {
+  background: rgba(212, 164, 100, .22);
+  color: var(--gold-l);
+  border-color: rgba(212, 164, 100, .45);
+}
+.theme-card.theme-premier .theme-progress-meta,
+.theme-card.theme-premier .theme-empty,
+.theme-card.theme-premier .theme-locked,
+.theme-card.theme-premier .theme-mastered {
+  color: rgba(255, 255, 255, .82);
+}
+.theme-card.theme-premier .theme-progress-meta strong {
+  color: var(--gold-l);
+}
+.theme-card.theme-premier .theme-progress-track {
+  background: rgba(255, 255, 255, .14);
+}
+.theme-card.theme-premier .theme-chevron {
+  background: var(--gold);
+  color: var(--navy);
+}
+.theme-card.theme-premier:hover .theme-chevron {
+  background: var(--gold-l);
+  color: var(--navy);
+}
+/* Badge "À faire maintenant" reste visible mais en doré sur le fond bleu */
+.theme-card.theme-premier .theme-badge-actif {
+  background: linear-gradient(135deg, var(--gold-l) 0%, var(--gold-deep) 100%);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(212, 164, 100, .4);
+}
+/* Bouton "Passer l'évaluation" du premier thème — version crème/beige sur fond bleu :
+   ergonomie soignée (padding généreux, animation de la flèche, micro-rebond) */
+.theme-card.theme-premier .btn-passer-eval {
+  /* Crème chaud cohérent avec l'écosystème AlphΩ, pas en concurrence avec la pulsation dorée */
+  background: linear-gradient(180deg, #FBF6EC 0%, #F0E6D2 100%);
+  color: var(--navy);
+  border: none;
+  padding: 14px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  gap: 10px;
+  border-radius: 999px;
+  box-shadow:
+    0 4px 14px rgba(0, 0, 0, .18),
+    0 0 0 1px rgba(212, 164, 100, .25) inset,
+    0 1px 0 rgba(255, 255, 255, .8) inset;
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+  cursor: pointer;
+}
+.theme-card.theme-premier .btn-passer-eval:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(180deg, #FFFCF5 0%, #F5EBD9 100%);
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, .25),
+    0 0 0 1px rgba(212, 164, 100, .4) inset,
+    0 1px 0 rgba(255, 255, 255, .9) inset;
+}
+.theme-card.theme-premier .btn-passer-eval:active {
+  transform: translateY(0);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, .2),
+    0 0 0 1px rgba(212, 164, 100, .4) inset;
+}
+/* Flèche animée — micro-feedback ergonomique */
+.theme-card.theme-premier .btn-passer-eval .btn-arrow {
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gold-deep);
+  transition: transform .25s cubic-bezier(.4, 0, .2, 1);
+}
+.theme-card.theme-premier .btn-passer-eval:hover .btn-arrow {
+  transform: translateX(4px);
+}
+/* Pas d'animation en mode reduced-motion (accessibilité) */
+@media (prefers-reduced-motion: reduce) {
+  .theme-card.theme-premier {
+    animation: none;
+  }
+}
+
 /* Chevron en haut à droite — affordance discrète de carte cliquable */
 .theme-chevron {
   position: absolute;
@@ -1047,6 +1174,52 @@ body.dys-mode .tb-avatar {
   border-radius: 3px;
   transition: width 1s;
 }
+
+/* ── Guide d'action sur la carte du thème (page d'accueil) ──
+   Petit bloc avec emoji + texte qui dit exactement quoi faire à l'élève.
+   Affiché uniquement quand il reste des fiches à travailler. */
+.theme-guide {
+  display: flex;
+  align-items: flex-start;
+  gap: .65rem;
+  margin-top: .85rem;
+  padding: .75rem .9rem;
+  background: linear-gradient(180deg, #FBF6EC 0%, var(--bg2) 100%);
+  border: 1px solid rgba(212, 164, 100, .3);
+  border-radius: var(--r);
+}
+.theme-guide-icon {
+  font-size: 16px;
+  line-height: 1.4;
+  flex-shrink: 0;
+}
+.theme-guide-text {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text2);
+}
+.theme-guide-text strong {
+  color: var(--navy);
+  font-weight: 700;
+}
+/* Sur le premier thème mis en évidence (fond bleu), on inverse le contraste */
+.theme-card.theme-premier .theme-guide {
+  background: rgba(255, 255, 255, .08);
+  border-color: rgba(212, 164, 100, .35);
+}
+.theme-card.theme-premier .theme-guide-text {
+  color: rgba(255, 255, 255, .85);
+}
+.theme-card.theme-premier .theme-guide-text strong {
+  color: var(--gold-l);
+}
+/* Mode DYS */
+body.dys .theme-guide-text {
+  font-family: 'OpenDyslexic', sans-serif;
+  line-height: 1.8;
+}
+
 .btn-passer-eval {
   display: inline-flex; align-items: center; gap: 7px;
   padding: 10px 18px;
@@ -1706,6 +1879,86 @@ body.dys-mode .tb-avatar {
 }
 
 
+/* ══ MODALE IFRAME — fiche de remédiation en plein écran ══
+   L'élève reste dans l'espace élève au lieu d'ouvrir un nouvel onglet.
+   Z-index 300 pour passer au-dessus de l'overlay des fiches (200). */
+.fiche-iframe-modal {
+  display: none;
+  position: fixed; inset: 0;
+  z-index: 300;
+  background: var(--bg);
+  animation: fadeUp .25s ease;
+  flex-direction: column;
+}
+.fiche-iframe-modal.visible { display: flex; }
+.fiche-iframe-header {
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 24px;
+  background: rgba(244,242,238,.85);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+.fiche-iframe-back {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 12.5px; font-weight: 600;
+  color: var(--text2);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 7px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.fiche-iframe-back:hover {
+  background: var(--gold-pale, rgba(212,164,100,.10));
+  border-color: var(--gold-deep, #B47A35);
+  color: var(--gold-deep, #B47A35);
+}
+.fiche-iframe-titre {
+  font-family: 'Sora', sans-serif;
+  font-size: 14px; font-weight: 700;
+  color: var(--navy, #1A2C4F);
+  letter-spacing: -.2px;
+  text-align: center;
+  flex: 1;
+  padding: 0 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fiche-iframe-spacer { width: 100px; flex-shrink: 0; }
+.fiche-iframe-body {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+.fiche-iframe-body iframe {
+  width: 100%; height: 100%;
+  border: none;
+  display: block;
+}
+.fiche-iframe-loader {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+  gap: 14px;
+  background: var(--bg);
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 13.5px; font-weight: 600;
+  color: var(--text2);
+  pointer-events: none;
+  transition: opacity .3s;
+}
+.fiche-iframe-loader.cache { opacity: 0; }
+.fiche-iframe-loader-dot {
+  width: 10px; height: 10px;
+  background: var(--gold-deep, #B47A35);
+  border-radius: 50%;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
 .fiches-overlay {
   display: none;
   position: fixed; inset: 0;
@@ -1741,6 +1994,43 @@ body.dys-mode .tb-avatar {
 .fiches-overlay-back:hover {
   border-color: var(--navy);
   color: var(--navy);
+}
+/* Bouton "Actualiser" dans le header de l'overlay des fiches.
+   Permet à l'élève de rafraîchir les statuts (validée/à faire) après avoir
+   terminé une fiche, sans attendre le polling automatique. */
+.fiches-overlay-refresh {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 12.5px; font-weight: 600;
+  color: var(--gold-deep, #B47A35);
+  cursor: pointer;
+  background: var(--white);
+  border: 1px solid var(--gold-soft, rgba(212,164,100,.18));
+  padding: 8px 16px;
+  border-radius: var(--r);
+  transition: all .15s;
+  width: 100px;
+  justify-content: center;
+}
+.fiches-overlay-refresh:hover {
+  background: var(--gold-pale, rgba(212,164,100,.10));
+  border-color: var(--gold-deep, #B47A35);
+}
+.fiches-overlay-refresh:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+.fiches-overlay-refresh .ico {
+  display: inline-block;
+  font-size: 14px;
+  transition: transform 0.6s ease;
+}
+.fiches-overlay-refresh.spinning .ico {
+  animation: spinIcon 0.8s linear infinite;
+}
+@keyframes spinIcon {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 .fiches-overlay-title { display: flex; align-items: center; gap: 12px; }
 .fiches-overlay-icon {
@@ -2596,7 +2886,19 @@ body.dys-mode .tb-avatar {
 .fiche-card:hover::before { width: 5px; }
 
 .fiche-card.valide {
-  background: linear-gradient(180deg, #F4FBF7 0%, var(--white) 75%);
+  background: linear-gradient(180deg, #ECFDF5 0%, #F7FFFC 75%);
+  border-color: rgba(21,163,98,.28);
+}
+.fiche-card.valide:hover {
+  border-color: rgba(21,163,98,.55);
+  box-shadow: 0 6px 18px rgba(21,163,98,.10);
+}
+/* Le ::before (barre latérale verte) est renforcé en largeur pour les fiches validées */
+.fiche-card.valide::before {
+  width: 4px;
+}
+.fiche-card.valide:hover::before {
+  width: 6px;
 }
 
 /* Numéro de fiche en gros chiffre discret */
@@ -2611,7 +2913,29 @@ body.dys-mode .tb-avatar {
   width: 38px;
   user-select: none;
 }
-.fiche-card.valide .fiche-card-num { color: rgba(21,163,98,.18); }
+.fiche-card.valide .fiche-card-num {
+  /* Sur une fiche validée, on masque le numéro et on affiche un ✓ vert à la place */
+  position: relative;
+  color: transparent; /* on cache le chiffre */
+  user-select: none;
+}
+.fiche-card.valide .fiche-card-num::after {
+  content: '✓';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--green);
+  background: rgba(21,163,98,.12);
+  border: 2px solid rgba(21,163,98,.35);
+  border-radius: 50%;
+  width: 38px; height: 38px;
+  line-height: 1;
+}
 .fiche-card.echec .fiche-card-num  { color: rgba(212,38,38,.18); }
 
 .fiche-card-body {
@@ -2649,8 +2973,9 @@ body.dys-mode .tb-avatar {
 }
 .fiche-card-pill.todo .fiche-card-dot { background: var(--gold); }
 .fiche-card-pill.valide {
-  background: var(--green-l);
+  background: rgba(21,163,98,.14);
   color: var(--green-dark);
+  border: 1px solid rgba(21,163,98,.3);
 }
 .fiche-card-pill.valide .fiche-card-dot { background: var(--green); }
 .fiche-card-pill.echec {
@@ -2911,6 +3236,771 @@ body.dys-mode .tb-avatar {
   padding: 1rem 0;
   text-align: center;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   POPUP DE BIENVENUE (première connexion uniquement)
+   ═══════════════════════════════════════════════════════════════ */
+.welcome-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 27, 53, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 2rem 1.25rem;
+  animation: fadeIn .35s ease both;
+}
+.welcome-overlay.visible {
+  display: flex;
+}
+.welcome-card {
+  position: relative;
+  background: linear-gradient(155deg, var(--beige-l) 0%, var(--bg2) 100%);
+  border: 1px solid rgba(212, 164, 100, .35);
+  border-radius: 20px;
+  max-width: 620px;
+  width: 100%;
+  padding: 3rem 3rem 2.5rem;
+  box-shadow: 0 30px 80px rgba(15, 27, 53, .35), 0 0 0 1px rgba(255,255,255,.5) inset;
+  animation: fadeUp .5s cubic-bezier(.2,.7,.2,1) both;
+  overflow: hidden;
+}
+.welcome-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, transparent 0%, var(--gold-l) 30%, var(--gold) 50%, var(--gold-l) 70%, transparent 100%);
+}
+.welcome-card::after {
+  content: '';
+  position: absolute;
+  top: -120px; right: -120px;
+  width: 280px; height: 280px;
+  background: radial-gradient(circle, rgba(212, 164, 100, .18) 0%, transparent 70%);
+  pointer-events: none;
+}
+.welcome-kicker {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  margin-bottom: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  z-index: 2;
+}
+.welcome-kicker::before,
+.welcome-kicker::after {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-l));
+}
+.welcome-kicker::after {
+  background: linear-gradient(90deg, var(--gold-l), transparent);
+}
+.welcome-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 38px;
+  line-height: 1.1;
+  color: var(--navy);
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 2;
+  letter-spacing: -0.02em;
+}
+.welcome-title .alpha-omega {
+  font-family: 'Montserrat', 'Sora', sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 38px;
+  letter-spacing: -0.5px;
+  color: var(--navy);
+  display: inline-flex;
+  align-items: baseline;
+}
+.welcome-title .alpha-omega svg {
+  width: 0.7em;
+  height: 0.7em;
+  fill: var(--navy);
+  margin-left: 1px;
+  position: relative;
+  top: 0.04em;
+}
+.welcome-body {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text2);
+  margin-bottom: 1.25rem;
+  position: relative;
+  z-index: 2;
+}
+.welcome-body p {
+  margin-bottom: 1rem;
+}
+.welcome-body p:last-child {
+  margin-bottom: 0;
+}
+.welcome-body strong {
+  color: var(--navy);
+  font-weight: 600;
+}
+.welcome-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 1.5rem;
+  padding: 14px 32px;
+  background: linear-gradient(135deg, var(--gold-l) 0%, var(--gold-deep) 100%);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(180, 122, 53, .35), 0 0 0 1px rgba(255,255,255,.2) inset;
+  transition: transform .2s ease, box-shadow .2s ease;
+  position: relative;
+  z-index: 2;
+}
+.welcome-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(180, 122, 53, .45), 0 0 0 1px rgba(255,255,255,.3) inset;
+}
+.welcome-cta:active {
+  transform: translateY(0);
+}
+.welcome-cta-arrow {
+  font-size: 16px;
+  transition: transform .2s ease;
+}
+.welcome-cta:hover .welcome-cta-arrow {
+  transform: translateX(3px);
+}
+
+/* Mode DYS */
+body.dys .welcome-title,
+body.dys .welcome-body,
+body.dys .welcome-cta,
+body.dys .welcome-kicker {
+  font-family: 'OpenDyslexic', sans-serif;
+}
+body.dys .welcome-body {
+  line-height: 1.9;
+}
+
+/* Responsive mobile */
+@media (max-width: 600px) {
+  .welcome-card {
+    padding: 2.25rem 1.5rem 2rem;
+    border-radius: 16px;
+  }
+  .welcome-title,
+  .welcome-title .alpha-omega {
+    font-size: 28px;
+  }
+  .welcome-body {
+    font-size: 15px;
+  }
+}
+
+/* ─── Composant fraction horizontale (vraie barre, num au-dessus / den en dessous) ─── */
+.frac-hz {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  margin: 0 4px;
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--navy);
+}
+.frac-hz .frac-num,
+.frac-hz .frac-den {
+  display: block;
+  padding: 0 4px;
+  font-size: 1em;
+}
+.frac-hz .frac-num {
+  border-bottom: 2px solid var(--navy);
+  padding-bottom: 1px;
+  min-width: 0.9em;
+  text-align: center;
+}
+.frac-hz .frac-den {
+  padding-top: 1px;
+  min-width: 0.9em;
+  text-align: center;
+}
+/* Variante "grande" pour la zone d'exemple */
+.frac-hz-big {
+  font-size: 28px;
+  margin: 0 6px;
+}
+.frac-hz-big .frac-num {
+  border-bottom-width: 2.5px;
+}
+
+/* Mode DYS : on garde la même structure mais en OpenDyslexic */
+body.dys .frac-hz {
+  font-family: 'OpenDyslexic', sans-serif;
+}
+
+/* ─── Composant fraction horizontale (vraie barre, num au-dessus / den en dessous) ─── (fin) */
+
+/* ═══════════════════════════════════════════════════════════════
+   CARTE DÉPLIABLE "COMPRENDRE MES RÉSULTATS"
+   (s'affiche dans l'overlay détail d'un thème, sous la barre de progression)
+   ═══════════════════════════════════════════════════════════════ */
+.resultats-card {
+  margin: 1rem 0 1.5rem;
+  background: linear-gradient(180deg, #FBF6EC 0%, var(--white) 80%);
+  border: 1px solid rgba(212, 164, 100, .35);
+  border-radius: var(--r);
+  overflow: hidden;
+  transition: border-color .25s;
+}
+.resultats-card[open] {
+  border-color: rgba(212, 164, 100, .55);
+}
+.resultats-card-head {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  padding: .85rem 1.1rem;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  transition: background .2s;
+}
+.resultats-card-head::-webkit-details-marker { display: none; } /* Safari */
+.resultats-card-head:hover {
+  background: rgba(212, 164, 100, .06);
+}
+.resultats-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: rgba(212, 164, 100, .18);
+  color: var(--gold-deep);
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  font-family: 'Inter Tight', sans-serif;
+}
+.resultats-card-title {
+  flex: 1;
+  font-family: 'Sora', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -.1px;
+}
+.resultats-card-chevron {
+  font-size: 14px;
+  color: var(--gold-deep);
+  transition: transform .25s cubic-bezier(.4, 0, .2, 1);
+  flex-shrink: 0;
+}
+.resultats-card[open] .resultats-card-chevron {
+  transform: rotate(180deg);
+}
+.resultats-card-body {
+  padding: 0 1.1rem 1rem;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--text2);
+}
+.resultats-card-body strong {
+  color: var(--navy);
+  font-weight: 700;
+}
+/* Mode DYS */
+body.dys .resultats-card-title,
+body.dys .resultats-card-body {
+  font-family: 'OpenDyslexic', sans-serif;
+}
+body.dys .resultats-card-body {
+  line-height: 1.85;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PAGE "FICHES MÉMO" — liste des notions validées + détail
+   ═══════════════════════════════════════════════════════════════ */
+.memos-empty {
+  margin: 2rem auto;
+  max-width: 540px;
+  padding: 2.5rem 2rem;
+  background: var(--bg2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--rl);
+  text-align: center;
+}
+.memos-empty-icon {
+  font-size: 48px;
+  margin-bottom: .75rem;
+  opacity: .55;
+}
+.memos-empty-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 18px; font-weight: 700;
+  color: var(--text);
+  margin-bottom: .5rem;
+}
+.memos-empty-text {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 14px; color: var(--text2);
+  line-height: 1.6;
+}
+.memos-theme-block {
+  margin-bottom: 2.25rem;
+}
+.memos-theme-head {
+  display: flex; align-items: center; gap: .75rem;
+  margin-bottom: 1rem;
+  padding-bottom: .75rem;
+  border-bottom: 1.5px solid var(--border);
+}
+.memos-theme-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.memos-theme-name {
+  font-family: 'Sora', sans-serif;
+  font-size: 18px; font-weight: 700;
+  color: var(--text);
+  letter-spacing: -.3px;
+  flex: 1;
+}
+.memos-theme-count {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 12px; font-weight: 700;
+  color: var(--green-dark);
+  background: rgba(21,163,98,.12);
+  border: 1px solid rgba(21,163,98,.25);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+/* ─── Thèmes en préparation (mode maquette) ─── */
+.memos-theme-pending {
+  opacity: .85;
+}
+.memos-theme-pending .memos-theme-head {
+  border-bottom-color: rgba(212, 164, 100, .2);
+}
+.memos-theme-pending-pill {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  background: rgba(212, 164, 100, .14);
+  border: 1px solid rgba(212, 164, 100, .3);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+.memos-pending-placeholder {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  padding: 1rem 1.15rem;
+  background: linear-gradient(180deg, #FBF6EC 0%, var(--bg2) 100%);
+  border: 1px dashed rgba(212, 164, 100, .3);
+  border-radius: var(--r);
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 13px;
+  color: var(--text3);
+  font-style: italic;
+}
+.memos-pending-icon {
+  font-size: 16px;
+  opacity: .8;
+  flex-shrink: 0;
+  font-style: normal;
+}
+.memos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: .85rem;
+}
+.memo-tile {
+  position: relative;
+  background: linear-gradient(180deg, #ECFDF5 0%, var(--white) 80%);
+  border: 1.5px solid rgba(21,163,98,.28);
+  border-radius: var(--rl);
+  padding: 1rem 1.1rem;
+  cursor: pointer;
+  transition: all .25s cubic-bezier(.4,0,.2,1);
+  display: flex; align-items: center; gap: .85rem;
+}
+.memo-tile:hover {
+  transform: translateY(-2px);
+  border-color: rgba(21,163,98,.55);
+  box-shadow: 0 6px 18px rgba(21,163,98,.12);
+}
+.memo-tile-check {
+  width: 32px; height: 32px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: rgba(21,163,98,.14);
+  border: 2px solid rgba(21,163,98,.35);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--green);
+  font-weight: 800;
+  font-size: 18px;
+}
+.memo-tile-body { flex: 1; min-width: 0; }
+.memo-tile-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 14px; font-weight: 700;
+  color: var(--text);
+  letter-spacing: -.2px;
+  line-height: 1.3;
+  margin-bottom: .15rem;
+}
+.memo-tile-meta {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 11.5px; color: var(--text3);
+}
+.memo-tile-arrow {
+  font-size: 18px;
+  color: var(--green);
+  flex-shrink: 0;
+}
+
+/* ─── Overlay vue mémo détaillée ─── */
+.memo-overlay {
+  position: fixed; inset: 0;
+  background: rgba(15, 27, 53, .72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: none;
+  z-index: 9000;
+  overflow-y: auto;
+  padding: 2rem 1rem;
+}
+.memo-overlay.visible { display: block; }
+.memo-overlay-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  background: var(--white);
+  border-radius: 18px;
+  box-shadow: 0 30px 80px rgba(15, 27, 53, .35);
+  overflow: hidden;
+  animation: fadeUp .35s cubic-bezier(.2,.7,.2,1) both;
+}
+.memo-overlay-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.25rem 1.75rem;
+  background: linear-gradient(180deg, #ECFDF5 0%, var(--white) 100%);
+  border-bottom: 1px solid var(--border);
+  gap: 1rem;
+}
+.memo-overlay-back {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 13px; font-weight: 600;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all .2s;
+}
+.memo-overlay-back:hover {
+  border-color: var(--text2);
+  color: var(--text);
+}
+.memo-overlay-title-wrap {
+  flex: 1;
+  text-align: center;
+}
+.memo-overlay-kicker {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 10.5px; font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--green-dark);
+  margin-bottom: .25rem;
+}
+.memo-overlay-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 18px; font-weight: 700;
+  color: var(--text);
+  letter-spacing: -.3px;
+}
+.memo-pdf-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: linear-gradient(135deg, var(--navy), var(--navy-deep));
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 9px 18px;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 12.5px; font-weight: 700;
+  cursor: pointer;
+  transition: all .2s;
+  box-shadow: 0 3px 10px rgba(15,27,53,.20);
+}
+.memo-pdf-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 16px rgba(15,27,53,.28);
+}
+.memo-pdf-btn svg {
+  width: 14px; height: 14px;
+  stroke: currentColor; fill: none; stroke-width: 2;
+}
+
+.memo-overlay-body {
+  padding: 2rem 2.25rem 2.5rem;
+}
+.memo-section {
+  margin-bottom: 1.75rem;
+}
+.memo-section:last-child { margin-bottom: 0; }
+.memo-section-title {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 10.5px; font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: .65rem;
+  display: flex; align-items: center; gap: .65rem;
+}
+.memo-section-title::before {
+  content: '';
+  display: block;
+  width: 18px; height: 1.5px;
+  background: var(--gold);
+}
+.memo-rule {
+  background: linear-gradient(180deg, #FBF6EC 0%, #F5EBD9 100%);
+  border-left: 4px solid var(--gold);
+  border-radius: 0 var(--r) var(--r) 0;
+  padding: 1rem 1.25rem;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--text);
+  margin-bottom: .75rem;
+}
+.memo-rule:last-child { margin-bottom: 0; }
+.memo-rule strong {
+  color: var(--navy);
+  font-weight: 700;
+}
+.memo-example {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: .9rem 1.15rem;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 13.5px;
+  color: var(--text);
+  line-height: 1.6;
+  margin-bottom: .55rem;
+}
+.memo-example:last-child { margin-bottom: 0; }
+.memo-example-label {
+  display: inline-block;
+  font-size: 10.5px; font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  margin-bottom: .35rem;
+}
+.memo-example-math {
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  color: var(--navy);
+}
+.memo-tip {
+  display: flex; gap: .65rem;
+  background: linear-gradient(180deg, #EFF6FF 0%, #DBEAFE 100%);
+  border-radius: var(--r);
+  padding: .9rem 1.15rem;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 13.5px;
+  color: var(--text);
+  line-height: 1.55;
+}
+.memo-tip-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.memo-tip strong {
+  color: var(--navy);
+  font-weight: 700;
+}
+
+/* ─── Section Exercices : deux cartes (Rappels collège + Année de seconde) ─── */
+.exo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  max-width: 880px;
+  margin: 2rem auto 0;
+}
+.exo-card {
+  position: relative;
+  background: linear-gradient(160deg, var(--beige-l) 0%, var(--bg2) 100%);
+  border: 1.5px solid var(--border);
+  border-radius: var(--rl);
+  padding: 2rem 1.75rem 1.75rem;
+  text-align: center;
+  transition: all .25s cubic-bezier(.4,0,.2,1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .75rem;
+  overflow: hidden;
+}
+.exo-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--gold-l), transparent);
+  opacity: .6;
+  transition: opacity .25s;
+}
+.exo-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(212, 164, 100, .35);
+  box-shadow: 0 12px 28px rgba(15, 27, 53, .08);
+}
+.exo-card:hover::before { opacity: 1; }
+.exo-card-icon {
+  font-size: 44px;
+  line-height: 1;
+  margin-bottom: .25rem;
+}
+.exo-card-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -.3px;
+  line-height: 1.25;
+}
+.exo-card-desc {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 13.5px;
+  color: var(--text2);
+  line-height: 1.55;
+  max-width: 280px;
+}
+.exo-card-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: .5rem;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(180, 122, 53, .12);
+  border: 1px solid rgba(212, 164, 100, .35);
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+.exo-card-pill::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: exoPillPulse 2s ease-in-out infinite;
+}
+@keyframes exoPillPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: .5; transform: scale(.7); }
+}
+@media (max-width: 640px) {
+  .exo-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .exo-card { padding: 1.75rem 1.25rem 1.5rem; }
+}
+
+/* (Ancien) Placeholder card — conservé au cas où, mais plus utilisé ici */
+.placeholder-card {
+  margin: 2rem auto;
+  max-width: 540px;
+  padding: 3rem 2rem;
+  background: linear-gradient(160deg, var(--beige-l) 0%, var(--bg2) 100%);
+  border: 1.5px dashed rgba(212,164,100,.35);
+  border-radius: var(--rl);
+  text-align: center;
+}
+.placeholder-icon {
+  font-size: 48px;
+  margin-bottom: 1rem;
+  opacity: .85;
+}
+.placeholder-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 20px; font-weight: 700;
+  color: var(--text);
+  margin-bottom: .65rem;
+  letter-spacing: -.3px;
+}
+.placeholder-text {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 14px; color: var(--text2);
+  line-height: 1.6;
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+/* Mode DYS pour les mémos */
+body.dys .memo-rule,
+body.dys .memo-example,
+body.dys .memo-tip,
+body.dys .memo-overlay-title,
+body.dys .memo-tile-title {
+  font-family: 'OpenDyslexic', sans-serif;
+}
+body.dys .memo-rule,
+body.dys .memo-example,
+body.dys .memo-tip {
+  line-height: 1.9;
+}
+
+/* Responsive mobile */
+@media (max-width: 640px) {
+  .memo-overlay { padding: 0; }
+  .memo-overlay-inner { border-radius: 0; min-height: 100vh; }
+  .memo-overlay-head {
+    flex-wrap: wrap;
+    padding: 1rem 1.25rem;
+  }
+  .memo-overlay-title-wrap { width: 100%; order: 3; text-align: left; }
+  .memo-overlay-body { padding: 1.5rem 1.25rem 2rem; }
+}
 </style>
 </head>
 <body>
@@ -2986,16 +4076,20 @@ body.dys-mode .tb-avatar {
           <div class="form-group"><label class="form-label">Adresse email *</label><input class="form-input" type="email" id="in-email" placeholder="ton.email@exemple.fr"/></div>
           <div class="form-group"><label class="form-label">Mot de passe *</label><input class="form-input" type="password" id="in-mdp" placeholder="Choisis un mot de passe"/></div>
           <div class="form-group">
+            <label class="form-label">Mon établissement *</label>
+            <select class="form-select" id="in-etablissement" onchange="mettreAJourNiveaux()">
+              <option value="">— Choisir mon établissement —</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label class="form-label">Niveau *</label>
-            <select class="form-select" id="in-niveau" onchange="mettreAJourClasses()">
-              <option value="">— Choisir son niveau —</option>
-              <option value="Seconde CAP">Seconde CAP</option>
-              <option value="Seconde Bac Pro">Seconde Bac Pro</option>
+            <select class="form-select" id="in-niveau" disabled onchange="mettreAJourClasses()">
+              <option value="">— Choisir d'abord mon établissement —</option>
             </select>
           </div>
           <div class="form-group">
             <label class="form-label">Classe *</label>
-            <select class="form-select" id="in-classe" disabled><option value="">— Choisir d'abord son niveau —</option></select>
+            <select class="form-select" id="in-classe" disabled><option value="">— Choisir d'abord mon niveau —</option></select>
           </div>
           <div class="form-group">
             <label class="form-label">Je suis *</label>
@@ -3047,7 +4141,17 @@ body.dys-mode .tb-avatar {
       <div class="sb-item active" id="sb-accueil" onclick="navVers('accueil')">
         <div class="sb-item-bg"></div>
         <div class="sb-ico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
-        <div class="sb-item-lbl">Mes fiches</div>
+        <div class="sb-item-lbl">Mon diagnostic</div>
+      </div>
+      <div class="sb-item" id="sb-memos" onclick="navVers('memos')">
+        <div class="sb-item-bg"></div>
+        <div class="sb-ico"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></div>
+        <div class="sb-item-lbl">Fiches mémo</div>
+      </div>
+      <div class="sb-item" id="sb-exercices" onclick="navVers('exercices')">
+        <div class="sb-item-bg"></div>
+        <div class="sb-ico"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+        <div class="sb-item-lbl">Exercices supplémentaires</div>
       </div>
       <div class="sb-item" id="sb-progression" onclick="navVers('progression')">
         <div class="sb-item-bg"></div>
@@ -3068,7 +4172,7 @@ body.dys-mode .tb-avatar {
 
     <div class="topbar">
       <div class="topbar-left">
-        <span class="topbar-page-title" id="topbar-title">Mes fiches</span>
+        <span class="topbar-page-title" id="topbar-title">Mon diagnostic</span>
         <span class="refresh-indicator" id="refresh-indicator">
           <span class="refresh-spinner"></span>
           <span class="refresh-label">Mise à jour…</span>
@@ -3115,7 +4219,7 @@ body.dys-mode .tb-avatar {
         <div class="section-header-centered">
           <div class="section-header-kicker">
             <span class="section-header-kicker-line"></span>
-            <span class="section-header-kicker-text">Mes fiches</span>
+            <span class="section-header-kicker-text">Mon diagnostic</span>
             <span class="section-header-kicker-line"></span>
           </div>
           <div class="section-title-hero">Tes domaines <span class="accent">à travailler</span></div>
@@ -3151,7 +4255,66 @@ body.dys-mode .tb-avatar {
 
       </div>
 
+      <!-- ══ FICHES MÉMO ══ -->
+      <div class="section" id="section-memos">
+        <div class="section-header-centered">
+          <div class="section-header-kicker">
+            <span class="section-header-kicker-line"></span>
+            <span class="section-header-kicker-text">Fiches mémo</span>
+            <span class="section-header-kicker-line"></span>
+          </div>
+          <div class="section-title-hero">Tes notions <span class="accent">validées</span></div>
+          <div class="section-subtitle">Retrouve ici un résumé clair de tout ce que tu as déjà maîtrisé. À consulter avant un contrôle, ou pour ne rien oublier.</div>
+        </div>
+        <div id="memos-content"></div>
+      </div>
+
+      <!-- ══ EXERCICES ══ -->
+      <div class="section" id="section-exercices">
+        <div class="section-header-centered">
+          <div class="section-header-kicker">
+            <span class="section-header-kicker-line"></span>
+            <span class="section-header-kicker-text">Exercices supplémentaires</span>
+            <span class="section-header-kicker-line"></span>
+          </div>
+          <div class="section-title-hero">Entraîne-toi <span class="accent">à ton rythme</span></div>
+          <div class="section-subtitle">Choisis si tu veux consolider tes acquis du collège ou t'entraîner sur les notions de ton programme actuel.</div>
+        </div>
+        <div class="exo-grid">
+          <div class="exo-card">
+            <div class="exo-card-icon">📚</div>
+            <div class="exo-card-title">Rappels du collège</div>
+            <div class="exo-card-desc">Des exercices pour t'entraîner sur les notions que tu as déjà vues mais que tu veux retravailler.</div>
+            <div class="exo-card-pill">En cours de création</div>
+          </div>
+          <div class="exo-card">
+            <div class="exo-card-icon">🚀</div>
+            <div class="exo-card-title">Mon année de seconde</div>
+            <div class="exo-card-desc">Entraîne-toi sur les notions de ton programme actuel pour les maîtriser à fond.</div>
+            <div class="exo-card-pill">En cours de création</div>
+          </div>
+        </div>
+      </div>
+
     </div>
+  </div>
+</div>
+
+<!-- ══ MODALE IFRAME — fiche de remédiation en plein écran ══
+     S'affiche par-dessus l'overlay des fiches (z-index 300 vs 200).
+     L'iframe charge la fiche GitHub Pages avec tous les paramètres URL. -->
+<div class="fiche-iframe-modal" id="fiche-iframe-modal">
+  <div class="fiche-iframe-header">
+    <button class="fiche-iframe-back" onclick="fermerFicheIframe()">← Retour</button>
+    <div class="fiche-iframe-titre" id="fiche-iframe-titre">Chargement…</div>
+    <div class="fiche-iframe-spacer"></div>
+  </div>
+  <div class="fiche-iframe-body">
+    <div class="fiche-iframe-loader" id="fiche-iframe-loader">
+      <div class="fiche-iframe-loader-dot"></div>
+      <div>Chargement de la fiche…</div>
+    </div>
+    <iframe id="fiche-iframe" title="Fiche de remédiation"></iframe>
   </div>
 </div>
 
@@ -3164,7 +4327,10 @@ body.dys-mode .tb-avatar {
         <div class="fiches-overlay-icon" id="overlay-icon"></div>
         <div class="fiches-overlay-name" id="overlay-name"></div>
       </div>
-      <div style="width:100px;"></div>
+      <button class="fiches-overlay-refresh" id="overlay-refresh-btn" onclick="actualiserFichesOverlay()" title="Actualiser les statuts des fiches">
+        <span class="ico">↻</span>
+        <span>Actualiser</span>
+      </button>
     </div>
 
     <!-- Pourquoi ce thème ? (uniquement en mode pédagogique) -->
@@ -3272,26 +4438,135 @@ body.dys-mode .tb-avatar {
   </div>
 </div>
 
+<!-- ══ OVERLAY FICHE MÉMO ══ -->
+<div class="memo-overlay" id="memo-overlay">
+  <div class="memo-overlay-inner">
+    <div class="memo-overlay-head">
+      <button class="memo-overlay-back" onclick="fermerMemo()">← Retour</button>
+      <div class="memo-overlay-title-wrap">
+        <div class="memo-overlay-kicker" id="memo-overlay-kicker">Fiche mémo</div>
+        <div class="memo-overlay-title" id="memo-overlay-title">—</div>
+      </div>
+      <button class="memo-pdf-btn" onclick="telechargerMemoPDF()">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        PDF
+      </button>
+    </div>
+    <div class="memo-overlay-body" id="memo-overlay-body"></div>
+  </div>
+</div>
+
 <script>
 var SCRIPT_URL="https://script.google.com/macros/s/AKfycbxlBMjVXIg58lsopoeQ5sEZW-jcQIOrOtnWwCGVtHLGjcmpi9exaYZ3oAEre4deZum2/exec";
 var EVAL_URL="https://arnaudreydellet.github.io/evaluation-fractions/";
 var currentUser=null;
 
-var CLASSES={
-  "Seconde CAP":[
-    "2nde CAP Charpentier",
-    "2nde CAP EL",
-    "2nde CAP Ebéniste",
-    "2nde CAP MIS"
-  ],
-  "Seconde Bac Pro":[
-    "2nde AMA",
-    "2nde TEBE",
-    "2nde TNE",
-    "2nde OBTP",
-    "2nde TCB"
-  ]
-};
+// ═══════════════════════════════════════════════════════════════
+// CLASSES & ÉTABLISSEMENTS — chargés dynamiquement depuis le Sheet
+// ═══════════════════════════════════════════════════════════════
+// CLASSES_DATA est un objet : { "Nom établissement" : { "Niveau" : [ "Niveau Appellation", ... ] } }
+// CLASSES_BRUT contient les lignes brutes pour pouvoir retrouver le prof rattaché à une classe
+var CLASSES_DATA = {};
+var CLASSES_BRUT = [];
+
+// Liste des établissements connus (configurée côté Apps Script, SHEETS)
+// Cette liste est récupérée via un appel au serveur au chargement de la page.
+var ETABLISSEMENTS = [];
+
+// Récupère le paramètre ?etab=... dans l'URL si présent (pré-sélection)
+function _getEtabFromURL(){
+  var search = window.location.search || '';
+  var params = {};
+  search.replace(/^\?/, '').split('&').forEach(function(pair){
+    if(!pair) return;
+    var kv = pair.split('=');
+    params[decodeURIComponent(kv[0]||'')] = decodeURIComponent(kv[1]||'');
+  });
+  return params.etab || '';
+}
+
+// Charge les classes depuis le serveur et peuple le dropdown établissement
+function chargerClassesEtablissements(){
+  var selEtab = document.getElementById('in-etablissement');
+  if(!selEtab) return;
+  fetch(SCRIPT_URL + '?type=lister_etablissements_et_classes&t=' + Date.now())
+    .then(function(r){ return r.json(); })
+    .then(function(j){
+      if(j.status !== 'ok' || !j.etablissements){
+        selEtab.innerHTML = '<option value="">Aucun établissement disponible</option>';
+        return;
+      }
+      ETABLISSEMENTS = j.etablissements;
+      CLASSES_BRUT = j.classes || [];
+      // Construction de CLASSES_DATA
+      CLASSES_DATA = {};
+      CLASSES_BRUT.forEach(function(c){
+        if(!CLASSES_DATA[c.etablissement]) CLASSES_DATA[c.etablissement] = {};
+        if(!CLASSES_DATA[c.etablissement][c.niveau]) CLASSES_DATA[c.etablissement][c.niveau] = [];
+        var fullName = c.niveau + ' ' + c.appellation;
+        if(CLASSES_DATA[c.etablissement][c.niveau].indexOf(fullName) === -1){
+          CLASSES_DATA[c.etablissement][c.niveau].push(fullName);
+        }
+      });
+      // Construit le dropdown établissement
+      var html = '<option value="">— Choisir mon établissement —</option>';
+      ETABLISSEMENTS.forEach(function(e){
+        html += '<option value="' + e + '">' + e + '</option>';
+      });
+      selEtab.innerHTML = html;
+
+      // Pré-sélection éventuelle depuis l'URL
+      var etabUrl = _getEtabFromURL();
+      if(etabUrl){
+        // Match flexible (Fourneyron matche "Lycée Benoît Fourneyron")
+        var match = ETABLISSEMENTS.find(function(e){
+          return e.toLowerCase().indexOf(etabUrl.toLowerCase()) !== -1
+              || etabUrl.toLowerCase().indexOf(e.toLowerCase()) !== -1;
+        });
+        if(match){
+          selEtab.value = match;
+          mettreAJourNiveaux();
+        }
+      }
+    })
+    .catch(function(){
+      selEtab.innerHTML = '<option value="">Erreur de chargement</option>';
+    });
+}
+
+// Met à jour le dropdown des niveaux en fonction de l'établissement choisi
+function mettreAJourNiveaux(){
+  var etab = document.getElementById('in-etablissement').value;
+  var selNiv = document.getElementById('in-niveau');
+  var selClasse = document.getElementById('in-classe');
+
+  selClasse.innerHTML = "<option value=''>— Choisir d'abord mon niveau —</option>";
+  selClasse.disabled = true;
+
+  if(!etab || !CLASSES_DATA[etab]){
+    selNiv.innerHTML = "<option value=''>— Choisir d'abord mon établissement —</option>";
+    selNiv.disabled = true;
+    return;
+  }
+
+  // Ordre logique des niveaux
+  var ordreNiveau = {
+    '6ème':1,'5ème':2,'4ème':3,'3ème':4,
+    'Seconde GT':5,'Première GT':6,'Terminale GT':7,
+    '2nde Pro':8,'1ère Pro':9,'Terminale Pro':10,
+    '1ère année CAP':11,'2ème année CAP':12
+  };
+  var niveaux = Object.keys(CLASSES_DATA[etab]).sort(function(a,b){
+    return (ordreNiveau[a]||99) - (ordreNiveau[b]||99);
+  });
+
+  var html = "<option value=''>— Choisir mon niveau —</option>";
+  niveaux.forEach(function(n){
+    html += "<option value='" + n + "'>" + n + "</option>";
+  });
+  selNiv.innerHTML = html;
+  selNiv.disabled = false;
+}
 
 function switchTab(tab){
   document.querySelectorAll(".auth-tab").forEach(function(t,i){
@@ -3303,6 +4578,9 @@ function switchTab(tab){
 
 document.getElementById("co-email").addEventListener("keydown",function(e){if(e.key==="Enter")seConnecter();});
 document.getElementById("co-mdp").addEventListener("keydown",function(e){if(e.key==="Enter")seConnecter();});
+
+// Charge les établissements et leurs classes au démarrage
+chargerClassesEtablissements();
 
 // Refresh auto quand l'élève revient sur l'onglet (après avoir validé une fiche)
 document.addEventListener("visibilitychange",function(){
@@ -3318,14 +4596,17 @@ window.addEventListener("focus",function(){
 });
 
 function mettreAJourClasses(){
-  var niveau=document.getElementById("in-niveau").value;
-  var sel=document.getElementById("in-classe");
-  sel.innerHTML="<option value=''>— Choisir sa classe —</option>";
-  if(niveau&&CLASSES[niveau]){
-    CLASSES[niveau].forEach(function(c){sel.innerHTML+="<option value='"+c+"'>"+c+"</option>";});
-    sel.disabled=false;
+  var etab = document.getElementById('in-etablissement').value;
+  var niveau = document.getElementById("in-niveau").value;
+  var sel = document.getElementById("in-classe");
+  sel.innerHTML = "<option value=''>— Choisir ma classe —</option>";
+  if(etab && niveau && CLASSES_DATA[etab] && CLASSES_DATA[etab][niveau]){
+    CLASSES_DATA[etab][niveau].forEach(function(c){
+      sel.innerHTML += "<option value='" + c + "'>" + c + "</option>";
+    });
+    sel.disabled = false;
   } else {
-    sel.disabled=true;
+    sel.disabled = true;
   }
 }
 
@@ -3357,6 +4638,7 @@ function seConnecter(){
         currentUser._mdp=mdp;
         appliquerModeDys(json.dys===true);
         afficherDashboard(json);
+        afficherPopupBienvenueSiBesoin(json);
       } else {
         err.textContent=json.message||"Email ou mot de passe incorrect.";
         err.classList.add("visible");
@@ -3432,6 +4714,7 @@ function sInscrire(){
   var nom=document.getElementById("in-nom").value.trim();
   var email=document.getElementById("in-email").value.trim();
   var mdp=document.getElementById("in-mdp").value;
+  var etablissement=document.getElementById("in-etablissement").value;
   var niveau=document.getElementById("in-niveau").value;
   var classe=document.getElementById("in-classe").value;
   var dys=document.getElementById("in-dys").checked;
@@ -3439,18 +4722,19 @@ function sInscrire(){
   var genre=genreInput?genreInput.value:"";
   var err=document.getElementById("in-err");
   err.classList.remove("visible");
-  if(!prenom||!nom||!email||!mdp||!niveau||!classe||!genre){err.textContent="Remplis tous les champs obligatoires.";err.classList.add("visible");return;}
+  if(!prenom||!nom||!email||!mdp||!etablissement||!niveau||!classe||!genre){err.textContent="Remplis tous les champs obligatoires.";err.classList.add("visible");return;}
   if(mdp.length<4){err.textContent="Le mot de passe doit faire au moins 4 caractères.";err.classList.add("visible");return;}
   setLoading(true,"Création du compte...");
   document.getElementById("in-btn").disabled=true;
-  fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify({type:"creer_compte",email:email,mot_de_passe:mdp,prenom:prenom,nom:nom,niveau:niveau,classe:classe,dys:dys,genre:genre})})
+  fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify({type:"creer_compte",email:email,mot_de_passe:mdp,prenom:prenom,nom:nom,etablissement:etablissement,niveau:niveau,classe:classe,dys:dys,genre:genre})})
     .then(function(r){return r.json();})
     .then(function(json){
       setLoading(false);document.getElementById("in-btn").disabled=false;
       if(json.status==="ok"){
-        currentUser={email:email,prenom:prenom,nom:nom,niveau:niveau,classe:classe,prof:json.prof,dys:dys,fiches:[],fiches_assignees:[],eval_faite:false,numero_eval:0};
+        currentUser={email:email,prenom:prenom,nom:nom,etablissement:etablissement,niveau:niveau,classe:classe,prof:json.prof,dys:dys,fiches:[],fiches_assignees:[],eval_faite:false,numero_eval:0,premiereConnexion:""};
         appliquerModeDys(dys);
         afficherDashboard(currentUser);
+        afficherPopupBienvenueSiBesoin(currentUser);
       } else {
         err.textContent=json.message||"Erreur lors de la création.";
         err.classList.add("visible");
@@ -3505,6 +4789,644 @@ var THEMES=[
    pourquoi:"Manipuler des unités, calculer aires et volumes, lire et interpréter des données : moyennes, écarts, indicateurs. Utile au quotidien comme dans toutes les disciplines.",
    fiches:[]}
 ];
+
+// ═══════════════════════════════════════════════════════════════
+// FICHES MÉMO — contenu pédagogique condensé pour révision
+// Format : MEMOS[ficheId] = { regles, exemples, astuce }
+// - regles[] : phrases courtes (HTML autorisé pour <strong>, <em>)
+// - exemples[] : { label, math, explication }
+// - astuce : phrase optionnelle (un piège fréquent ou un truc à retenir)
+// ═══════════════════════════════════════════════════════════════
+var MEMOS = {
+  // ▶ 1. Comprendre les fractions
+  // Reprend exactement les 3 points évalués dans la fiche de remédiation 1 :
+  // (1) numérateur/dénominateur, (2) barre = divisé, (3) écrire une fraction d'un partage
+  "fractions_comprendre": {
+    regles: [
+      "Le <strong>numérateur</strong> est le nombre <strong>en haut</strong>, le <strong>dénominateur</strong> est le nombre <strong>en bas</strong>.",
+      "La <strong>barre de fraction</strong> signifie <strong>divisé</strong> : <span class='frac-hz'><span class='frac-num'>a</span><span class='frac-den'>b</span></span> = a ÷ b.",
+      "Pour écrire une fraction d'un partage : le haut indique <strong>combien de parts on prend</strong>, le bas indique <strong>en combien de parts on partage</strong>."
+    ],
+    exemples: [
+      {
+        label: "Exemple",
+        math: "<span class='frac-hz frac-hz-big'><span class='frac-num'>3</span><span class='frac-den'>4</span></span>",
+        explication: "3 parts prises sur 4 parts égales, soit 3 ÷ 4 = 0,75."
+      }
+    ],
+    astuce: ""
+  },
+
+  // ▶ 2. Reconnaître deux fractions égales
+  // Notion évaluée : deux fractions sont égales si on passe de l'une à l'autre
+  // en multipliant (ou divisant) le numérateur ET le dénominateur par un même nombre.
+  "fractions_reconnaitre_egales": {
+    regles: [
+      "Deux fractions sont <strong>égales</strong> si on passe de l'une à l'autre en <strong>multipliant</strong> (ou en <strong>divisant</strong>) le numérateur <strong>ET</strong> le dénominateur par le <strong>même nombre</strong>.",
+      "Si l'opération n'est pas la <strong>même en haut et en bas</strong>, les fractions ne sont <strong>pas égales</strong>."
+    ],
+    exemples: [
+      {
+        label: "Exemple",
+        math: "<span class='frac-hz frac-hz-big'><span class='frac-num'>2</span><span class='frac-den'>3</span></span> = <span class='frac-hz frac-hz-big'><span class='frac-num'>4</span><span class='frac-den'>6</span></span>",
+        explication: "On a multiplié 2 et 3 par le même nombre (×2). Même opération en haut et en bas → fractions égales."
+      }
+    ],
+    astuce: ""
+  },
+
+  // ▶ 3. Rendre une fraction irréductible
+  // Notions évaluées : reconnaître si une fraction est déjà irréductible,
+  // trouver un diviseur commun au numérateur et au dénominateur,
+  // écrire la fraction simplifiée. On cherche le plus grand diviseur possible.
+  "fractions_irreductible": {
+    regles: [
+      "<strong>Simplifier</strong> une fraction = diviser le numérateur <strong>ET</strong> le dénominateur par un <strong>même nombre</strong>.",
+      "Pour ne le faire qu'une seule fois, on cherche le <strong>plus grand nombre possible</strong> qui divise les deux.",
+      "Quand on ne peut plus simplifier, la fraction est <strong>irréductible</strong>."
+    ],
+    exemples: [
+      {
+        label: "Exemple",
+        math: "<span class='frac-hz frac-hz-big'><span class='frac-num'>4</span><span class='frac-den'>8</span></span> = <span class='frac-hz frac-hz-big'><span class='frac-num'>1</span><span class='frac-den'>2</span></span>",
+        explication: "4 et 8 sont divisibles par 4 : 4÷4=1 et 8÷4=2. Donc 1/2, qui est irréductible."
+      }
+    ],
+    astuce: ""
+  },
+
+  // ▶ 4. Additionner et soustraire des fractions de même dénominateur
+  // Notion évaluée : on calcule sur les numérateurs, le dénominateur reste inchangé.
+  // Pareil pour + et pour −.
+  "fractions_add_meme_denom": {
+    regles: [
+      "Pour additionner ou soustraire deux fractions qui ont le <strong>même dénominateur</strong>, on calcule uniquement sur les <strong>numérateurs</strong>.",
+      "Le <strong>dénominateur</strong> reste le même — on ne le touche pas."
+    ],
+    exemples: [
+      {
+        label: "Exemple",
+        math: "<span class='frac-hz frac-hz-big'><span class='frac-num'>2</span><span class='frac-den'>7</span></span> + <span class='frac-hz frac-hz-big'><span class='frac-num'>3</span><span class='frac-den'>7</span></span> = <span class='frac-hz frac-hz-big'><span class='frac-num'>5</span><span class='frac-den'>7</span></span>",
+        explication: "On additionne les numérateurs : 2 + 3 = 5. Le dénominateur 7 reste."
+      }
+    ],
+    astuce: ""
+  },
+
+  // ▶ 5. Trouver un dénominateur commun (1)
+  // Cas particulier : quand un dénominateur est un multiple de l'autre.
+  // Pédagogie : 1 règle courte + 1 exemple détaillé en 3 étapes plutôt qu'un texte abstrait.
+  "fractions_denom_commun_1": {
+    regles: [
+      "Pour additionner ou soustraire deux fractions qui n'ont pas le même dénominateur, il faut d'abord les <strong>réécrire avec le même dénominateur</strong>."
+    ],
+    exemples: [
+      {
+        label: "Étape 1 — Choisir le dénominateur commun",
+        math: "<span class='frac-hz frac-hz-big'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> + <span class='frac-hz frac-hz-big'><span class='frac-num'>1</span><span class='frac-den'>4</span></span>",
+        explication: "Le 4 est dans la table du 2 (2 × 2 = 4). On garde donc <strong>4</strong> comme dénominateur commun."
+      },
+      {
+        label: "Étape 2 — Réécrire la première fraction avec 4 en bas",
+        math: "<span class='frac-hz frac-hz-big'><span class='frac-num'>1</span><span class='frac-den'>2</span></span> = <span class='frac-hz frac-hz-big'><span class='frac-num'>2</span><span class='frac-den'>4</span></span>",
+        explication: "On multiplie 2 par 2 pour obtenir 4 en bas. On fait la <strong>même chose en haut</strong> : 1 × 2 = 2."
+      },
+      {
+        label: "Étape 3 — Additionner les numérateurs",
+        math: "<span class='frac-hz frac-hz-big'><span class='frac-num'>2</span><span class='frac-den'>4</span></span> + <span class='frac-hz frac-hz-big'><span class='frac-num'>1</span><span class='frac-den'>4</span></span> = <span class='frac-hz frac-hz-big'><span class='frac-num'>3</span><span class='frac-den'>4</span></span>",
+        explication: "Les dénominateurs sont identiques, on additionne juste les numérateurs : 2 + 1 = 3."
+      }
+    ],
+    astuce: ""
+  },
+
+  // ▶ 6. Trouver un dénominateur commun (2) — cas général
+  // Notion évaluée : quand aucun dénom n'est multiple de l'autre, on multiplie
+  // les deux dénominateurs entre eux. Chaque numérateur se multiplie par le
+  // dénominateur de l'autre fraction. Format en étapes (sinon trop abstrait).
+  "fractions_denom_commun_2": {
+    regles: [
+      "Quand aucun des deux dénominateurs n'est dans la table de l'autre, on <strong>multiplie les deux dénominateurs entre eux</strong> pour obtenir le dénominateur commun."
+    ],
+    exemples: [
+      {
+        label: "Étape 1 — Trouver le dénominateur commun",
+        math: "<span class='frac-hz frac-hz-big'><span class='frac-num'>1</span><span class='frac-den'>3</span></span> + <span class='frac-hz frac-hz-big'><span class='frac-num'>1</span><span class='frac-den'>4</span></span>",
+        explication: "3 et 4 n'ont aucun multiple commun évident. On multiplie : <strong>3 × 4 = 12</strong>. Le dénominateur commun sera 12."
+      },
+      {
+        label: "Étape 2 — Réécrire la 1ère fraction avec 12 en bas",
+        math: "<span class='frac-hz frac-hz-big'><span class='frac-num'>1</span><span class='frac-den'>3</span></span> = <span class='frac-hz frac-hz-big'><span class='frac-num'>4</span><span class='frac-den'>12</span></span>",
+        explication: "On multiplie 3 par 4 pour avoir 12 en bas. Pareil en haut : 1 × 4 = 4."
+      },
+      {
+        label: "Étape 3 — Réécrire la 2ème fraction avec 12 en bas",
+        math: "<span class='frac-hz frac-hz-big'><span class='frac-num'>1</span><span class='frac-den'>4</span></span> = <span class='frac-hz frac-hz-big'><span class='frac-num'>3</span><span class='frac-den'>12</span></span>",
+        explication: "On multiplie 4 par 3 pour avoir 12 en bas. Pareil en haut : 1 × 3 = 3."
+      },
+      {
+        label: "Étape 4 — Additionner les numérateurs",
+        math: "<span class='frac-hz frac-hz-big'><span class='frac-num'>4</span><span class='frac-den'>12</span></span> + <span class='frac-hz frac-hz-big'><span class='frac-num'>3</span><span class='frac-den'>12</span></span> = <span class='frac-hz frac-hz-big'><span class='frac-num'>7</span><span class='frac-den'>12</span></span>",
+        explication: "Même dénominateur, on additionne : 4 + 3 = 7."
+      }
+    ],
+    astuce: ""
+  },
+
+  // ▶ 7. Multiplier une fraction par un entier
+  // Notion évaluée : on multiplie uniquement le numérateur par l'entier,
+  // le dénominateur reste inchangé. Pédagogie : on écrit l'entier sous forme
+  // de fraction n/1 pour montrer que le dénominateur est aussi multiplié,
+  // mais que ×1 ne change rien. Ça relie naturellement à la fiche 8.
+  "fractions_mult_entier": {
+    regles: [
+      "Tout entier peut s'écrire comme une <strong>fraction sur 1</strong> (3 = <span class='frac-hz'><span class='frac-num'>3</span><span class='frac-den'>1</span></span>).",
+      "On multiplie alors comme deux fractions : <strong>numérateurs entre eux</strong>, <strong>dénominateurs entre eux</strong>.",
+      "Comme on multiplie le dénominateur par 1, il <strong>ne change pas</strong>."
+    ],
+    exemples: [
+      {
+        label: "Étape 1 — Écrire l'entier comme une fraction",
+        math: "<span class='frac-hz frac-hz-big'><span class='frac-num'>2</span><span class='frac-den'>5</span></span> × 3 = <span class='frac-hz frac-hz-big'><span class='frac-num'>2</span><span class='frac-den'>5</span></span> × <span class='frac-hz frac-hz-big'><span class='frac-num'>3</span><span class='frac-den'>1</span></span>",
+        explication: "On écrit 3 sous la forme 3/1. Maintenant on a une multiplication entre deux fractions."
+      },
+      {
+        label: "Étape 2 — Multiplier numérateurs et dénominateurs",
+        math: "<span class='frac-hz frac-hz-big'><span class='frac-num'>2</span><span class='frac-den'>5</span></span> × <span class='frac-hz frac-hz-big'><span class='frac-num'>3</span><span class='frac-den'>1</span></span> = <span class='frac-hz frac-hz-big'><span class='frac-num'>6</span><span class='frac-den'>5</span></span>",
+        explication: "Numérateurs : 2 × 3 = 6. Dénominateurs : 5 × 1 = 5 (×1 ne change rien). Résultat : 6/5."
+      }
+    ],
+    astuce: ""
+  },
+
+  // ▶ 8. Multiplier deux fractions entre elles
+  // Notion évaluée : multiplier numérateurs entre eux ET dénominateurs entre eux.
+  // Règles simples → format classique.
+  "fractions_mult_fractions": {
+    regles: [
+      "Pour multiplier deux fractions, on multiplie les <strong>numérateurs entre eux</strong>.",
+      "Puis on multiplie les <strong>dénominateurs entre eux</strong>."
+    ],
+    exemples: [
+      {
+        label: "Exemple",
+        math: "<span class='frac-hz frac-hz-big'><span class='frac-num'>2</span><span class='frac-den'>3</span></span> × <span class='frac-hz frac-hz-big'><span class='frac-num'>3</span><span class='frac-den'>5</span></span> = <span class='frac-hz frac-hz-big'><span class='frac-num'>6</span><span class='frac-den'>15</span></span>",
+        explication: "Numérateurs : 2 × 3 = 6. Dénominateurs : 3 × 5 = 15."
+      }
+    ],
+    astuce: ""
+  },
+
+  // ▶ 9. Comprendre l'inverse d'une fraction
+  // Notion évaluée : l'inverse s'obtient en échangeant numérateur et dénominateur.
+  // Une fraction × son inverse = 1. Règles simples → format classique.
+  "fractions_inverse": {
+    regles: [
+      "L'<strong>inverse</strong> d'une fraction s'obtient en <strong>échangeant le numérateur et le dénominateur</strong>.",
+      "Une fraction multipliée par son inverse donne toujours <strong>1</strong>."
+    ],
+    exemples: [
+      {
+        label: "Exemple",
+        math: "Inverse de <span class='frac-hz frac-hz-big'><span class='frac-num'>3</span><span class='frac-den'>4</span></span> = <span class='frac-hz frac-hz-big'><span class='frac-num'>4</span><span class='frac-den'>3</span></span>",
+        explication: "Le 3 descend en bas, le 4 monte en haut. Vérification : 3/4 × 4/3 = 12/12 = 1 ✓"
+      }
+    ],
+    astuce: ""
+  },
+
+  // ▶ 10. Diviser par une fraction
+  // Notion évaluée : diviser par une fraction = multiplier par son inverse.
+  // Format en étapes (transformation division → multiplication mérite d'être déroulée).
+  "fractions_division": {
+    regles: [
+      "Diviser par une fraction, c'est <strong>multiplier par son inverse</strong>. On garde la 1ère fraction, on retourne la 2ème, puis on multiplie."
+    ],
+    exemples: [
+      {
+        label: "Étape 1 — Identifier l'opération",
+        math: "<span class='frac-hz frac-hz-big'><span class='frac-num'>2</span><span class='frac-den'>3</span></span> ÷ <span class='frac-hz frac-hz-big'><span class='frac-num'>1</span><span class='frac-den'>4</span></span>",
+        explication: "On veut diviser 2/3 par 1/4. La 1ère fraction reste, on va retourner la 2ème."
+      },
+      {
+        label: "Étape 2 — Transformer la division en multiplication",
+        math: "<span class='frac-hz frac-hz-big'><span class='frac-num'>2</span><span class='frac-den'>3</span></span> × <span class='frac-hz frac-hz-big'><span class='frac-num'>4</span><span class='frac-den'>1</span></span>",
+        explication: "On a remplacé ÷ par ×, et 1/4 est devenue 4/1 (son inverse)."
+      },
+      {
+        label: "Étape 3 — Multiplier les fractions",
+        math: "<span class='frac-hz frac-hz-big'><span class='frac-num'>2</span><span class='frac-den'>3</span></span> × <span class='frac-hz frac-hz-big'><span class='frac-num'>4</span><span class='frac-den'>1</span></span> = <span class='frac-hz frac-hz-big'><span class='frac-num'>8</span><span class='frac-den'>3</span></span>",
+        explication: "Numérateurs : 2 × 4 = 8. Dénominateurs : 3 × 1 = 3."
+      }
+    ],
+    astuce: ""
+  }
+
+  // Les autres thèmes (calcul numérique, puissances, etc.) viendront ici plus tard.
+};
+
+// ═══════════════════════════════════════════════════════════════
+// PAGE FICHES MÉMO — rendu de la liste des notions validées
+// ═══════════════════════════════════════════════════════════════
+function renderMemosSection(){
+  var container = document.getElementById("memos-content");
+  if(!container || !currentUser) return;
+
+  // ⚠ MODE MAQUETTE — pour visualiser le rendu final avant validation réelle :
+  // - Pour le thème "Fractions" : on affiche TOUTES ses fiches en vert (comme si validées)
+  // - Pour les autres thèmes (qui ont ou non des fiches) : on affiche le thème
+  //   mais avec un placeholder "Fiches mémo en préparation"
+  // → Plus tard, on remplacera ce comportement par la vraie logique basée sur statutsMap.
+  var MAQUETTE_MODE = true;
+
+  var iconBgMap = {
+    "ic-fractions":"linear-gradient(135deg, #EEF2FF, #DDE7FF)",
+    "ic-propor":"linear-gradient(135deg, #FFF7ED, #FFEAD0)",
+    "ic-litteral":"linear-gradient(135deg, #F0FDF4, #DCFCE7)",
+    "ic-fonctions":"linear-gradient(135deg, #EFF6FF, #DBEAFE)",
+    "ic-geometrie":"linear-gradient(135deg, #FDF4FF, #F5D0FE)",
+    "ic-nombres":"linear-gradient(135deg, #FFFBEB, #FEF3C7)",
+    "ic-stats":"linear-gradient(135deg, #FFF1F2, #FECDD3)",
+    "ic-puissances":"linear-gradient(135deg, #EFF6FF, #DBEAFE)",
+    "ic-equations":"linear-gradient(135deg, #F5F3FF, #EDE9FE)"
+  };
+
+  var blocsHtml = "";
+
+  THEMES.forEach(function(theme){
+    var iconBg = iconBgMap[theme.iconClass] || "#EEF2FF";
+
+    // ─── Cas 1 : Fractions en mode maquette → toutes les fiches en vert ───
+    if(MAQUETTE_MODE && theme.id === "fractions" && theme.fiches && theme.fiches.length > 0){
+      blocsHtml += "<div class='memos-theme-block'>";
+      blocsHtml += "<div class='memos-theme-head'>";
+      blocsHtml += "<div class='memos-theme-icon' style='background:"+iconBg+";'>"+theme.icon+"</div>";
+      blocsHtml += "<div class='memos-theme-name'>"+theme.titre+"</div>";
+      blocsHtml += "<div class='memos-theme-count'>"+theme.fiches.length+" notion"+(theme.fiches.length>1?"s":"")+"</div>";
+      blocsHtml += "</div>";
+
+      blocsHtml += "<div class='memos-grid'>";
+      theme.fiches.forEach(function(fiche){
+        var hasMemo = MEMOS[fiche.id] !== undefined;
+        blocsHtml += "<div class='memo-tile' onclick=\"ouvrirMemo('"+fiche.id+"','"+theme.id+"')\">";
+        blocsHtml += "<div class='memo-tile-check'>✓</div>";
+        blocsHtml += "<div class='memo-tile-body'>";
+        blocsHtml += "<div class='memo-tile-title'>"+fiche.titre+"</div>";
+        blocsHtml += "<div class='memo-tile-meta'>"+(hasMemo?"Voir le mémo":"Mémo en préparation")+"</div>";
+        blocsHtml += "</div>";
+        blocsHtml += "<div class='memo-tile-arrow'>→</div>";
+        blocsHtml += "</div>";
+      });
+      blocsHtml += "</div>";
+      blocsHtml += "</div>";
+      return;
+    }
+
+    // ─── Cas 2 : autres thèmes en mode maquette → placeholder ───
+    if(MAQUETTE_MODE){
+      blocsHtml += "<div class='memos-theme-block memos-theme-pending'>";
+      blocsHtml += "<div class='memos-theme-head'>";
+      blocsHtml += "<div class='memos-theme-icon' style='background:"+iconBg+";opacity:.7;'>"+theme.icon+"</div>";
+      blocsHtml += "<div class='memos-theme-name' style='color:var(--text3);'>"+theme.titre+"</div>";
+      blocsHtml += "<div class='memos-theme-pending-pill'>En préparation</div>";
+      blocsHtml += "</div>";
+      blocsHtml += "<div class='memos-pending-placeholder'>"
+        +"<span class='memos-pending-icon'>✍️</span>"
+        +"<span>Fiches mémo en préparation pour ce thème.</span>"
+        +"</div>";
+      blocsHtml += "</div>";
+      return;
+    }
+  });
+
+  container.innerHTML = blocsHtml;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// OVERLAY VUE MÉMO DÉTAILLÉ
+// ═══════════════════════════════════════════════════════════════
+var memoCourantId = null;
+var memoCourantThemeId = null;
+
+function ouvrirMemo(ficheId, themeId){
+  var theme = THEMES.find(function(t){ return t.id === themeId; });
+  var fiche = theme ? theme.fiches.find(function(f){ return f.id === ficheId; }) : null;
+  if(!fiche) return;
+
+  memoCourantId = ficheId;
+  memoCourantThemeId = themeId;
+
+  var memo = MEMOS[ficheId];
+
+  document.getElementById("memo-overlay-kicker").textContent = theme.titre;
+  document.getElementById("memo-overlay-title").textContent = fiche.titre;
+
+  var body = document.getElementById("memo-overlay-body");
+  if(!memo){
+    // Pas encore de contenu mémo : message provisoire
+    body.innerHTML = "<div class='memos-empty' style='margin:0;'>"
+      +"<div class='memos-empty-icon'>✍️</div>"
+      +"<div class='memos-empty-title'>Mémo en préparation</div>"
+      +"<div class='memos-empty-text'>Le résumé de cette notion sera bientôt disponible. En attendant, tu peux revenir consulter la fiche originale depuis <strong>Mon diagnostic</strong>.</div>"
+      +"</div>";
+  } else {
+    var html = "";
+
+    // Section "À retenir" — les règles
+    if(memo.regles && memo.regles.length > 0){
+      html += "<div class='memo-section'>";
+      html += "<div class='memo-section-title'>À retenir</div>";
+      memo.regles.forEach(function(r){
+        html += "<div class='memo-rule'>"+r+"</div>";
+      });
+      html += "</div>";
+    }
+
+    // Section "Exemples"
+    if(memo.exemples && memo.exemples.length > 0){
+      html += "<div class='memo-section'>";
+      html += "<div class='memo-section-title'>Exemples</div>";
+      memo.exemples.forEach(function(ex){
+        html += "<div class='memo-example'>";
+        if(ex.label) html += "<div class='memo-example-label'>"+ex.label+"</div>";
+        if(ex.math) html += "<div class='memo-example-math'>"+ex.math+"</div>";
+        if(ex.explication) html += "<div style='margin-top:.35rem;'>"+ex.explication+"</div>";
+        html += "</div>";
+      });
+      html += "</div>";
+    }
+
+    // Section "Astuce"
+    if(memo.astuce){
+      html += "<div class='memo-section'>";
+      html += "<div class='memo-tip'>";
+      html += "<div class='memo-tip-icon'>💡</div>";
+      html += "<div>"+memo.astuce+"</div>";
+      html += "</div>";
+      html += "</div>";
+    }
+
+    body.innerHTML = html;
+  }
+
+  document.getElementById("memo-overlay").classList.add("visible");
+  document.body.style.overflow = "hidden";
+}
+
+function fermerMemo(){
+  document.getElementById("memo-overlay").classList.remove("visible");
+  document.body.style.overflow = "";
+  memoCourantId = null;
+  memoCourantThemeId = null;
+}
+
+// Échap pour fermer le mémo
+document.addEventListener("keydown", function(e){
+  if(e.key === "Escape"){
+    var ov = document.getElementById("memo-overlay");
+    if(ov && ov.classList.contains("visible")) fermerMemo();
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// GÉNÉRATION PDF — carte de révision condensée tout-sur-une-page
+// ═══════════════════════════════════════════════════════════════
+function telechargerMemoPDF(){
+  if(!memoCourantId || !memoCourantThemeId){
+    alert("Impossible de générer le PDF pour le moment.");
+    return;
+  }
+  var memo = MEMOS[memoCourantId];
+  if(!memo){
+    alert("Cette fiche mémo n'est pas encore disponible.");
+    return;
+  }
+  var theme = THEMES.find(function(t){ return t.id === memoCourantThemeId; });
+  var fiche = theme ? theme.fiches.find(function(f){ return f.id === memoCourantId; }) : null;
+  if(!fiche || !theme) return;
+
+  // Vérifier que jsPDF est chargé
+  if(typeof window.jspdf === "undefined"){
+    alert("Le générateur PDF n'a pas pu être chargé. Vérifie ta connexion internet.");
+    return;
+  }
+
+  var jsPDF = window.jspdf.jsPDF;
+  var doc = new jsPDF({ unit: "mm", format: "a4" });
+
+  // Page A4 : 210 × 297 mm
+  var pageW = 210, pageH = 297;
+  var margin = 18;
+  var contentW = pageW - 2 * margin;
+
+  // Helper : strip HTML tags pour PDF (jsPDF ne gère pas le HTML brut).
+  // Convertit le composant <span class='frac-hz'> en notation "X/Y" lisible.
+  function strip(s){
+    if(!s) return "";
+    var txt = String(s);
+    // Convertir les fractions horizontales en "num/den" (les vraies barres
+    // sont dessinées séparément pour les blocs "math" mis en avant)
+    txt = txt.replace(/<span\s+class=['"]frac-hz[^'"]*['"]>\s*<span\s+class=['"]frac-num['"]>([^<]*)<\/span>\s*<span\s+class=['"]frac-den['"]>([^<]*)<\/span>\s*<\/span>/gi,
+                       "$1/$2");
+    // Supprimer toutes les autres balises HTML
+    return txt.replace(/<[^>]+>/g, "").trim();
+  }
+
+  // Helper : détecte si "math" est composé d'une SEULE fraction grande (et rien d'autre,
+  // hormis d'éventuels espaces). C'est le cas où on veut dessiner une vraie fraction verticale.
+  // Quand l'exemple contient plusieurs fractions ou des opérateurs (= + −), on rend en texte avec slashes.
+  // → renvoie { num: "X", den: "Y" } si exemple à fraction unique, null sinon
+  function extraireFractionGrande(s){
+    if(!s) return null;
+    var raw = String(s).trim();
+    // Vérifie qu'il n'y a qu'UN SEUL composant frac-hz-big dans la chaîne
+    var matches = raw.match(/frac-hz-big/g) || [];
+    if(matches.length !== 1) return null;
+    // Vérifie que la chaîne entière correspond exactement au composant (rien autour)
+    var m = raw.match(/^<span\s+class=['"]frac-hz[^'"]*frac-hz-big[^'"]*['"]>\s*<span\s+class=['"]frac-num['"]>([^<]*)<\/span>\s*<span\s+class=['"]frac-den['"]>([^<]*)<\/span>\s*<\/span>$/i);
+    if(!m) return null;
+    return { num: m[1], den: m[2] };
+  }
+
+  // ─── EN-TÊTE ──────────────────────────────
+  // Bandeau navy en haut
+  doc.setFillColor(26, 44, 79); // navy
+  doc.rect(0, 0, pageW, 28, "F");
+
+  // Logo AlphΩ texte
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(16);
+  doc.setTextColor(255, 255, 255);
+  doc.text("AlphΩ", margin, 13);
+
+  // Sous-titre kicker
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(8);
+  doc.setTextColor(212, 164, 100); // gold
+  doc.text("CARTE DE RÉVISION", margin, 19);
+
+  // Thème en haut à droite
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(9);
+  doc.setTextColor(220, 220, 220);
+  doc.text(theme.titre.toUpperCase(), pageW - margin, 13, { align: "right" });
+
+  // Date de génération
+  var aujourdhui = new Date().toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" });
+  doc.setFontSize(8);
+  doc.setTextColor(180, 180, 180);
+  doc.text("Édité le " + aujourdhui, pageW - margin, 19, { align: "right" });
+
+  // ─── TITRE FICHE ──────────────────────────────
+  var y = 42;
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(20);
+  doc.setTextColor(26, 44, 79);
+  var titleLines = doc.splitTextToSize(fiche.titre, contentW);
+  doc.text(titleLines, margin, y);
+  y += titleLines.length * 8 + 4;
+
+  // Trait or
+  doc.setDrawColor(212, 164, 100);
+  doc.setLineWidth(0.8);
+  doc.line(margin, y, margin + 30, y);
+  y += 8;
+
+  // ─── À RETENIR ──────────────────────────────
+  if(memo.regles && memo.regles.length > 0){
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(10);
+    doc.setTextColor(180, 122, 53);
+    doc.text("À RETENIR", margin, y);
+    y += 6;
+
+    memo.regles.forEach(function(r){
+      var txt = strip(r);
+      // Fond crème pour chaque règle
+      doc.setFillColor(251, 246, 236);
+      doc.setDrawColor(212, 164, 100);
+      doc.setLineWidth(0.4);
+      var lines = doc.splitTextToSize(txt, contentW - 8);
+      var blockH = lines.length * 5 + 6;
+      doc.roundedRect(margin, y, contentW, blockH, 2, 2, "FD");
+      // Barre or à gauche
+      doc.setFillColor(194, 138, 66);
+      doc.rect(margin, y, 1.5, blockH, "F");
+      // Texte
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10);
+      doc.setTextColor(31, 30, 27);
+      doc.text(lines, margin + 5, y + 5);
+      y += blockH + 3;
+    });
+    y += 4;
+  }
+
+  // ─── EXEMPLES ──────────────────────────────
+  if(memo.exemples && memo.exemples.length > 0){
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(10);
+    doc.setTextColor(180, 122, 53);
+    doc.text("EXEMPLES", margin, y);
+    y += 6;
+
+    memo.exemples.forEach(function(ex){
+      var labelTxt = strip(ex.label || "");
+      var explTxt = strip(ex.explication || "");
+
+      // Détecte si "math" est une vraie fraction à dessiner verticalement
+      var fracGrande = extraireFractionGrande(ex.math || "");
+      var mathTxt = fracGrande ? "" : strip(ex.math || "");
+
+      doc.setFillColor(236, 233, 226);
+      doc.setDrawColor(226, 223, 215);
+      doc.setLineWidth(0.3);
+      var mathLines = mathTxt ? doc.splitTextToSize(mathTxt, contentW - 10) : [];
+      var explLines = explTxt ? doc.splitTextToSize(explTxt, contentW - 10) : [];
+      // Hauteur supplémentaire si on dessine une fraction verticale (≈ 18mm centrée)
+      var fracBlockH = fracGrande ? 18 : 0;
+      var blockH = 4
+                 + (labelTxt ? 4 : 0)
+                 + (mathTxt ? mathLines.length * 5 + 1 : 0)
+                 + fracBlockH
+                 + (explTxt ? explLines.length * 4.5 : 0)
+                 + 4;
+      doc.roundedRect(margin, y, contentW, blockH, 2, 2, "FD");
+
+      var inner = y + 5;
+      if(labelTxt){
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(7.5);
+        doc.setTextColor(180, 122, 53);
+        doc.text(labelTxt.toUpperCase(), margin + 5, inner);
+        inner += 4;
+      }
+      // Cas 1 — Fraction verticale : on la dessine avec une vraie barre
+      if(fracGrande){
+        var cx = margin + contentW / 2; // centre horizontal du bloc
+        var fontSizeFrac = 22;
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(fontSizeFrac);
+        doc.setTextColor(26, 44, 79);
+        // Numérateur (au-dessus de la barre)
+        doc.text(fracGrande.num, cx, inner + 5, { align: "center" });
+        // Barre horizontale
+        doc.setDrawColor(26, 44, 79);
+        doc.setLineWidth(0.8);
+        var barreW = Math.max(8, Math.max(fracGrande.num.length, fracGrande.den.length) * 4);
+        doc.line(cx - barreW/2, inner + 7.5, cx + barreW/2, inner + 7.5);
+        // Dénominateur (en dessous de la barre)
+        doc.text(fracGrande.den, cx, inner + 14, { align: "center" });
+        inner += fracBlockH;
+      }
+      // Cas 2 — Math en texte normal
+      if(mathTxt){
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(11);
+        doc.setTextColor(26, 44, 79);
+        doc.text(mathLines, margin + 5, inner);
+        inner += mathLines.length * 5 + 1;
+      }
+      if(explTxt){
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(9);
+        doc.setTextColor(74, 72, 66);
+        doc.text(explLines, margin + 5, inner);
+      }
+      y += blockH + 2.5;
+    });
+    y += 3;
+  }
+
+  // ─── ASTUCE ──────────────────────────────
+  if(memo.astuce){
+    var astuceTxt = strip(memo.astuce);
+    doc.setFillColor(239, 246, 255);
+    doc.setDrawColor(219, 234, 254);
+    doc.setLineWidth(0.4);
+    var astuceLines = doc.splitTextToSize("💡  " + astuceTxt, contentW - 8);
+    var astuceH = astuceLines.length * 5 + 6;
+    doc.roundedRect(margin, y, contentW, astuceH, 2, 2, "FD");
+    doc.setFont("helvetica", "italic");
+    doc.setFontSize(9.5);
+    doc.setTextColor(26, 44, 79);
+    doc.text(astuceLines, margin + 5, y + 5);
+    y += astuceH + 4;
+  }
+
+  // ─── PIED DE PAGE ──────────────────────────────
+  doc.setFont("helvetica", "italic");
+  doc.setFontSize(8);
+  doc.setTextColor(140, 140, 140);
+  doc.text("AlphΩ · " + ((currentUser && currentUser.prenom) ? currentUser.prenom + " " + (currentUser.nom||"") : "") + " · " + theme.titre, pageW / 2, pageH - 10, { align: "center" });
+
+  // Nom du fichier propre
+  var slug = fiche.titre.toLowerCase()
+    .replace(/[àáâã]/g,"a").replace(/[éèêë]/g,"e").replace(/[íìî]/g,"i")
+    .replace(/[óòôõ]/g,"o").replace(/[úùû]/g,"u").replace(/ç/g,"c")
+    .replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+  doc.save("memo-" + slug + ".pdf");
+}
 
 // ═══════════════════════════════════════════════════════════════
 // HELPERS RÉÉVALUATION
@@ -3767,7 +5689,7 @@ function renderThemes(user){
   }
 
   var html="<div class='themes-grid'>";
-  THEMES.forEach(function(theme){
+  THEMES.forEach(function(theme,themeIdx){
     var hasFiches=theme.fiches.length>0;
     var fa=hasFiches?theme.fiches.filter(function(f){return fichesAssignees.indexOf(f.id)!==-1;}):[];
     var hasAssigned=evalFaite&&fa.length>0;
@@ -3780,6 +5702,8 @@ function renderThemes(user){
     if(etat==="actif")   classes+=" theme-actif";
     if(etat==="fini")    classes+=" theme-fini";
     if(etat==="attente") classes+=" theme-attente";
+    // ⚠ NOUVEAU : mise en évidence du tout premier thème (sauf s'il est déjà terminé)
+    if(themeIdx===0 && etat!=="fini") classes+=" theme-premier";
 
     var onclickAttr=clickable?" onclick='ouvrirFiches(\""+theme.id+"\")'":"";
     html+="<div class='"+classes+"'"+onclickAttr+">";
@@ -3802,7 +5726,7 @@ function renderThemes(user){
       html+="<div class='theme-empty'>Fiches en cours de création…</div>";
     } else if(!evalFaite){
       html+="<div class='theme-locked'>Passe l'évaluation diagnostique pour découvrir tes fiches personnalisées.</div>";
-      html+="<a href='"+evalLien+"' target='_blank' class='btn-passer-eval'>Passer l'évaluation →</a>";
+      html+="<a href='"+evalLien+"' target='_blank' class='btn-passer-eval'><span class='btn-label'>Passer l'évaluation</span><span class='btn-arrow'>→</span></a>";
     } else if(fa.length===0){
       html+="<div class='theme-mastered'>✓ Toutes les notions maîtrisées</div>";
     } else {
@@ -3811,6 +5735,21 @@ function renderThemes(user){
       var fillCol=pct>=80?"var(--green)":pct>=40?"var(--amber)":"var(--gold-l)";
       html+="<div class='theme-progress-meta'><strong>"+fa.length+"</strong> fiche"+(fa.length>1?"s assignées":" assignée")+" · <strong>"+valideesDansTheme+"</strong> validée"+(valideesDansTheme>1?"s":"")+"</div>";
       html+="<div class='theme-progress-track'><div class='theme-progress-fill' style='width:"+pct+"%;background:"+fillCol+";'></div></div>";
+
+      // ── Guide d'action : visible uniquement s'il reste des fiches à faire ──
+      // L'élève sait exactement quoi faire en sortant de la lecture.
+      var nbAFaire=fa.length-valideesDansTheme;
+      if(nbAFaire>0){
+        var motFiches=nbAFaire>1?"fiches":"fiche";
+        var prochaineFiche=valideesDansTheme<fa.length?String(valideesDansTheme+1).padStart(2,"0"):"01";
+        html+="<div class='theme-guide'>"
+          +"<div class='theme-guide-icon'>👉</div>"
+          +"<div class='theme-guide-text'>"
+            +"Tu as <strong>"+nbAFaire+" "+motFiches+"</strong> à travailler dans ce thème. "
+            +"Clique sur la carte pour les voir, puis commence par la <strong>fiche "+prochaineFiche+"</strong> et avance dans l'ordre."
+          +"</div>"
+        +"</div>";
+      }
     }
     html+="</div>";
   });
@@ -4220,12 +6159,35 @@ function ouvrirFiches(themeId){
     html+="</div>";
     html+="</div>";
 
-    // ── Logique de verrouillage séquentiel ──
-    // Une fiche est "acquise pour la chaîne" si :
+    // ── Carte dépliable "Comprendre mes résultats" ──
+    // Visible uniquement si l'élève a au moins une fiche à consolider dans ce thème
+    if(nbAssignees>0){
+      var motNotion = nbAssignees>1 ? "notions non maîtrisées" : "notion non maîtrisée";
+      html+="<details class='resultats-card'>"
+        +"<summary class='resultats-card-head'>"
+          +"<span class='resultats-card-icon'>ⓘ</span>"
+          +"<span class='resultats-card-title'>Comprendre mes résultats</span>"
+          +"<span class='resultats-card-chevron'>▾</span>"
+        +"</summary>"
+        +"<div class='resultats-card-body'>"
+          +"L'évaluation a détecté <strong>"+nbAssignees+" "+motNotion+"</strong> dans ce thème. "
+          +"Travaille tes fiches dans l'ordre pour les maîtriser une à une&nbsp;!"
+        +"</div>"
+      +"</details>";
+    }
+
+    // ── Logique de verrouillage séquentiel (corrigée) ──
+    // Règle simple : une fiche "À faire" verrouille TOUTES les fiches "À faire"
+    // qui viennent après elle, tant qu'elle n'est pas validée.
+    //
+    // Une fiche est considérée "acquise pour la chaîne" si :
     // - elle est non assignée (notion déjà maîtrisée au diagnostic), OU
     // - elle est validée (quiz_final_valide)
-    // Une fiche bloquée gèle la suite.
-    var precedenteAcquise=true; // la 1re fiche est toujours accessible
+    //
+    // Dès qu'on rencontre une fiche assignée non encore validée (à travailler
+    // OU bloquée), toutes les fiches "à travailler" suivantes sont verrouillées.
+    var chaineRompue=false; // devient true dès qu'on tombe sur une fiche non acquise
+    var premiereFicheBloquante=null; // numéro (01-padded) de la fiche à terminer en premier
 
     html+="<div class='fiches-grid'>";
     fa.forEach(function(fiche, idx){
@@ -4244,12 +6206,21 @@ function ouvrirFiches(themeId){
       var estBloquee=estAssignee && st==="echec_3_tentatives";
       var estATravailler=estAssignee && !estValidee && !estBloquee;
 
-      var estVerrouillee=(idx>0)&&!precedenteAcquise && estATravailler;
-      // Note : une fiche déjà validée, déjà bloquée, ou maîtrisée
-      // n'a pas besoin d'être verrouillée — son sort est déjà décidé.
+      // Verrouillage : on verrouille toute fiche à travailler dès que la chaîne est rompue
+      var estVerrouillee=chaineRompue && estATravailler;
 
-      // Pour la chaîne suivante : "acquise" = déjà bonne
-      var prochaineSera=estMaitrisee||estValidee;
+      // Mise à jour de la chaîne pour la fiche suivante :
+      // - si cette fiche est maîtrisée ou validée → la chaîne continue
+      // - si cette fiche est bloquée, à travailler ou verrouillée → la chaîne se rompt
+      //   (et elle reste rompue jusqu'à la fin)
+      if(!estMaitrisee && !estValidee){
+        if(!chaineRompue){
+          // C'est LA première fiche qui rompt la chaîne — on la mémorise
+          // pour pouvoir indiquer "Termine d'abord la fiche XX" sur les suivantes
+          premiereFicheBloquante=num;
+        }
+        chaineRompue=true;
+      }
 
       var lien=aUrl?fiche.url+"?nom="+encodeURIComponent((user.prenom||"")+" "+(user.nom||""))+"&classe="+encodeURIComponent(user.classe||"")+"&lycee="+encodeURIComponent("Lycée Benoît Fourneyron")+"&email="+encodeURIComponent(user.email||"")+"&prof="+encodeURIComponent(user.prof||"")+"&prof_email=ar.reydellet%40gmail.com"+(dysActif?"&dys=1":""):"#";
 
@@ -4269,7 +6240,7 @@ function ouvrirFiches(themeId){
         estCliquable=true;
       } else if(estValidee){
         cardCls="valide"; pillCls="valide";
-        statutTxt="Validée"; btnTxt="Revoir →"; btnCls="fiche-card-btn done";
+        statutTxt="Validée"; btnTxt="Voir le mémo →"; btnCls="fiche-card-btn done";
         estCliquable=true;
       } else {
         cardCls="todo"; pillCls="todo";
@@ -4283,7 +6254,7 @@ function ouvrirFiches(themeId){
       html+="<div class='fiche-card-title'>"+fiche.titre+"</div>";
       html+="<div class='fiche-card-meta'>";
       if(estVerrouillee){
-        html+="<span class='fiche-card-pill locked'><span class='fiche-card-lock'>🔒</span>Termine d'abord la fiche "+String(origIdx).padStart(2,"0")+"</span>";
+        html+="<span class='fiche-card-pill locked'><span class='fiche-card-lock'>🔒</span>Termine d'abord la fiche "+(premiereFicheBloquante||String(origIdx).padStart(2,"0"))+"</span>";
       } else if(estBloquee){
         html+="<span class='fiche-card-pill frozen'><span class='fiche-card-lock'>!</span>Demande de l'aide à ton prof</span>";
       } else if(estMaitrisee){
@@ -4297,11 +6268,17 @@ function ouvrirFiches(themeId){
       html+="</div>";
 
       if(estCliquable && aUrl){
-        html+="<a href='"+lien+"' target='_blank' class='"+btnCls+"'>"+btnTxt+"</a>";
+        if(estValidee){
+          // Bouton "Voir le mémo" : ouvre le mémo au lieu de relancer la fiche
+          html+="<button type='button' class='"+btnCls+"' onclick=\"ouvrirMemo('"+fiche.id+"','"+themeId+"')\">"+btnTxt+"</button>";
+        } else {
+          // Ouvre la fiche dans une modale iframe (plein écran) au lieu d'un nouvel onglet,
+          // pour garder l'élève dans l'expérience de l'espace élève.
+          var titreEsc=fiche.titre.replace(/'/g,"\\'");
+          html+="<button type='button' class='"+btnCls+"' onclick=\"ouvrirFicheIframe('"+lien+"','"+titreEsc+"')\">"+btnTxt+"</button>";
+        }
       }
       html+="</div>";
-
-      precedenteAcquise=prochaineSera;
     });
     html+="</div>";
   }
@@ -4322,6 +6299,84 @@ function fermerFiches(){
   document.body.style.overflow="";
 }
 
+// Bouton "Actualiser" du header de l'overlay des fiches.
+// Force un rechargement des données depuis le serveur pour mettre à jour
+// les statuts des fiches (validée/à faire/bloquée) immédiatement après
+// que l'élève a terminé une fiche, sans attendre le polling automatique.
+function actualiserFichesOverlay(){
+  var btn=document.getElementById("overlay-refresh-btn");
+  if(!btn||btn.disabled) return;
+  btn.disabled=true;
+  btn.classList.add("spinning");
+  // rechargerDonnees() rafraîchit déjà l'overlay des fiches s'il est ouvert
+  // (voir la fonction lignes ~4640) — pas besoin de logique supplémentaire ici.
+  if(typeof rechargerDonnees==="function") rechargerDonnees();
+  // Remettre le bouton en état normal après un délai un peu plus long
+  // que la durée typique de la requête réseau, pour donner du feedback visuel.
+  setTimeout(function(){
+    btn.disabled=false;
+    btn.classList.remove("spinning");
+  }, 1400);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MODALE IFRAME — ouvre une fiche de remédiation en plein écran
+// ═══════════════════════════════════════════════════════════════
+// L'élève reste dans l'espace élève au lieu d'ouvrir un nouvel onglet.
+// La fiche (sur GitHub Pages) reçoit les mêmes paramètres URL qu'avant
+// (nom, classe, lycée, email, dys…), donc aucune modif des fiches.
+function ouvrirFicheIframe(url, titre){
+  if(!url || url==="#") return;
+  var modal=document.getElementById("fiche-iframe-modal");
+  var iframe=document.getElementById("fiche-iframe");
+  var loader=document.getElementById("fiche-iframe-loader");
+  var titreEl=document.getElementById("fiche-iframe-titre");
+
+  // Afficher la modale + le loader, puis charger l'URL
+  titreEl.textContent=titre||"Fiche de remédiation";
+  loader.classList.remove("cache");
+  modal.classList.add("visible");
+  document.body.style.overflow="hidden";
+
+  // Cacher le loader dès que la fiche est chargée
+  iframe.onload=function(){
+    setTimeout(function(){ loader.classList.add("cache"); }, 200);
+  };
+  iframe.src=url;
+}
+
+function fermerFicheIframe(){
+  var modal=document.getElementById("fiche-iframe-modal");
+  var iframe=document.getElementById("fiche-iframe");
+  modal.classList.remove("visible");
+  // Vider l'iframe pour stopper toute lecture audio en cours dans la fiche
+  iframe.src="about:blank";
+  // Restaurer le scroll seulement si l'overlay des fiches n'est plus actif
+  var ov=document.getElementById("fiches-overlay");
+  if(!ov||!ov.classList.contains("visible")){
+    document.body.style.overflow="";
+  }
+  // Rafraîchir l'affichage de l'overlay des fiches (au cas où la fiche
+  // a été validée pendant cette session) — refetch des données.
+  if(ov&&ov.classList.contains("visible")){
+    var themeId=ov.getAttribute("data-theme-id");
+    if(themeId&&typeof window.ouvrirFiches==="function"){
+      // Léger délai pour laisser le temps au Google Sheet d'être à jour
+      setTimeout(function(){ window.ouvrirFiches(themeId); }, 800);
+    }
+  }
+}
+
+// Touche Échap pour fermer la modale iframe
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape"){
+    var modal=document.getElementById("fiche-iframe-modal");
+    if(modal&&modal.classList.contains("visible")){
+      fermerFicheIframe();
+    }
+  }
+});
+
 // ═══════════════════════════════════════════════════════════════
 // NAVIGATION
 // ═══════════════════════════════════════════════════════════════
@@ -4329,11 +6384,13 @@ function navVers(dest){
   document.querySelectorAll(".section").forEach(function(s){s.classList.remove("active");});
   document.querySelectorAll(".sb-item").forEach(function(n){n.classList.remove("active");});
   document.getElementById("section-"+dest).classList.add("active");
-  var sbId=dest==="progression"?"sb-progression":"sb-accueil";
-  var sbEl=document.getElementById(sbId);
+  var sbMap={accueil:"sb-accueil",progression:"sb-progression",memos:"sb-memos",exercices:"sb-exercices"};
+  var sbEl=document.getElementById(sbMap[dest]||"sb-accueil");
   if(sbEl) sbEl.classList.add("active");
-  var titles={accueil:"Mes fiches",progression:"Ma progression"};
+  var titles={accueil:"Mon diagnostic",progression:"Ma progression",memos:"Fiches mémo",exercices:"Exercices supplémentaires"};
   document.getElementById("topbar-title").textContent=titles[dest]||"Accueil";
+  // Rendu différé pour la page mémos
+  if(dest==="memos") renderMemosSection();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -4354,6 +6411,81 @@ function seDeconnecter(){
   navVers("accueil");
   switchTab("connexion");
 }
+
+// ═══════════════════════════════════════════════════════════════
+// POPUP DE BIENVENUE (1ère connexion uniquement)
+// ═══════════════════════════════════════════════════════════════
+function afficherPopupBienvenueSiBesoin(user){
+  // On affiche uniquement si premiereConnexion est vide / non défini
+  if(!user) return;
+  var dejaVu = user.premiereConnexion && String(user.premiereConnexion).trim() !== "";
+  if(dejaVu) return;
+  
+  // Petit délai pour laisser le dashboard s'afficher d'abord
+  setTimeout(function(){
+    var overlay = document.getElementById("welcome-overlay");
+    if(overlay) overlay.classList.add("visible");
+    document.body.style.overflow = "hidden";
+  }, 400);
+}
+
+function fermerPopupBienvenue(){
+  var overlay = document.getElementById("welcome-overlay");
+  if(overlay) overlay.classList.remove("visible");
+  document.body.style.overflow = "";
+  
+  // On marque côté serveur que l'élève a vu le pop-up
+  if(currentUser && currentUser.email){
+    fetch(SCRIPT_URL,{
+      method:"POST",
+      body:JSON.stringify({
+        type:"marquer_premiere_connexion",
+        email: currentUser.email
+      })
+    }).then(function(r){return r.json();})
+      .then(function(json){
+        // On met à jour le profil local pour éviter de réafficher si refresh
+        if(currentUser) currentUser.premiereConnexion = (json && json.date) ? json.date : "1";
+      })
+      .catch(function(){
+        // Si échec serveur, on marque quand même côté client
+        // (le pop-up ne se réaffichera pas dans cette session)
+        if(currentUser) currentUser.premiereConnexion = "1";
+      });
+  }
+}
+
+// Échap pour fermer
+document.addEventListener("keydown", function(e){
+  if(e.key === "Escape"){
+    var overlay = document.getElementById("welcome-overlay");
+    if(overlay && overlay.classList.contains("visible")){
+      fermerPopupBienvenue();
+    }
+  }
+});
 </script>
+
+<!-- ══════════════════════════════════════════════════════════════
+     POPUP DE BIENVENUE (1ère connexion uniquement)
+     ══════════════════════════════════════════════════════════════ -->
+<div class="welcome-overlay" id="welcome-overlay">
+  <div class="welcome-card">
+    <div class="welcome-kicker">Bienvenue</div>
+    <div class="welcome-title">
+      Bienvenue dans <span class="alpha-omega">Alph<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"><path d="M 50 6 C 25 6, 14 26, 14 48 C 14 64, 22 75, 30 81 L 8 81 L 8 94 L 40 94 L 40 81 L 36 81 C 29 75, 24 65, 24 50 C 24 32, 35 20, 50 20 C 65 20, 76 32, 76 50 C 76 65, 71 75, 64 81 L 60 81 L 60 94 L 92 94 L 92 81 L 70 81 C 78 75, 86 64, 86 48 C 86 26, 75 6, 50 6 Z"/></svg></span>
+    </div>
+    <div class="welcome-body">
+      <p>Cet outil s'assure que tes notions des années précédentes sont bien acquises avant ton entrée au lycée.</p>
+      <p>Le principe est simple : tu passes une évaluation sur chacun des thèmes, l'outil détecte là où tu as des difficultés, et te prépare des fiches de travail pour reprendre les notions qui posent problème.</p>
+      <p>Prêt ? <strong>Rends-toi dans le premier thème et lance l'évaluation.</strong> Bon courage !</p>
+    </div>
+    <button class="welcome-cta" onclick="fermerPopupBienvenue()">
+      C'est parti
+      <span class="welcome-cta-arrow">→</span>
+    </button>
+  </div>
+</div>
+
 </body>
 </html>
