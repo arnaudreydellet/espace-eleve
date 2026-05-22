@@ -5433,10 +5433,11 @@ function telechargerMemoPDF(){
 // ═══════════════════════════════════════════════════════════════
 function getEvalLink(user,reeval){
   var dysActif=user.dys===true;
+  var lyceeEleve=user.etablissement||"Lycée Benoît Fourneyron";
   return EVAL_URL
     +"?nom="+encodeURIComponent((user.prenom||"")+" "+(user.nom||""))
     +"&classe="+encodeURIComponent(user.classe||"")
-    +"&lycee="+encodeURIComponent("Lycée Benoît Fourneyron")
+    +"&lycee="+encodeURIComponent(lyceeEleve)
     +"&email="+encodeURIComponent(user.email||"")
     +"&prof="+encodeURIComponent(user.prof||"")
     +"&prof_email="+encodeURIComponent("ar.reydellet@gmail.com")
@@ -5491,7 +5492,7 @@ function afficherDashboard(user){
   // Hero
   document.getElementById("hero-prenom").textContent=user.prenom||"—";
   document.getElementById("hero-kicker-txt").textContent="Mon parcours · "+(user.classe||"");
-  document.getElementById("eleve-meta").textContent="Lycée Benoît Fourneyron · "+(user.classe||"");
+  document.getElementById("eleve-meta").textContent=(user.etablissement||"Lycée Benoît Fourneyron")+" · "+(user.classe||"");
 
   // Stocker pour la page progression
   user._meilleurScore=0;
@@ -6222,7 +6223,7 @@ function ouvrirFiches(themeId){
         chaineRompue=true;
       }
 
-      var lien=aUrl?fiche.url+"?nom="+encodeURIComponent((user.prenom||"")+" "+(user.nom||""))+"&classe="+encodeURIComponent(user.classe||"")+"&lycee="+encodeURIComponent("Lycée Benoît Fourneyron")+"&email="+encodeURIComponent(user.email||"")+"&prof="+encodeURIComponent(user.prof||"")+"&prof_email=ar.reydellet%40gmail.com"+(dysActif?"&dys=1":""):"#";
+      var lien=aUrl?fiche.url+"?nom="+encodeURIComponent((user.prenom||"")+" "+(user.nom||""))+"&classe="+encodeURIComponent(user.classe||"")+"&lycee="+encodeURIComponent(user.etablissement||"Lycée Benoît Fourneyron")+"&email="+encodeURIComponent(user.email||"")+"&prof="+encodeURIComponent(user.prof||"")+"&prof_email=ar.reydellet%40gmail.com"+(dysActif?"&dys=1":""):"#";
 
       var cardCls, pillCls, statutTxt, btnTxt, btnCls, estCliquable;
 
