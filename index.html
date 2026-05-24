@@ -965,6 +965,49 @@ body.dys-mode .tb-avatar {
   border-radius: 999px;
 }
 
+/* ── ÉTAT "LOCKED-PREREQ" — verrouillé tant qu'un prérequis n'est pas complété ──
+   Apparence sobre, désaturée, non-cliquable. Le cadenas en pastille indique
+   clairement l'état sans être anxiogène. */
+.theme-card.theme-locked-prereq {
+  opacity: .55;
+  cursor: not-allowed;
+  background: linear-gradient(160deg, #FAFAF7 0%, #F2F0EA 100%);
+  filter: grayscale(.3);
+}
+.theme-card.theme-locked-prereq:hover {
+  transform: none;
+  opacity: .65;
+  border-color: var(--border);
+}
+.theme-card.theme-locked-prereq .theme-title {
+  color: var(--text2);
+}
+.theme-card.theme-locked-prereq .theme-icon {
+  background: rgba(0,0,0,.05);
+  color: var(--text3);
+}
+.theme-card.theme-locked-prereq .theme-locked {
+  color: var(--text2);
+  font-style: italic;
+}
+.theme-card.theme-locked-prereq .theme-locked strong {
+  color: var(--gold-deep);
+  font-style: normal;
+}
+
+/* Pastille cadenas — affordance claire que le thème n'est pas encore débloqué */
+.theme-pastille-cadenas {
+  position: absolute;
+  top: 1.25rem; right: 1.25rem;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px;
+  background: rgba(0,0,0,.06);
+  color: var(--text2);
+  font-size: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,.08);
+}
+
 /* ── ÉTAT "EN ATTENTE" — pas encore le tour de cette carte ── */
 .theme-card.theme-attente {
   opacity: .68;
@@ -4458,7 +4501,29 @@ body.dys .memo-tip {
 
 <script>
 var SCRIPT_URL="https://script.google.com/macros/s/AKfycbxlBMjVXIg58lsopoeQ5sEZW-jcQIOrOtnWwCGVtHLGjcmpi9exaYZ3oAEre4deZum2/exec";
-var EVAL_URL="https://arnaudreydellet.github.io/evaluation-fractions/";
+
+// ═══════════════════════════════════════════════════════════════
+// ÉVALUATIONS PAR THÈME
+// ─────────────────────────────────────────────────────────────
+// Chaque thème a sa propre évaluation diagnostique. EVAL_URLS mappe
+// l'ID du thème vers l'URL de son évaluation. Les thèmes sans entrée
+// ici n'ont pas encore d'évaluation prête.
+//
+// THEME_PREFIXES mappe l'ID du thème vers les préfixes d'ID de fiches
+// utilisés pour détecter "à quel thème appartient cette fiche assignée".
+// Ex: une fiche "calculs_num_priorites_operatoires" appartient au
+// thème "calcul_numerique" car elle commence par "calculs_num_".
+// ═══════════════════════════════════════════════════════════════
+var EVAL_URLS = {
+  "fractions":       "https://arnaudreydellet.github.io/evaluation-fractions/",
+  "calcul_numerique":"https://arnaudreydellet.github.io/evaluation-calculs-numeriques/"
+};
+var THEME_PREFIXES = {
+  "fractions":        ["fractions_"],
+  "calcul_numerique": ["calculs_num_"]
+};
+// URL de fallback (ancien comportement) pour compatibilité descendante
+var EVAL_URL = EVAL_URLS["fractions"];
 var currentUser=null;
 
 // ═══════════════════════════════════════════════════════════════
@@ -4765,8 +4830,18 @@ var THEMES=[
     {id:"fractions_division",titre:"Diviser par une fraction",url:"https://arnaudreydellet.github.io/fiche-10/"}
    ]},
   {id:"calcul_numerique",titre:"Calcul numérique",icon:"🔣",iconClass:"ic-nombres",
+   prerequis:["fractions"],
    pourquoi:"L'aisance avec les nombres rend tout le reste plus simple. Maîtriser les priorités, les décimaux, les relatifs et les racines, c'est la fondation sur laquelle s'appuieront toutes les autres notions de l'année.",
-   fiches:[]},
+   fiches:[
+    {id:"calculs_num_priorites_operatoires",     titre:"Les priorités opératoires",                            url:"https://arnaudreydellet.github.io/fiche-priorites-operatoires/"},
+    {id:"calculs_num_relatifs_mult_div",         titre:"Nombres relatifs : multiplication et division",       url:"https://arnaudreydellet.github.io/fiche-relatifs-mult-div/"},
+    {id:"calculs_num_decimaux_3A_raisonnement",  titre:"Multiplier ou diviser par un nombre entre 0 et 1",     url:"https://arnaudreydellet.github.io/fiche-decimaux-raisonnement/"},
+    {id:"calculs_num_decimaux_3B_technique",     titre:"Calculer avec 0,1 ; 0,01 ; 0,001",                     url:"https://arnaudreydellet.github.io/fiche-decimaux-technique/"},
+    {id:"calculs_num_arrondis_decimaux",         titre:"Arrondir un nombre décimal",                           url:"https://arnaudreydellet.github.io/fiche-arrondir/"},
+    {id:"calculs_num_ordre_grandeur",            titre:"Ordre de grandeur et estimation",                      url:"https://arnaudreydellet.github.io/fiche-ordre-grandeur/"},
+    {id:"calculs_num_passage_ecritures",         titre:"Fraction, décimal, pourcentage",                       url:"https://arnaudreydellet.github.io/fiche-passage-ecritures/"},
+    {id:"calculs_num_racines_carrees",           titre:"Les racines carrées",                                  url:"https://arnaudreydellet.github.io/fiche-racines-carrees/"}
+   ]},
   {id:"puissances_notation",titre:"Puissances et notation scientifique",icon:"🔟",iconClass:"ic-puissances",
    pourquoi:"Manipuler des très grands et très petits nombres sans se tromper. Indispensable pour les sciences, l'informatique et toute lecture de données chiffrées au quotidien.",
    fiches:[]},
@@ -5431,10 +5506,82 @@ function telechargerMemoPDF(){
 // ═══════════════════════════════════════════════════════════════
 // HELPERS RÉÉVALUATION
 // ═══════════════════════════════════════════════════════════════
-function getEvalLink(user,reeval){
+
+// ─── THEME PREREQUIS ────────────────────────────────────────────
+// Détermine si TOUS les prérequis d'un thème sont remplis. Un thème
+// a ses prérequis OK si, pour chaque thème prérequis défini dans
+// theme.prerequis, toutes les fiches assignées de ce prérequis ont
+// été validées (statut quiz_final_valide). Si le thème prérequis
+// n'a aucune fiche assignée (ex: élève qui maîtrise tout), alors les
+// prérequis sont considérés OK aussi (rien à valider de plus).
+//
+// Si le thème prérequis n'a pas d'éval faite, les prérequis ne sont
+// PAS OK : il faut d'abord passer son éval.
+function themePrerequisOk(theme, user){
+  if(!theme || !theme.prerequis || theme.prerequis.length === 0) return true;
+  var fichesAssignees = user.fiches_assignees || [];
+  var statutsMap = user._statutsMap || {};
+  for(var i = 0; i < theme.prerequis.length; i++){
+    var idPrereq = theme.prerequis[i];
+    // Retrouver le thème prérequis dans THEMES
+    var themePrereq = null;
+    for(var t = 0; t < THEMES.length; t++){
+      if(THEMES[t].id === idPrereq){ themePrereq = THEMES[t]; break; }
+    }
+    if(!themePrereq) continue; // Prérequis inconnu : on ignore
+    // L'éval du prérequis doit être faite
+    if(!evalFaitePourTheme(idPrereq, user)) return false;
+    // Toutes les fiches assignées de ce prérequis doivent être validées
+    var faPrereq = themePrereq.fiches.filter(function(f){
+      return fichesAssignees.indexOf(f.id) !== -1;
+    });
+    var allValid = faPrereq.every(function(f){
+      return statutsMap[f.id] && statutsMap[f.id].statut === "quiz_final_valide";
+    });
+    if(!allValid) return false;
+  }
+  return true;
+}
+
+// Détermine si l'élève a passé l'évaluation diagnostique pour un thème donné.
+// Détection par préfixes d'ID (option B) :
+//   - Si au moins une fiche du thème apparaît dans fiches_assignees → éval faite
+//   - Sinon, on consulte localStorage (cas où l'élève maîtrise tout le thème,
+//     dans ce cas aucune fiche n'est assignée mais l'éval a quand même été passée)
+// Bonus : si user.eval_faite est vrai et que le thème est "fractions" (compat
+// descendante), on considère l'éval comme faite.
+function evalFaitePourTheme(themeId, user){
+  if(!themeId || !user) return false;
+  var fichesAssignees = user.fiches_assignees || [];
+  var prefixes = THEME_PREFIXES[themeId] || [];
+
+  // 1) Test principal : au moins une fiche du thème dans les assignées ?
+  for(var i=0; i<fichesAssignees.length; i++){
+    var fid = String(fichesAssignees[i]||"");
+    for(var p=0; p<prefixes.length; p++){
+      if(fid.indexOf(prefixes[p]) === 0) return true;
+    }
+  }
+
+  // 2) Compat descendante : ancien flag global pour fractions
+  if(themeId === "fractions" && user.eval_faite === true) return true;
+
+  // 3) Fallback localStorage (cas "tout maîtrisé" pour ce thème)
+  try {
+    var key = "eval_done_" + themeId + "_" + (user.email || "");
+    if(localStorage.getItem(key) === "true") return true;
+  } catch(e){ /* localStorage indisponible : tant pis */ }
+
+  return false;
+}
+
+function getEvalLink(user,reeval,themeId){
   var dysActif=user.dys===true;
   var lyceeEleve=user.etablissement||"Lycée Benoît Fourneyron";
-  return EVAL_URL
+  // Choisir l'URL d'évaluation selon le thème.
+  // Fallback : fractions (pour compatibilité descendante).
+  var baseUrl = (themeId && EVAL_URLS[themeId]) ? EVAL_URLS[themeId] : EVAL_URLS["fractions"];
+  return baseUrl
     +"?nom="+encodeURIComponent((user.prenom||"")+" "+(user.nom||""))
     +"&classe="+encodeURIComponent(user.classe||"")
     +"&lycee="+encodeURIComponent(lyceeEleve)
@@ -5470,7 +5617,8 @@ function afficherDashboard(user){
 
   var fiches=user.fiches||[];
   var fichesAssignees=user.fiches_assignees||[];
-  var evalFaite=user.eval_faite||false;
+  // ⚠ Note : le flag global user.eval_faite n'est plus utilisé directement
+  // ici. Chaque thème vérifie sa propre éval via evalFaitePourTheme().
 
   var statutsMap={};
   fiches.forEach(function(f){
@@ -5664,47 +5812,64 @@ function ouvrirDetailTheme(themeId){
 function renderThemes(user){
   var fichesAssignees=user.fiches_assignees||[];
   var statutsMap=user._statutsMap||{};
-  var evalFaite=user.eval_faite||false;
-  var evalLien=getEvalLink(user);
 
   // ─── PRÉ-CALCUL : déterminer l'état de chaque thème ──────────
-  // - "fini"    : toutes les fiches assignées du thème sont validées
-  // - "actif"   : premier thème dans l'ordre avec des fiches non validées
-  // - "attente" : thème avec fiches assignées mais après le thème actif
-  // - "vide"    : pas de fiches assignées (notions maîtrisées au diagnostic)
-  // - "locked"  : pas encore passé l'évaluation
-  // - "empty"   : pas encore de fiches développées dans le thème
+  // - "fini"         : toutes les fiches assignées du thème sont validées
+  // - "actif"        : premier thème dans l'ordre avec des fiches non validées
+  // - "attente"      : thème avec fiches assignées mais après le thème actif
+  // - "vide"         : pas de fiches assignées pour ce thème (notions maîtrisées au diagnostic)
+  // - "locked"       : pas encore passé l'évaluation pour ce thème
+  // - "locked-prereq": prérequis (autre thème) pas encore terminé → CADENAS
+  // - "empty"        : pas encore de fiches développées dans le thème (et donc pas d'éval)
+  //
+  // ⚠ NOUVEAU : chaque thème a sa propre évaluation. evalFaitePourTheme(t.id, user)
+  // détermine si l'éval de ce thème a été passée (option B : détection par préfixe
+  // d'ID + fallback localStorage). Plus de flag global eval_faite.
+  // ⚠ NOUVEAU : séquentialité — si un thème a des prerequis (autres thèmes à
+  // terminer d'abord), il passe en état "locked-prereq" tant qu'ils ne sont pas
+  // tous validés (toutes les fiches assignées du thème prérequis validées).
   var etatThemes={}, themeActifId=null;
-  if(evalFaite){
-    for(var ti=0;ti<THEMES.length;ti++){
-      var t=THEMES[ti];
-      if(t.fiches.length===0){ etatThemes[t.id]="empty"; continue; }
-      var faT=t.fiches.filter(function(f){return fichesAssignees.indexOf(f.id)!==-1;});
-      if(faT.length===0){ etatThemes[t.id]="vide"; continue; }
-      var valideesT=faT.filter(function(f){return statutsMap[f.id]&&statutsMap[f.id].statut==="quiz_final_valide";}).length;
-      if(valideesT===faT.length){ etatThemes[t.id]="fini"; continue; }
-      // Premier thème avec fiches non terminées = actif
-      if(!themeActifId){ themeActifId=t.id; etatThemes[t.id]="actif"; }
-      else { etatThemes[t.id]="attente"; }
-    }
+  for(var ti=0;ti<THEMES.length;ti++){
+    var t=THEMES[ti];
+    if(t.fiches.length===0){ etatThemes[t.id]="empty"; continue; }
+    // ⚠ Verrouillage par prérequis (avant tout autre état) : si un autre thème
+    // doit être complété d'abord, on bloque celui-ci, qu'il ait passé son éval ou pas.
+    if(!themePrerequisOk(t, user)){ etatThemes[t.id]="locked-prereq"; continue; }
+    // Si l'éval de ce thème n'a pas été passée → locked (le thème invite à passer l'éval)
+    if(!evalFaitePourTheme(t.id, user)){ etatThemes[t.id]="locked"; continue; }
+    var faT=t.fiches.filter(function(f){return fichesAssignees.indexOf(f.id)!==-1;});
+    if(faT.length===0){ etatThemes[t.id]="vide"; continue; }
+    var valideesT=faT.filter(function(f){return statutsMap[f.id]&&statutsMap[f.id].statut==="quiz_final_valide";}).length;
+    if(valideesT===faT.length){ etatThemes[t.id]="fini"; continue; }
+    // Premier thème avec fiches non terminées = actif
+    if(!themeActifId){ themeActifId=t.id; etatThemes[t.id]="actif"; }
+    else { etatThemes[t.id]="attente"; }
   }
 
   var html="<div class='themes-grid'>";
   THEMES.forEach(function(theme,themeIdx){
     var hasFiches=theme.fiches.length>0;
     var fa=hasFiches?theme.fiches.filter(function(f){return fichesAssignees.indexOf(f.id)!==-1;}):[];
-    var hasAssigned=evalFaite&&fa.length>0;
-    var etat=etatThemes[theme.id]||(evalFaite?"":"locked");
+    // ⚠ NOUVEAU : éval propre au thème (et pas plus flag global)
+    var evalFaiteCeTheme = evalFaitePourTheme(theme.id, user);
+    var evalLien = getEvalLink(user, false, theme.id);
+    var hasAssigned=evalFaiteCeTheme&&fa.length>0;
+    var etat=etatThemes[theme.id]||"locked";
     var clickable=hasAssigned&&etat!=="fini";
 
     // Classes CSS selon l'état
     var classes="theme-card";
     if(hasAssigned) classes+=" has-fiches";
-    if(etat==="actif")   classes+=" theme-actif";
-    if(etat==="fini")    classes+=" theme-fini";
-    if(etat==="attente") classes+=" theme-attente";
-    // ⚠ NOUVEAU : mise en évidence du tout premier thème (sauf s'il est déjà terminé)
-    if(themeIdx===0 && etat!=="fini") classes+=" theme-premier";
+    if(etat==="actif")        classes+=" theme-actif";
+    if(etat==="fini")         classes+=" theme-fini";
+    if(etat==="attente")      classes+=" theme-attente";
+    if(etat==="locked-prereq")classes+=" theme-locked-prereq";
+    // ⚠ NOUVEAU : style "premier" (fond bleu, bouton crème) appliqué à TOUTE
+    // carte invitant à passer une éval — pas seulement la première du tableau.
+    // Ça uniformise l'UX entre fractions (1er) et calcul_numerique (2ème) quand
+    // ils sont tous les deux dans cet état. On exclut les cartes verrouillées
+    // par prérequis qui ont leur propre style.
+    if(etat==="locked") classes+=" theme-premier";
 
     var onclickAttr=clickable?" onclick='ouvrirFiches(\""+theme.id+"\")'":"";
     html+="<div class='"+classes+"'"+onclickAttr+">";
@@ -5712,6 +5877,9 @@ function renderThemes(user){
     // Pastille/chevron en haut à droite selon l'état
     if(etat==="fini"){
       html+="<div class='theme-pastille-fini'>✓ Terminé</div>";
+    } else if(etat==="locked-prereq"){
+      // ⚠ NOUVEAU : cadenas pour les thèmes verrouillés par prérequis
+      html+="<div class='theme-pastille-cadenas'>🔒</div>";
     } else if(clickable){
       html+="<div class='theme-chevron'>→</div>";
     }
@@ -5725,7 +5893,16 @@ function renderThemes(user){
 
     if(!hasFiches){
       html+="<div class='theme-empty'>Fiches en cours de création…</div>";
-    } else if(!evalFaite){
+    } else if(etat==="locked-prereq"){
+      // ⚠ NOUVEAU : message indiquant le prérequis à compléter d'abord
+      var nomPrereq = "";
+      if(theme.prerequis && theme.prerequis.length > 0){
+        for(var tp = 0; tp < THEMES.length; tp++){
+          if(THEMES[tp].id === theme.prerequis[0]){ nomPrereq = THEMES[tp].titre; break; }
+        }
+      }
+      html+="<div class='theme-locked'>Termine d'abord toutes les fiches du thème <strong>"+nomPrereq+"</strong> pour débloquer ce thème.</div>";
+    } else if(!evalFaiteCeTheme){
       html+="<div class='theme-locked'>Passe l'évaluation diagnostique pour découvrir tes fiches personnalisées.</div>";
       html+="<a href='"+evalLien+"' target='_blank' class='btn-passer-eval'><span class='btn-label'>Passer l'évaluation</span><span class='btn-arrow'>→</span></a>";
     } else if(fa.length===0){
@@ -5820,20 +5997,27 @@ function getProjection(palierKey){
 function renderProgression(user){
   var fichesAssignees=user.fiches_assignees||[];
   var statutsMap=user._statutsMap||{};
-  var evalFaite=user.eval_faite||false;
+
+  // ⚠ NOUVEAU : la notion d'éval globale n'existe plus, chaque thème a la sienne.
+  // Pour l'intro de la vue progression, on considère qu'au moins UNE éval doit
+  // avoir été passée pour afficher le bilan ; sinon on invite à commencer.
+  var auMoinsUneEvalFaite = THEMES.some(function(t){
+    return t.fiches.length > 0 && evalFaitePourTheme(t.id, user);
+  });
 
   var intro=document.getElementById("progression-intro");
   var grid=document.getElementById("domains-grid");
   if(!grid) return;
 
-  // ── Cas global : élève n'a pas encore passé l'évaluation ────────
-  if(!evalFaite){
-    if(intro) intro.innerHTML="Tu n'as <strong>pas encore passé l'évaluation diagnostique</strong>. Une fois passée, tu retrouveras ici un bilan personnalisé pour chaque thème — ce que tu maîtrises déjà, et ce qu'il te reste à travailler.";
+  // ── Cas global : élève n'a passé AUCUNE évaluation ────────────────
+  if(!auMoinsUneEvalFaite){
+    if(intro) intro.innerHTML="Tu n'as <strong>pas encore passé d'évaluation diagnostique</strong>. Une fois la première passée, tu retrouveras ici un bilan personnalisé pour chaque thème — ce que tu maîtrises déjà, et ce qu'il te reste à travailler.";
   } else {
-    // Vue d'ensemble globale
+    // Vue d'ensemble globale : on n'inclut que les thèmes dont l'éval est faite
     var totalSolides=0, totalNotions=0;
     THEMES.forEach(function(theme){
       if(theme.fiches.length===0) return;
+      if(!evalFaitePourTheme(theme.id, user)) return;
       var assign=theme.fiches.filter(function(f){return fichesAssignees.indexOf(f.id)!==-1;});
       var valid=assign.filter(function(f){return statutsMap[f.id]&&statutsMap[f.id].statut==="quiz_final_valide";}).length;
       totalSolides+=(theme.fiches.length-assign.length)+valid;
@@ -5857,6 +6041,7 @@ function renderProgression(user){
   var html="";
   THEMES.forEach(function(theme){
     var hasFiches=theme.fiches.length>0;
+    var evalFaiteCeTheme = hasFiches && evalFaitePourTheme(theme.id, user);
     var totalNotionsTheme=theme.fiches.length;
     var assignDansTheme=hasFiches?theme.fiches.filter(function(f){return fichesAssignees.indexOf(f.id)!==-1;}):[];
     var nbAssign=assignDansTheme.length;
@@ -5865,7 +6050,7 @@ function renderProgression(user){
     var nbSolides=nbMaitrisees+nbValide;
     var pctSolides=totalNotionsTheme>0?Math.round(nbSolides/totalNotionsTheme*100):0;
 
-    var nonEvaluable=!hasFiches || !evalFaite;
+    var nonEvaluable=!hasFiches || !evalFaiteCeTheme;
     var cardCls="domain-card";
     if(nonEvaluable) cardCls+=" locked";
     else cardCls+=" palier-"+getPalier(pctSolides).key;
@@ -5881,7 +6066,7 @@ function renderProgression(user){
 
     if(!hasFiches){
       html+="<div class='domain-meta'><span class='domain-pill empty'>Bientôt disponible</span></div>";
-    } else if(!evalFaite){
+    } else if(!evalFaiteCeTheme){
       html+="<div class='domain-meta'><span class='domain-pill empty'>Évaluation à passer</span></div>";
     } else {
       var palier=getPalier(pctSolides);
