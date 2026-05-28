@@ -852,9 +852,92 @@ body.dys-mode .tb-avatar {
 /* ═══ THEMES ═══ */
 .themes-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  /* Grille principale pour les paires de thèmes avec vérification au milieu.
+     3 colonnes : thème pair · bouton vérification étroit · thème impair.
+     La colonne du milieu (auto) s'ajuste à la taille du bouton (~110px). */
+  grid-template-columns: 1fr auto 1fr;
   gap: 1rem;
   margin-bottom: 2rem;
+  align-items: stretch;
+}
+/* Grille spécifique à la 1re ligne (Fractions + Calcul numérique) :
+   pas de bouton vérification au milieu, donc on garde une grille simple
+   à 2 colonnes pour que les deux cartes restent visuellement rapprochées. */
+.themes-grid-first {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* ── Bouton "Vérification" intercalé entre les thèmes ──
+   S'insère dans la colonne du milieu de la grille à 3 colonnes.
+   Format vertical et compact pour rester plus étroit que les
+   cartes thèmes (qui prennent les colonnes 1 et 3, en 1fr chacune).
+   ⚠ Placeholder : la logique d'exercices reste à brancher. */
+.btn-verification {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 110px;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-d, #0a1a3a) 100%);
+  color: var(--gold-l, #f5e6c8);
+  border: 1.5px solid var(--gold, #c9a961);
+  border-radius: var(--rl);
+  padding: 1rem 0.65rem;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: none;
+  cursor: pointer;
+  transition: all .25s;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(10, 26, 58, 0.15);
+}
+.btn-verification:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(10, 26, 58, 0.25);
+  border-color: var(--gold-l, #f5e6c8);
+}
+.btn-verification:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(10, 26, 58, 0.2);
+}
+.btn-verification .verif-icon {
+  font-size: 1.7em;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+}
+.btn-verification .verif-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  text-align: center;
+}
+.btn-verification .verif-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+  line-height: 1.15;
+}
+.btn-verification .verif-sub {
+  font-size: 0.62rem;
+  font-weight: 400;
+  opacity: 0.85;
+  letter-spacing: .01em;
+  line-height: 1.25;
+}
+.btn-verification .verif-arrow {
+  font-size: 0.95em;
+  opacity: 0.7;
+  transition: transform .25s;
+}
+.btn-verification:hover .verif-arrow {
+  transform: translateY(2px);
 }
 .theme-card {
   background: var(--white);
@@ -1173,6 +1256,7 @@ body.dys-mode .tb-avatar {
 .ic-stats      { background: linear-gradient(135deg, #FFF1F2, #FECDD3); }
 .ic-puissances { background: linear-gradient(135deg, #ECFEFF, #CFFAFE); }
 .ic-equations  { background: linear-gradient(135deg, #FAF5FF, #E9D5FF); }
+.ic-probas     { background: linear-gradient(135deg, #F0FDFA, #CCFBF1); }
 .theme-title {
   font-family: 'Fraunces', Georgia, serif;
   font-size: 19px; font-weight: 600;
@@ -3613,6 +3697,48 @@ body.dys .resultats-card-body {
   font-size: 14px; color: var(--text2);
   line-height: 1.6;
 }
+
+/* ── Placeholder de la section "Mes entraînements" ──
+   Style proche de memos-empty mais avec un accent navy/or pour signaler
+   une fonctionnalité importante à venir, pas juste un thème vide. */
+.entrainements-placeholder {
+  margin: 2.5rem auto;
+  max-width: 620px;
+  padding: 3rem 2.5rem;
+  background: linear-gradient(135deg, var(--bg2) 0%, rgba(212, 175, 55, 0.04) 100%);
+  border: 1.5px solid var(--border);
+  border-radius: var(--rxl, 22px);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.entrainements-placeholder::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(212, 175, 55, 0.08) 100%);
+  pointer-events: none;
+  opacity: .6;
+}
+.entrainements-placeholder-icon {
+  font-size: 56px;
+  margin-bottom: 1rem;
+  position: relative;
+}
+.entrainements-placeholder-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 22px; font-weight: 700;
+  color: var(--navy);
+  margin-bottom: .75rem;
+  position: relative;
+  letter-spacing: -.01em;
+}
+.entrainements-placeholder-text {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 15px; color: var(--text2);
+  line-height: 1.65;
+  position: relative;
+}
 .memos-theme-block {
   margin-bottom: 2.25rem;
 }
@@ -4186,6 +4312,11 @@ body.dys .memo-tip {
         <div class="sb-ico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
         <div class="sb-item-lbl">Mon diagnostic</div>
       </div>
+      <div class="sb-item" id="sb-entrainements" onclick="navVers('entrainements')">
+        <div class="sb-item-bg"></div>
+        <div class="sb-ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="8" cy="15" r="1"/><circle cx="12" cy="15" r="1"/><circle cx="16" cy="15" r="1"/></svg></div>
+        <div class="sb-item-lbl">Mes entraînements</div>
+      </div>
       <div class="sb-item" id="sb-memos" onclick="navVers('memos')">
         <div class="sb-item-bg"></div>
         <div class="sb-ico"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></div>
@@ -4271,6 +4402,33 @@ body.dys .memo-tip {
 
         <div id="fiches-section"></div>
 
+      </div>
+
+      <!-- ══ MES ENTRAÎNEMENTS ══
+           Placeholder : la logique reste à brancher.
+           Objectif : sessions courtes et régulières (3-5 questions/semaine)
+           pour ancrer les notions sur le long terme. Le contenu s'adapte
+           à la progression de l'élève (thèmes en cours uniquement au début,
+           puis mélange progressif). -->
+      <div class="section" id="section-entrainements">
+        <div class="section-header-centered">
+          <div class="section-header-kicker">
+            <span class="section-header-kicker-line"></span>
+            <span class="section-header-kicker-text">Mes entraînements</span>
+            <span class="section-header-kicker-line"></span>
+          </div>
+          <div class="section-title-hero">Garde le rythme <span class="accent">chaque semaine</span></div>
+          <div class="section-subtitle">Des petites séances régulières pour que les notions s'installent durablement. Quelques minutes par semaine suffisent.</div>
+        </div>
+
+        <div class="entrainements-placeholder">
+          <div class="entrainements-placeholder-icon">📅</div>
+          <div class="entrainements-placeholder-title">Bientôt disponible</div>
+          <div class="entrainements-placeholder-text">
+            Tu pourras bientôt faire de courtes séances d'entraînement, adaptées à ton avancée dans les thèmes.<br>
+            L'objectif : revoir régulièrement les notions clés pour ne pas les oublier au fil de l'année.
+          </div>
+        </div>
       </div>
 
       <!-- ══ PROGRESSION ══ -->
@@ -4857,11 +5015,14 @@ var THEMES=[
   {id:"fonctions_reperage",titre:"Fonctions affines, linéaires et repérage",icon:"📈",iconClass:"ic-fonctions",
    pourquoi:"Comprendre comment une grandeur dépend d'une autre, et savoir la représenter dans un repère. Lire un graphique, anticiper un résultat, modéliser une situation.",
    fiches:[]},
-  {id:"geometrie",titre:"Géométrie",icon:"📐",iconClass:"ic-geometrie",
-   pourquoi:"Mesurer, tracer, démontrer. Théorèmes, configurations, calculs de longueurs et d'angles : la base du raisonnement géométrique.",
+  {id:"geometrie",titre:"Géométrie et trigonométrie",icon:"📐",iconClass:"ic-geometrie",
+   pourquoi:"Mesurer, tracer, démontrer. Théorèmes de Pythagore et Thalès, configurations, trigonométrie dans le triangle rectangle (cosinus, sinus, tangente), calculs de longueurs et d'angles : la base du raisonnement géométrique.",
    fiches:[]},
   {id:"grandeurs_statistiques",titre:"Grandeurs, mesures et statistiques",icon:"📏",iconClass:"ic-stats",
    pourquoi:"Manipuler des unités, calculer aires et volumes, lire et interpréter des données : moyennes, écarts, indicateurs. Utile au quotidien comme dans toutes les disciplines.",
+   fiches:[]},
+  {id:"probabilites",titre:"Probabilités",icon:"🎲",iconClass:"ic-probas",
+   pourquoi:"Modéliser le hasard, calculer la probabilité d'un événement, comprendre l'équiprobabilité et la répétition d'expériences. Une base indispensable pour aborder les probabilités conditionnelles et les arbres de probabilité en seconde.",
    fiches:[]}
 ];
 
@@ -5123,7 +5284,8 @@ function renderMemosSection(){
     "ic-nombres":"linear-gradient(135deg, #FFFBEB, #FEF3C7)",
     "ic-stats":"linear-gradient(135deg, #FFF1F2, #FECDD3)",
     "ic-puissances":"linear-gradient(135deg, #EFF6FF, #DBEAFE)",
-    "ic-equations":"linear-gradient(135deg, #F5F3FF, #EDE9FE)"
+    "ic-equations":"linear-gradient(135deg, #F5F3FF, #EDE9FE)",
+    "ic-probas":"linear-gradient(135deg, #F0FDFA, #CCFBF1)"
   };
 
   var blocsHtml = "";
@@ -5664,7 +5826,8 @@ var ANALYSE_ICON_BG={
   "ic-nombres":"linear-gradient(135deg, #FFFBEB, #FEF3C7)",
   "ic-stats":"linear-gradient(135deg, #FFF1F2, #FECDD3)",
   "ic-puissances":"linear-gradient(135deg, #ECFEFF, #CFFAFE)",
-  "ic-equations":"linear-gradient(135deg, #FAF5FF, #E9D5FF)"
+  "ic-equations":"linear-gradient(135deg, #FAF5FF, #E9D5FF)",
+  "ic-probas":"linear-gradient(135deg, #F0FDFA, #CCFBF1)"
 };
 
 // Phrases d'usage concrètes pour les notions de Fractions
@@ -5846,8 +6009,35 @@ function renderThemes(user){
     else { etatThemes[t.id]="attente"; }
   }
 
-  var html="<div class='themes-grid'>";
+  // Deux grilles distinctes :
+  //   • themes-grid-first : 1re ligne (Fractions + Calcul numérique), 2 colonnes simples
+  //   • themes-grid       : 2e ligne et au-delà, 3 colonnes avec bouton vérification au milieu
+  var html="<div class='themes-grid-first'>";
   THEMES.forEach(function(theme,themeIdx){
+    // ─── À l'index 2 (Puissances), on bascule sur la 2e grille ──────────
+    //     C'est là qu'apparaissent les boutons de vérification.
+    if(themeIdx === 2){
+      html += "</div><div class='themes-grid'>";
+    }
+    // ─── Insertion du bouton "Vérification anti-oubli" dans la colonne du milieu ───
+    // Avant chaque thème d'index impair ≥ 3, on insère un bouton qui propose
+    // un mélange d'exercices sur les thèmes déjà parcourus.
+    // ⚠ Placeholder : la logique d'exercices reste à brancher.
+    if(themeIdx >= 3 && themeIdx % 2 === 1){
+      var themesPrec = THEMES.slice(0, themeIdx).map(function(tp){return tp.id;}).join(",");
+      var nbPrec = themeIdx;
+      var labelSub = "Mélange des "+nbPrec+" thèmes vus";
+      html += "<button class='btn-verification' "
+            + "data-themes-precedents='"+themesPrec+"' "
+            + "onclick='lancerVerification(\""+themesPrec+"\")'>"
+            + "<span class='verif-icon'>🔄</span>"
+            + "<span class='verif-label'>"
+              + "<span class='verif-title'>Vérification</span>"
+              + "<span class='verif-sub'>"+labelSub+"</span>"
+            + "</span>"
+            + "<span class='verif-arrow'>↓</span>"
+          + "</button>";
+    }
     var hasFiches=theme.fiches.length>0;
     var fa=hasFiches?theme.fiches.filter(function(f){return fichesAssignees.indexOf(f.id)!==-1;}):[];
     // ⚠ NOUVEAU : éval propre au thème (et pas plus flag global)
@@ -5933,6 +6123,26 @@ function renderThemes(user){
   });
   html+="</div>";
   document.getElementById("fiches-section").innerHTML=html;
+}
+
+// ─── Vérification anti-oubli ──────────────────────────────────────
+// PLACEHOLDER — à brancher plus tard.
+// Doit déclencher une série d'exercices mélangeant les thèmes déjà
+// parcourus pour rafraîchir les notions et lutter contre l'oubli.
+// L'argument `themesPrecedentsCsv` est une chaîne CSV d'ids de thèmes
+// (ex: "fractions,calcul_numerique") correspondant à tous les thèmes
+// situés AVANT le bouton cliqué dans l'ordre d'affichage.
+//
+// TODO :
+//   - Tirer N questions par thème depuis une banque (mix proportionnel)
+//   - Réutiliser le moteur de quiz existant ou ouvrir une fiche dédiée
+//   - Enregistrer le passage (date, score) côté Apps Script
+//   - Adapter la fréquence proposée selon les résultats (espacement)
+function lancerVerification(themesPrecedentsCsv){
+  // Vide intentionnellement — juste un rappel visuel pour Arnaud.
+  // (Les ids des thèmes à mélanger sont dispo via l'argument
+  //  et via l'attribut data-themes-precedents sur le bouton.)
+  console.log("[Vérification anti-oubli] À implémenter. Thèmes à mélanger :", themesPrecedentsCsv);
 }
 
 function renderReevalBanner(user){
@@ -6110,8 +6320,9 @@ var TOUCHE_THEME={
   "equations_inequations":"Les équations et inéquations sont au cœur de la seconde. Tu vas en utiliser dans tous les autres chapitres — c'est rentable de les maîtriser.",
   "proportionnalite_evolution":"La proportionnalité et les pourcentages, tu les croises partout : remises, hausses, comparaisons. Solide ici, c'est de la confiance gagnée dans la vie courante.",
   "fonctions_reperage":"Les fonctions, c'est le langage qui te permet de modéliser à peu près tout. Bien posées en seconde, elles te suivront jusqu'au bac.",
-  "geometrie":"La géométrie te fait travailler le raisonnement et la rigueur. Ce qu'on y apprend, c'est autant les théorèmes que la manière de structurer une démonstration.",
-  "grandeurs_statistiques":"Lire des données, manipuler des unités, comparer des moyennes — des gestes qui vont bien au-delà du cours de maths."
+  "geometrie":"La géométrie et la trigonométrie te font travailler le raisonnement et la rigueur. Ce qu'on y apprend, c'est autant les théorèmes que la manière de structurer une démonstration.",
+  "grandeurs_statistiques":"Lire des données, manipuler des unités, comparer des moyennes — des gestes qui vont bien au-delà du cours de maths.",
+  "probabilites":"Les probabilités sont partout : tests médicaux, sondages, jeux, météo. Apprendre à modéliser le hasard, c'est apprendre à raisonner sur l'incertain."
 };
 
 // Projection lycée détaillée — pourquoi ce thème compte pour la suite
@@ -6153,14 +6364,19 @@ var PROJECTION_LYCEE={
     metier:"Modéliser une situation, prévoir un comportement, lire un graphique — utile en <strong>sciences, économie, informatique, gestion</strong>."
   },
   "geometrie":{
-    seconde:"Tu approfondis les <strong>vecteurs, la trigonométrie, le repérage</strong>. C'est aussi là que tu apprends à structurer une vraie démonstration mathématique.",
-    apres:"En <strong>1ère</strong>, le produit scalaire et la géométrie repérée prennent le relais — chapitre dense qui suppose les vecteurs maîtrisés. En <strong>terminale</strong> (spé maths), la géométrie dans l'espace, les droites et plans, les vecteurs en 3D. La rigueur de raisonnement que tu construis ici te servira partout, <strong>même hors géométrie</strong> : c'est ce qui te permet de structurer une démonstration propre.",
+    seconde:"Tu approfondis les <strong>vecteurs, la trigonométrie, le repérage</strong>. Cosinus, sinus, tangente du collège sont réactivés et étendus. C'est aussi là que tu apprends à structurer une vraie démonstration mathématique.",
+    apres:"En <strong>1ère</strong>, le produit scalaire, la trigonométrie sur le cercle et la géométrie repérée prennent le relais — chapitre dense qui suppose les vecteurs et la trigo maîtrisés. En <strong>terminale</strong> (spé maths), la géométrie dans l'espace, les droites et plans, les vecteurs en 3D. La rigueur de raisonnement que tu construis ici te servira partout, <strong>même hors géométrie</strong> : c'est ce qui te permet de structurer une démonstration propre.",
     metier:"Indispensable en <strong>architecture, design, ingénierie, infographie</strong>. Et le raisonnement géométrique entraîne une logique précieuse pour le droit, la philo, la programmation."
   },
   "grandeurs_statistiques":{
     seconde:"Tu travailles les <strong>statistiques descriptives</strong> (moyenne, médiane, écart-type) et les unités composées (vitesses, débits, densités).",
     apres:"En <strong>1ère</strong>, les statistiques croisées et les probabilités conditionnelles s'appuient directement dessus — autant en spé maths qu'en maths complémentaires. En <strong>terminale</strong>, la loi binomiale, les intervalles de confiance, les variables aléatoires. Et l'<strong>enseignement scientifique</strong> (tronc commun) est rempli de lectures de données : il faut savoir interpréter une moyenne, un écart-type, une tendance.",
     metier:"Lire un sondage, comprendre un indicateur économique, interpréter une étude — <strong>une compétence citoyenne</strong> autant que scolaire. Et indispensable dans toutes les filières qui touchent aux données."
+  },
+  "probabilites":{
+    seconde:"Tu vas découvrir la <strong>probabilité conditionnelle</strong> et les <strong>arbres pondérés</strong>, qui s'appuient directement sur ce que tu as vu au collège (équiprobabilité, calcul de probabilité d'un événement, événement contraire).",
+    apres:"En <strong>1ère</strong>, les probabilités conditionnelles, l'indépendance et la loi binomiale — chapitres centraux en spé maths et en maths complémentaires. En <strong>terminale</strong>, les variables aléatoires, l'espérance, les lois continues. C'est aussi un grand classique des tests à l'entrée des études supérieures (médecine, économie, sciences).",
+    metier:"Indispensable en <strong>médecine</strong> (tests diagnostiques, faux positifs), en <strong>finance et assurance</strong> (gestion du risque), en <strong>data science</strong> et en <strong>recherche scientifique</strong>. Et utile au quotidien pour comprendre les sondages, les jeux, les statistiques médicales."
   }
 };
 
@@ -6570,10 +6786,10 @@ function navVers(dest){
   document.querySelectorAll(".section").forEach(function(s){s.classList.remove("active");});
   document.querySelectorAll(".sb-item").forEach(function(n){n.classList.remove("active");});
   document.getElementById("section-"+dest).classList.add("active");
-  var sbMap={accueil:"sb-accueil",progression:"sb-progression",memos:"sb-memos",exercices:"sb-exercices"};
+  var sbMap={accueil:"sb-accueil",entrainements:"sb-entrainements",progression:"sb-progression",memos:"sb-memos",exercices:"sb-exercices"};
   var sbEl=document.getElementById(sbMap[dest]||"sb-accueil");
   if(sbEl) sbEl.classList.add("active");
-  var titles={accueil:"Mon diagnostic",progression:"Ma progression",memos:"Fiches mémo",exercices:"Exercices supplémentaires"};
+  var titles={accueil:"Mon diagnostic",entrainements:"Mes entraînements",progression:"Ma progression",memos:"Fiches mémo",exercices:"Exercices supplémentaires"};
   document.getElementById("topbar-title").textContent=titles[dest]||"Accueil";
   // Rendu différé pour la page mémos
   if(dest==="memos") renderMemosSection();
